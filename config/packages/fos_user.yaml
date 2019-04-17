@@ -1,0 +1,22 @@
+# config/packages/fos_user.yaml
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: App\Entity\Person
+    service:
+        mailer: fos_user.mailer.twig_swift # this lines
+    #resetting:
+        #email:
+            #template: Resetting:email.txt.twig
+    registration:
+        confirmation:
+            enabled: true
+            from_email:
+                address: joelseri01@gmail.com
+                sender_name: Admin Uniflor
+    #            template: 'email/registration.email.twig'
+
+    from_email:
+        address: "test@domain.com"
+        sender_name: "test@domain.com"
+

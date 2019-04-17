@@ -1,0 +1,34 @@
+.filldiv{
+    height: 100%;
+    width: 100%;
+}
+.logo{
+    height: 40px;
+}
+.bg-gray
+{
+    background-color: #AAAAAA;
+}
+.bg-black{
+    background-color: black;
+}
+.centered{
+    text-align: center;
+}
+.largeur30{
+    width: 30px;
+}
+
+.largeur150
+{
+    width: 150px;
+}
+.hauteur50
+{
+    min-height: 100px;
+}
+td{
+    border-style: solid;
+    border-width: 2px;
+    border-color: white;
+}

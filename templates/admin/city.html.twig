@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+        {% block title %}
+            Gestion des villes
+        {% endblock %}
+
+        {% block body %}
+
+            <!--formulaire villes-->
+            <h1 class="centered">Ajouter une Ville</h1>
+            <table class="table">
+                <tr class="centered">
+                    <th>departement</th>
+                    <th>ville</th>
+                    <th>action</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="departement" onblur="changeDepartement()">
+                            <option value=null>choisir un departement</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="cityOptions" onfocusin="requestCities()">
+                            <option value=null >choisir une ville</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button onclick="add()" class="btn btn-success">
+                            ajouter
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <!--fin formulaire villes-->
+
+
+            <!--Liste des villes-->
+
+            <h1 class="centered">Liste des Villes</h1> :<br>
+            <table class="table">
+                <tr>
+                    <th class="largeur30">id</th>
+                    <th class="largeur150">nom</th>
+                    <th class="largeur30">id INSEE</th>
+                    <th class="largeur30">état</th>
+                    <th class="largeur30">actions</th>
+                </tr>
+                {% for city in cities %}
+                    <tr>
+                        <td>{{ city.id }}</td>
+                        <td>{{ city.name }}</td>
+                        <td>{{ city.inseeid }}</td>
+                        <td>{{ city.activeString }}</td>
+                        <td>
+                            <button class="btn btn-success" onclick="enable({{ city.inseeid }})">activer</button>
+                            <button class="btn btn-secondary" onclick="disable({{ city.inseeid }})">desactiver</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+
+                </tr>
+            </table>
+            <!--fin liste des villes-->
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ parent() }}
+            <script type="application/javascript" src="{{ asset('web/js/city.js') }}">
+
+            </script>
+        {% endblock %}

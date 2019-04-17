@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}        Liste des utilisateurs :<br>
+        <table class="table">
+        {% for user in users %}
+        <tr><td>{{user.toString()}}</td></tr>
+{% endfor %}
+        </table>
+{% endblock %}
+

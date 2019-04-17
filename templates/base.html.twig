@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    {% block stylesheets %}
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="{{ asset('web/css/style.css') }}">
+</head>
+<body class="bg-gray">
+
+{% block navbar %}
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-black">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto text-white">
+                <li class="nav-item bg-light">
+                    <a class="navbar-brand" href="/">Uniflor<img class="logo" src="/web/images/LogoUniflors.jpg"></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Abonnements
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/abonnement/vie">Abonnements vivants</a>
+                        <a class="dropdown-item" href="/abonnement/mort">Abonnements de la mort</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/plantes/offres">plantes<br>orchidée</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/coupees/offres">fleurs coupées</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/ideescadeau/offres">idées cadeaux</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/deuil/offres">deuil</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Evenementiel
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/evenements/mariages">Mariages</a>
+                        <a class="dropdown-item" href="/evenements/enterrements">Enterrements</a>
+                        <a class="dropdown-item" href="/evenements/autres">Autres</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/emploi">emploi</a>
+                </li>
+                {% if app.request.session.get("connected") %}
+                    <li class="nav-item">
+                        {{ app.request.session.get("user").getEmail() }}
+                        <br>
+                        <a class="nav-link text-white" href="/logout">Deconnexion</a>
+
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/login">Connexion</a>
+                    </li>
+
+                {% endif %}
+
+                <li class="nav-item">
+                    <div class="nav-link text-white">
+                        user rights: {{ app.request.session.get("userRights") }}
+                        <br>admin rights: {{ app.request.session.get("adminRights") }}
+                        <br>acc admin rights: {{ app.request.session.get("accAdminRights") }}
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+{% endblock %}
+
+
+{% block flashmsg %}
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block javascripts %}
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+{% endblock %}

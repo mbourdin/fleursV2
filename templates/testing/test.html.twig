@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+
+
+
+<body class="bg-gray">
+
+{% block navbar %}
+
+
+
+{% endblock %}
+
+
+{% block flashmsg %}
+
+{% endblock %}
+
+{% block body %}
+    <br>
+    Test panier par session
+    <br><br>
+    {{ app.request.session.get("sale").toString }}
+    <br>
+    <br>
+    Test panier par cookie
+    <br>
+    <br>
+    {{ app.request.cookies.get('bucket') }}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block javascripts %}
+
+
+
+{% endblock %}

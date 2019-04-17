@@ -1,0 +1,428 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
+ */
+class Sale
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $onlinepay;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $paid;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $discount;
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Person", cascade={"merge"}, fetch="LAZY")
+     */
+    private $person;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent", cascade={"persist"})
+     * @ORM\JoinTable(name="saleproductcontent")
+     */
+    private $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent", cascade={"persist"})
+     * @ORM\JoinTable(name="saleoffercontent")
+     */
+    private $offers;
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SameServiceContent", cascade={"persist"})
+     * @ORM\JoinTable(name="saleservicecontent")
+     */
+    private $services;
+
+    /**
+     * Sale constructor.
+     */
+    public function __construct()
+    {
+        $this->onlinepay = true;
+        $this->paid = false;
+        $this->discount = 0;
+        $this->date = time();
+        $this->person = null;
+        $this->products = new ArrayCollection();
+        $this->offers = new ArrayCollection();
+        $this->services = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOnlinepay()
+    {
+        return $this->onlinepay;
+    }
+
+    /**
+     * @param mixed $onlinepay
+     */
+    public function setOnlinepay($onlinepay)
+    {
+        $this->onlinepay = $onlinepay;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * @param mixed $paid
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param mixed $discount
+     */
+    public function setDiscount($discount)
+    {
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * @param mixed $person
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+
+    /**
+     * @param mixed $offers
+     */
+    public function setOffers($offers)
+    {
+        $this->offers = $offers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param mixed $services
+     */
+    public function setServices($services)
+    {
+        $this->services = $services;
+    }
+
+    //ajoute des services, des produits ou des offres à la commande
+    //cette fonction fait appel aux 3 sous-fonctions ci-dessous
+    //renvoie vrai si ajout réussi
+
+    public function add($object, $quantity)
+    {
+        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        if ($object instanceof Product) {
+            $result = $this->addProduct($object, $quantity);
+        } elseif ($object instanceof Service) {
+            $result = $this->addService($object, $quantity);
+        } elseif ($object instanceof Offer) {
+            $result = $this->addOffer($object, $quantity);
+        } else {
+            $result = false;
+        }
+        return $result;
+    }
+
+//ajoute $quantity de $product au panier, renvoie vrai en cas de succes
+    public function addProduct(Product $product, int $quantity)
+    {
+        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        foreach ($this->products->getIterator() as $i => $productContent) {
+            if ($product->equals($productContent->getProduct())) {
+
+                $oldQuantity = $productContent->getQuantity();
+                $newQuantity = $oldQuantity + $quantity;
+                $productContent->setQuantity($newQuantity);
+                return true;
+            }
+        }
+        $newProduct = new SaleProductContent();
+        $newProduct->setProduct($product);
+        $newProduct->setSale($this);
+        $newProduct->setQuantity($quantity);
+        $this->products->add($newProduct);
+
+        return true;
+    }
+
+//ajoute $quantity de $service au panier, renvoie vrai en cas de succes
+    public function addService(Service $service, int $quantity)
+    {
+
+        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        foreach ($this->services->getIterator() as $i => $serviceContent) {
+            if ($service->equals($serviceContent->getService())) {
+
+                $oldQuantity = $serviceContent->getQuantity();
+                $newQuantity = $oldQuantity + $quantity;
+                $serviceContent->setQuantity($newQuantity);
+                return true;
+            }
+        }
+        $newService = new SaleServiceContent();
+        $newService->setService($service);
+        $newService->setSale($this);
+        $newService->setQuantity($quantity);
+        $this->services->add($newService);
+
+        return true;
+    }
+
+    //ajoute $quantity de $offre au panier, renvoie vrai en cas de succes
+
+    public function addOffer(Offer $offer, int $quantity)
+    {
+        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        foreach ($this->offers->getIterator() as $i => $offerContent) {
+            if ($offer->equals($offerContent->getOffer())) {
+
+                $oldQuantity = $offerContent->getQuantity();
+                $newQuantity = $oldQuantity + $quantity;
+                $offerContent->setQuantity($newQuantity);
+                return true;
+            }
+        }
+        $newOffer = new SaleOfferContent();
+        $newOffer->setOffer($offer);
+        $newOffer->setSale($this);
+        $newOffer->setQuantity($quantity);
+        $this->offers->add($newOffer);
+
+
+        return true;
+    }
+    //supprime un produit/service /une offre du panier
+    //cette fonction appelle les 3 fonctions ci-dessous
+    // revoie l'objet effacé
+    public function remove($object)
+    {
+        if ($object instanceof Product) {
+            return $this->removeProduct($object);
+        } elseif ($object instanceof Service) {
+            return $this->removeService($object);
+        } elseif ($object instanceof Offer) {
+            return $this->removeOffer($object);
+        }
+        return null;
+    }
+
+    //supprime un produit du panier
+    public function removeProduct(Product $product)
+    {
+        foreach ($this->products->getIterator() as $i => $productContent) {
+            if ($product->equals($productContent->getProduct())) {
+                $this->products->removeElement($productContent);
+                return $product;
+            }
+        }
+        return null;
+    }
+
+    // supprime un service du panier
+    public function removeService(Service $service)
+    {
+        foreach ($this->services->getIterator() as $i => $serviceContent) {
+            if ($service->equals($serviceContent->getService())) {
+                $this->services->removeElement($serviceContent);
+                return $service;
+            }
+        }
+        return null;
+    }
+
+    // supprime une offre du panier
+    public function removeOffer(Offer $offer)
+    {
+        foreach ($this->offers->getIterator() as $i => $offerContent) {
+            if ($offer->equals($offerContent->getOffer())) {
+                $this->offers->removeElement($offerContent);
+                return $offer;
+            }
+        }
+        return null;
+    }
+    // met à jour la quantité de l'objet dans le panier
+    //supprime l'objet si quantité négative ou nulle
+    //renvoie l'objet mis a jour
+    public function updateQuantity($object, int $quantity)
+    {
+        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+
+        if ($object instanceof Product) {
+            return $this->updateProductQuantity($object, $quantity);
+        } elseif ($object instanceof Service) {
+            return $this->updateServiceQuantity($object, $quantity);
+        } elseif ($object instanceof Offer) {
+            return $this->updateOfferQuantity($object, $quantity);
+        } else {
+            return false;
+        }
+    }
+
+    public function updateProductQuantity(Product $product,int $quantity)
+    {   if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+
+        foreach ($this->products->getIterator() as $i => $productContent) {
+            if ($product->equals($productContent->getProduct())) {
+                $productContent->setQuantity($quantity);
+                return $product;
+            }
+        }
+        return null;
+    }
+    public function updateServiceQuantity(Service $service,int $quantity)
+    {   if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+
+        foreach ($this->services->getIterator() as $i => $serviceContent) {
+            if ($service->equals($serviceContent->getService())) {
+                $serviceContent->setQuantity($quantity);
+                return $service;
+            }
+        }
+        return null;
+    }
+    public function updateOfferQuantity(Offer $offer,int $quantity)
+    {   if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+
+        foreach ($this->offers->getIterator() as $i => $offerContent) {
+            if ($offer->equals($offerContent->getOffer())) {
+                $offerContent->setQuantity($quantity);
+                return $offer;
+            }
+        }
+        return null;
+    }
+    //renvie en texte le contenu du panier
+    public function toString()
+    {
+        $str = "id:" . $this->id
+            . "/onlinepay:" . $this->onlinepay
+            . "/paid:" . $this->paid
+            . "/discount:" . $this->discount
+            . "/date:" . $this->date;
+        foreach ($this->products->getIterator() as $i => $productContent) {
+            $str .= $productContent->toString();
+        }
+        foreach ($this->offers->getIterator() as $i => $offerContent) {
+            $str .= $offerContent->toString();
+        }
+        foreach ($this->services->getIterator() as $i => $serviceContent) {
+            $str .= $serviceContent->toString();
+        }
+        return $str;
+    }
+}
+
