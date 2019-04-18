@@ -37,17 +37,17 @@ class Offer
     /**
      * @return null
      */
-    public function getNom()
+    public function getName()
     {
-        return $this->nom;
+        return $this->name;
     }
 
     /**
      * @param null $nom
      */
-    public function setNom($nom)
+    public function setName($name)
     {
-        $this->nom = $nom;
+        $this->nom = $name;
     }
     public function equals(Offer $o)
     {   return $this->id==$o->id;

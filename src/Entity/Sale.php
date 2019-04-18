@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Serializable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
@@ -423,6 +424,23 @@ class Sale
             $str .= $serviceContent->toString();
         }
         return $str;
+    }
+    public function price():int
+    {   //todo remplacer par le vrai code une fois les prix des articles en vente définis
+        $result= 0;
+
+        /*
+         foreach ($this->products->getIterator() as $i => $productContent) {
+            res+= $productContent->getProduct()->getPrice;
+        }
+        foreach ($this->services->getIterator() as $i => $serviceContent) {
+            result+=$serviceContent->getService()->getPrice();
+        }
+        foreach ($this->offers->getIterator() as $i => $offerContent) {
+            result+=$offerContent->getOffer->getPrice();
+        }
+         */
+        return $result;
     }
 }
 

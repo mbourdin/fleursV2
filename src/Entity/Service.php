@@ -1,60 +1,128 @@
 <?php
 
-
 namespace App\Entity;
 
-//PLACEHOLDER SANS BDD A REMPLACER DANS LE PROJET FINAL
-use phpDocumentor\Reflection\Types\Boolean;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\ServiceRepository")
+ */
 class Service
 {
-    private $id;
-    private $nom;
     /**
-     * Product constructor.
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
-    public function __construct()
-    {   $this->id=null;
-        $this->nom=null;
-    }
+    private $id;
 
     /**
-     * @return null
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public function getId()
+    private $photopath;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $price;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $active;
+
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param null $id
+     * @param mixed $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
 
-    /**
-     * @return null
-     */
-    public function getNom()
+
+    public function getPhotopath(): ?string
     {
-        return $this->nom;
+        return $this->photopath;
     }
 
-    /**
-     * @param null $nom
-     */
-    public function setNom($nom)
+    public function setPhotopath(?string $photopath): self
     {
-        $this->nom = $nom;
+        $this->photopath = $photopath;
+
+        return $this;
     }
-    public function equals(Service $service)
-    {   return $this->id==$service->id;
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?int $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(?bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+    public function equals($s)
+    {
+        return $this->id==$s->id;
     }
     public function toString()
-    {   $str="/service/id/".$this->id."/nom/".$this->nom;
+    {   $str="/service/id/"
+        .$this->id
+        ."/name/".$this->name;
         return $str;
     }
-
 }
