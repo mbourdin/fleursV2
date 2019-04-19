@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-use Serializable;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")

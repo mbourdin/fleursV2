@@ -3,7 +3,7 @@
 
 namespace App\Entity;
 
-
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 class SaleOfferContent
 {   private $offer;
     private $sale;
@@ -27,7 +27,7 @@ class SaleOfferContent
     /**
      * @param mixed $offer
      */
-    public function setOffer($offer): void
+    public function setOffer(Offer $offer): void
     {
         $this->offer = $offer;
     }
@@ -43,7 +43,7 @@ class SaleOfferContent
     /**
      * @param mixed $sale
      */
-    public function setSale($sale): void
+    public function setSale(Sale $sale): void
     {
         $this->sale = $sale;
     }
@@ -59,8 +59,8 @@ class SaleOfferContent
     /**
      * @param mixed $quantity
      */
-    public function setQuantity($quantity): void
-    {
+    public function setQuantity(int $quantity): void
+    {   if ($quantity<=0) throw new UnexpectedValueException("quantité négative");
         $this->quantity = $quantity;
     }
     public function toString()

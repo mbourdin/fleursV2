@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -17,7 +18,7 @@ class Product
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=30)
      */
     private $name;
 
@@ -40,7 +41,19 @@ class Product
      * @ORM\Column(type="integer")
      */
     private $price;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProductType", fetch="LAZY")
+     */
+    private $producttype;
 
+    /**
+     * Product constructor.
+     * @param $active
+     */
+    public function __construct()
+    {
+        $this->active = true;
+    }
 
 
     public function getId(): ?int
@@ -110,7 +123,8 @@ class Product
     }
 
     public function setPrice(int $price): self
-    {
+    {   if ($price<=0) throw new UnexpectedValueException("prix négatif");
+
         $this->price = $price;
 
         return $this;
@@ -125,4 +139,21 @@ class Product
         ."/name/".$this->name;
         return $str;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProducttype()
+    {
+        return $this->producttype;
+    }
+
+    /**
+     * @param mixed $producttype
+     */
+    public function setProducttype($producttype): void
+    {
+        $this->producttype = $producttype;
+    }
+
 }

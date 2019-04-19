@@ -9,7 +9,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 class Offer
 {
     private $id;
-    private $nom;
+    private $name;
     /**
      * Product constructor.
      */
