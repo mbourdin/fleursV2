@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    Produits
+{% endblock %}
+{% block body %}
+    <h1>List des types de produits</h1>
+    <table class="table">
+        <tr>
+            <th>id</th>
+            <th>nom</th>
+            <th>description</th>
+            <th>prix</th>
+            <th>actif</th>
+            <th>chemin vers photo</th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <td> {{   pt.id }}</td>
+            <td> {{  pt.name }}</td>
+            <td> {{  pt.description }}</td>
+            <td> {{ pt.price }}</td>
+            <td> {{ pt.active }}</td>
+            <td> {{ pt.photopath }}</td>
+            <td><a  href="/admin/productType/edit/{{   product.id }}"><button>edit</button></a></td>
+        </tr>
+
+    </table>
+{% endblock %}

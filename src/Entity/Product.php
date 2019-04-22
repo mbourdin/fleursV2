@@ -42,7 +42,7 @@ class Product
      */
     private $price;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ProductType", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Producttype", fetch="LAZY")
      */
     private $producttype;
 
@@ -117,7 +117,7 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice()
     {
         return $this->price;
     }

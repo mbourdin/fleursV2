@@ -4,9 +4,25 @@
 namespace App\Entity;
 
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\SaleOfferContentRepository")
+ */
 class SaleOfferContent
-{   private $offer;
+{   /**
+ * @ORM\Id
+ * @ORM\ManyToOne(targetEntity="App\Entity\Offer"))
+ */
+    private $offer;
+    /**
+     * @ORM\Id
+     *  @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     */
     private $sale;
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $quantity;
 
     /**

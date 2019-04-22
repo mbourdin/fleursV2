@@ -15,7 +15,7 @@ class Sale
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -33,28 +33,28 @@ class Sale
      */
     private $discount;
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Person", cascade={"merge"}, fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Person", fetch="LAZY")
      */
     private $person;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={})
      * @ORM\JoinTable(name="saleproductcontent")
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={})
      * @ORM\JoinTable(name="saleoffercontent")
      */
     private $offers;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SameServiceContent", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={})
      * @ORM\JoinTable(name="saleservicecontent")
      */
     private $services;
@@ -67,8 +67,8 @@ class Sale
         $this->onlinepay = true;
         $this->paid = false;
         $this->discount = 0;
-        $this->date = time();
         $this->person = null;
+        $this->date=null;
         $this->products = new ArrayCollection();
         $this->offers = new ArrayCollection();
         $this->services = new ArrayCollection();
@@ -425,21 +425,21 @@ class Sale
         }
         return $str;
     }
-    public function price():int
+    public function getPrice():int
     {   //todo remplacer par le vrai code une fois les prix des articles en vente définis
         $result= 0;
 
-        /*
+
          foreach ($this->products->getIterator() as $i => $productContent) {
-            res+= $productContent->getProduct()->getPrice;
+            $result +=$productContent->getProduct()->getPrice();
         }
         foreach ($this->services->getIterator() as $i => $serviceContent) {
-            result+=$serviceContent->getService()->getPrice();
+            $result +=$serviceContent->getService()->getPrice();
         }
         foreach ($this->offers->getIterator() as $i => $offerContent) {
-            result+=$offerContent->getOffer->getPrice();
+            $result +=$offerContent->getOffer()->getPrice();
         }
-         */
+
         return $result;
     }
 }

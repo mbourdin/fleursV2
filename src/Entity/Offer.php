@@ -2,13 +2,22 @@
 
 
 namespace App\Entity;
+use Doctrine\ORM\Mapping as ORM;
 
 //PLACEHOLDER SANS BDD A REMPLACER DANS LE PROJET FINAL
-use phpDocumentor\Reflection\Types\Boolean;
-
+/**
+* @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
+*/
 class Offer
-{
+{   /**
+ * @ORM\Id
+ * @ORM\GeneratedValue
+ * @ORM\Column(type="integer")
+ */
     private $id;
+    /**
+     * @ORM\Column(type="string", length=30)
+     */
     private $name;
     /**
      * Product constructor.
@@ -53,8 +62,11 @@ class Offer
     {   return $this->id==$o->id;
     }
     public function toString()
-    {   $str="/offer/id/".$this->id."/nom/".$this->nom;
+    {   $str="/offer/id/".$this->id."/nom/".$this->name;
         return $str;
     }
-
+    public function getPrice()
+    {
+        return 0;
+    }
 }

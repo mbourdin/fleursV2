@@ -2,11 +2,28 @@
 
 
 namespace App\Entity;
+use Doctrine\ORM\Mapping as ORM;
 
-
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\SaleProductContentRepository")
+ */
 class SaleProductContent
-{   private $product;
+{   /**
+ * @ORM\Id
+ * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"merge"}))
+ * @ORM\JoinColumn(name="product_id", referencedColumnName="id",)
+
+ */
+    private $product;
+    /**
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     * @ORM\JoinColumn(name="sale_id", referencedColumnName="id")
+     */
     private $sale;
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $quantity;
 
     /**

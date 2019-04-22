@@ -1,10 +1,13 @@
 <?php
 namespace App\Controller;
+use App\Entity\Sale;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Utility\OnEventActions;
-class DefaultController extends Controller
+class MainController extends Controller
 {
     /**
      * @Route("/",name="index")
@@ -49,4 +52,5 @@ class DefaultController extends Controller
         OnEventActions::logout($request->getSession());
         return $this->redirect("/");
     }
+
 }

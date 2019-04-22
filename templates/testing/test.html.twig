@@ -1,29 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8"/>
-
-
-
-<body class="bg-gray">
-
-{% block navbar %}
-
-
-
-{% endblock %}
-
+{% extends 'base.html.twig' %}
 
 {% block flashmsg %}
 
 {% endblock %}
 
 {% block body %}
-    <br>
-    Test panier par session
-    <br><br>
-    {{ app.request.session.get("sale").toString }}
-    <br>
+
 {% endblock %}
 
 {% block content %}

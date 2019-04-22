@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TypeProductRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ProducttypeRepository")
  */
-class ProductType
+class Producttype
 {
     /**
      * @ORM\Id()
@@ -35,6 +35,13 @@ class ProductType
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photopath;
+
+    /**
+     * Producttype constructor.
+     */
+    public function __construct()
+    {   $this->active=true;
+    }
 
     public function getId(): ?int
     {

@@ -2,11 +2,25 @@
 
 
 namespace App\Entity;
+use Doctrine\ORM\Mapping as ORM;
 
-
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\SaleServiceContentRepository")
+ */
 class SaleServiceContent
-{   private $service;
+{   /**
+ * @ORM\Id
+ * @ORM\ManyToOne(targetEntity="App\Entity\Service"))
+ */
+    private $service;
+    /**
+     * @ORM\Id
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     */
     private $sale;
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $quantity;
 
     /**

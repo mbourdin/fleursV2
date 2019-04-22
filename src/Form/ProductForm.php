@@ -14,18 +14,17 @@ class ProductForm extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            ->add("active")
             ->add('photopath')
             ->add('price')
             ;
-        if (!$options["create"])
-        $builder->add("active");
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
-            'create' => false,
+
         ]);
     }
 }
