@@ -25,8 +25,14 @@ class TestController extends Controller
             $sale->setId(null);
         }
         $productDao=$this->getDoctrine()->getRepository(Entity\Product::class);
-        $product=$productDao->find(3);
-        //$sale->add($product,1);
+        $product=$productDao->find(1);
+        $sale->add($product,3);
+        $serviceDao=$this->getDoctrine()->getRepository(Entity\Service::class);
+        $service=$serviceDao->find(1);
+        $sale->add($service,2);
+        $offerDao=$this->getDoctrine()->getRepository(Entity\Offer::class);
+        $offer=$offerDao->find(1);
+        $sale->add($offer,4);
         $response=new Response();
         $serialSale=serialize($sale);
         //pour rappel la liste des parametres du constructeur de cookies :

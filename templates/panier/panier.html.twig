@@ -26,10 +26,10 @@ Gestion du panier
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ productContent.product.id }}</td>
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input id="productinput{{ productContent.product.id }}" value="{{ productContent.quantity }}"
                            type="text"></td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>0</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>0</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought * productContent.quantity }}</td>
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
-                    <button id="minusproduct{{ productContent.product.id }}" class="btn btn-success ">-</button>
+                    <a href="/user/panier/rmProduct/{{ productContent.product.id }}"><button  class="btn btn-success ">-</button></a>
                     <button id="plusproduct{{ productContent.product.id }}" class="btn  btn-success">+</button>
                     <button id="deleteproduct{{ productContent.product.id }}" class="btn  btn-danger">X</button>
 
@@ -47,8 +47,8 @@ Gestion du panier
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ serviceContent.service.id }}</td>
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input id="serviceinput{{ serviceContent.service.id }}" value="{{ serviceContent.quantity }}"
                            type="text"></td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>0</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>0</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
                     <button id="minusservice{{ serviceContent.service.id }}" class="btn btn-success">-</button>
                     <button id="plusservice{{ serviceContent.service.id }}" class="btn btn-success">+</button>
@@ -66,8 +66,8 @@ Gestion du panier
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ offerContent.offer.id }}</td>
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input id="offerinput{{ offerContent.offer.id }}" value="{{ offerContent.quantity }}" type="text">
                 </td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>0</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>0</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
                 <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
                     <button id="minusoffer{{ offerContent.offer.id }}" class="btn btn-success">-</button>
                     <button id="plusoffer{{ offerContent.offer.id }}" class="btn btn-success">+</button>

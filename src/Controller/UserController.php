@@ -2,6 +2,10 @@
 namespace App\Controller;
 use App\Entity\Person;
 use App\Entity\Sale;
+use App\Entity\Product;
+use App\Entity\Service;
+use App\Entity\Offer;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,9 +60,8 @@ class UserController extends Controller
      * @Route("/user/panier/save",name="savePanier")
      */
     public function savePanierAction(Request $request)
-    {
-        $cookie=$request->cookies->get("bucket");
-        $sale=unserialize($cookie);
+    {   $sale=$this->sanitizeSale($request);
+
         $em=$this->getDoctrine()->getManager();
         $em->persist($sale);
         $em->flush();
@@ -66,4 +69,69 @@ class UserController extends Controller
         return $this->redirect("/test/panier/list");
     }
 
+    /**
+     * @Route("/user/panier/addProduct/{id}"))
+     */
+    public function addProduct(Request $request,int $id)
+    {   $sale=$this->sanitizeSale($request);
+        //$productDao=$this->getDoctrine()->getRepository(Product::class);
+        foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
+            if ($productContent->getProduct()->getId()==$id)
+            {   $productContent->setQuantity($productContent->setQuantity()+1);
+                return redirect("/user/panier/show");;
+            }
+        }
+        return $this->redirect("/user/panier/show");
+    }
+
+    /**
+     * @Route("/user/panier/rmProduct/{id}"))
+     */
+    public function rmProduct(Request $request,int $id)
+    {   $sale=$this->sanitizeSale($request);
+        //$productDao=$this->getDoctrine()->getRepository(Product::class);
+        foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
+            if ($productContent->getProduct()->getId()==$id)
+            {   $tmp=$productContent->getQuantity()-1;
+                if($tmp<=0) return delProduct($request,$id);
+                $productContent->setQuantity($tmp);
+                return $this->redirect("/user/panier/show");
+            }
+        }
+        return $this->redirect("/user/panier/show");
+    }
+
+    /**
+     * @Route("/user/panier/delProduct/{id}"))
+     */
+    public function delProduct(Request $request,int $id)
+    {   $sale=$this->sanitizeSale($request);
+        $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $product=$productDao->find($id);
+        $sale->removeProduct($product);
+        return $this->redirect("/user/panier/show");
+    }
+
+    private function sanitizeSale(Request $request) : Sale
+    {
+        $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $serviceDao=$this->getDoctrine()->getRepository(Service::class);
+        $offerDao=$this->getDoctrine()->getRepository(Offer::class);
+        $cookie=$request->cookies->get("bucket");
+        $sale=unserialize($cookie);
+
+
+        //On empeche l'utilisateur de modifier la BDD en rechargeant les éléments
+        $sale->setId(null);
+        foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
+            $productContent->setProduct($productDao->find($productContent->getProduct()->getId()));
+        }
+        foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
+            $serviceContent->setService($serviceDao->find($serviceContent->getService()->getId()));
+        }
+        foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
+            $offerContent->setOffer($offerDao->find($offerContent->getOffer()->getId()));
+        }
+        return $sale;
+    }
 }

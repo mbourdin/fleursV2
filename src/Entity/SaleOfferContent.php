@@ -10,20 +10,32 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\SaleOfferContentRepository")
  */
 class SaleOfferContent
-{   /**
- * @ORM\Id
- * @ORM\ManyToOne(targetEntity="App\Entity\Offer"))
- */
-    private $offer;
+{
     /**
      * @ORM\Id
-     *  @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Offer",cascade={"persist","remove"},inversedBy="offers")
+     * @ORM\JoinColumn(name="offer_id", referencedColumnName="id",)
+     */
+    private $offer;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     * @ORM\JoinColumn(name="sale_id", referencedColumnName="id")
      */
     private $sale;
     /**
      * @ORM\Column(type="integer")
      */
     private $quantity;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pricewhenbought;
 
     /**
      * SaleOfferContent constructor.
@@ -83,4 +95,21 @@ class SaleOfferContent
     {   $str="/offercontent/".$this->offer->toString()."/quantity/".$this->quantity;
         return $str;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPricewhenbought()
+    {
+        return $this->pricewhenbought;
+    }
+
+    /**
+     * @param mixed $pricewhenbought
+     */
+    public function setPricewhenbought($pricewhenbought): void
+    {
+        $this->pricewhenbought = $pricewhenbought;
+    }
+
 }

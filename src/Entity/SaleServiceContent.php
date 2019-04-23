@@ -8,13 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\SaleServiceContentRepository")
  */
 class SaleServiceContent
-{   /**
- * @ORM\Id
- * @ORM\ManyToOne(targetEntity="App\Entity\Service"))
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+    /**
+ * @ORM\ManyToOne(targetEntity="App\Entity\Service",cascade={"persist"},inversedBy="services"))
  */
     private $service;
     /**
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
      */
     private $sale;
@@ -24,11 +29,32 @@ class SaleServiceContent
     private $quantity;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $pricewhenbought;
+    /**
      * SaleServiceContent constructor.
      */
     public function __construct()
     {
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPricewhenbought()
+    {
+        return $this->pricewhenbought;
+    }
+
+    /**
+     * @param mixed $pricewhenbought
+     */
+    public function setPricewhenbought($pricewhenbought): void
+    {
+        $this->pricewhenbought = $pricewhenbought;
+    }
+
 
     /**
      * @return mixed

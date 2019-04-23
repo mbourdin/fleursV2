@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-
+use DateTime;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
@@ -33,7 +33,7 @@ class Sale
      */
     private $discount;
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $date;
 
@@ -43,18 +43,18 @@ class Sale
     private $person;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist","remove"})
      * @ORM\JoinTable(name="saleproductcontent")
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist","remove"})
      * @ORM\JoinTable(name="saleoffercontent")
      */
     private $offers;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist","remove"})
      * @ORM\JoinTable(name="saleservicecontent")
      */
     private $services;
@@ -68,7 +68,7 @@ class Sale
         $this->paid = false;
         $this->discount = 0;
         $this->person = null;
-        $this->date=null;
+        $this->date=new DateTime();
         $this->products = new ArrayCollection();
         $this->offers = new ArrayCollection();
         $this->services = new ArrayCollection();
@@ -254,6 +254,7 @@ class Sale
         $newProduct->setProduct($product);
         $newProduct->setSale($this);
         $newProduct->setQuantity($quantity);
+        $newProduct->setPricewhenbought($product->getPrice());
         $this->products->add($newProduct);
 
         return true;
@@ -277,6 +278,7 @@ class Sale
         $newService->setService($service);
         $newService->setSale($this);
         $newService->setQuantity($quantity);
+        $newService->setPricewhenbought($service->getPrice());
         $this->services->add($newService);
 
         return true;
@@ -300,6 +302,7 @@ class Sale
         $newOffer->setOffer($offer);
         $newOffer->setSale($this);
         $newOffer->setQuantity($quantity);
+        $newOffer->setPricewhenbought($offer->getPrice());
         $this->offers->add($newOffer);
 
 
@@ -431,13 +434,13 @@ class Sale
 
 
          foreach ($this->products->getIterator() as $i => $productContent) {
-            $result +=$productContent->getProduct()->getPrice();
+            $result +=$productContent->getPricewhenbought()*$productContent->getQuantity();
         }
         foreach ($this->services->getIterator() as $i => $serviceContent) {
-            $result +=$serviceContent->getService()->getPrice();
+            $result +=$serviceContent->getPricewhenbought()*$serviceContent->getQuantity();
         }
         foreach ($this->offers->getIterator() as $i => $offerContent) {
-            $result +=$offerContent->getOffer()->getPrice();
+            $result +=$offerContent->getPricewhenbought()*$offerContent->getQuantity();
         }
 
         return $result;

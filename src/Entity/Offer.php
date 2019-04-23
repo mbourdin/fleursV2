@@ -19,6 +19,39 @@ class Offer
      * @ORM\Column(type="string", length=30)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $photopath;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $price;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $start;
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $end;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $discount;
     /**
      * Product constructor.
      */
@@ -26,6 +59,7 @@ class Offer
     {   $this->id=null;
         $this->nom=null;
     }
+
 
     /**
      * @return null
@@ -65,8 +99,126 @@ class Offer
     {   $str="/offer/id/".$this->id."/nom/".$this->name;
         return $str;
     }
+
+    /**
+     * @return mixed
+     */
     public function getPrice()
     {
-        return 0;
+        return $this->price;
     }
+
+    /**
+     * @param mixed $price
+     */
+    public function setPrice($price): void
+    {
+        $this->price = $price;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getPhotopath()
+    {
+        return $this->photopath;
+    }
+
+    /**
+     * @param mixed $photopath
+     */
+    public function setPhotopath($photopath): void
+    {
+        $this->photopath = $photopath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param mixed $active
+     */
+    public function setActive($active): void
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
+
+    /**
+     * @param mixed $start
+     */
+    public function setStart($start): void
+    {
+        $this->start = $start;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEnd()
+    {
+        return $this->end;
+    }
+
+    /**
+     * @param mixed $end
+     */
+    public function setEnd($end): void
+    {
+        $this->end = $end;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDiscount()
+    {
+        return $this->discount;
+    }
+
+    /**
+     * @param mixed $discount
+     */
+    public function setDiscount($discount): void
+    {
+        $this->discount = $discount;
+    }
+
+    /**
+     * @return null
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
 }
