@@ -127,4 +127,5 @@ class SaleProductContent
     {
         $this->pricewhenbought = $pricewhenbought;
     }
+
 }
