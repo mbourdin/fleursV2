@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+messages
+   {% endblock %}
+{% block body %}
+<h1 class="centered" >message admin</h1>
+    <div class="table container ">
+        <div  class="row">
+            <div class="table-bordered col-2">auteur</div>
+            <div class="table-bordered col-9">{{ msgAdmin.email }}</div>
+            <div class="table-bordered col-1">
+                <a href="/admin/message/setRead/{{ msgAdmin.id }}"
+                   class="btn {% if msgAdmin.isread %}btn-success{% else %}btn-primary{% endif %}">
+                    lu
+                </a>
+                <a href="/admin/message/delete/{{ msgAdmin.id }}" class="btn btn-danger">
+                    X
+                </a>
+            </div>
+        </div>
+        <div  class="row">
+            <div class="table-bordered col-2">message</div>
+            <div class="table-bordered col-10">{{ msgAdmin.text }}</div>
+        </div>
+    </div>
+{% endblock %}

@@ -69,7 +69,8 @@ function requestCities()
     }
 }
 function add()
-{   cityId=document.getElementById("cityOptions").value;
+{   //TODO corriger cette fonction
+    cityId=document.getElementById("cityOptions").value;
     console.log(cityId);
     id="insee"+cityId;
     console.log(id);
