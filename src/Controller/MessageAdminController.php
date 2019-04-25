@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 use App\Entity\MessageAdmin;
+use App\Entity\Person;
 use App\Form\MessageAdminFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -25,35 +26,33 @@ class MessageAdminController extends Controller
      *
      * @Route("/contactAdmin")
      */
-    public function addMessageAdminAction(Request$request)
-    {
-        // on crée un produit
-        $product = new MessageAdmin();
+    public function addMessageAdminAction(Request $request)
+    {   $session=$request->getSession();
+        if($session->get("connected"))
+        {   $user=$this->getDoctrine()->getRepository(Person::class)->find($session->get("user")->getId());
+            $email = $user->getEmail();
+        }
+        $msg = new MessageAdmin();
 
-        // ensuite on récupère le formulaire
-        $form = $this->createForm(MessageAdminFormType::class, $product);
+        $form = $this->createForm(MessageAdminFormType::class, $msg,["email"=>$email]);
         $form->add('submit', SubmitType::class, [
             'label' => 'envoyer',
             'attr' => ['class' => 'btn btn-default pull-right'],
         ]);
         $form->handleRequest($request);
 
-        //si le formulaire a été soumi
         if ($form->isSubmitted() && $form->isValid()) {
-            //on enregistre le produit dans la bdd
 
             $reg = $this->getDoctrine()->getManager();
 
-            $reg->persist($product);
+            $reg->persist($msg);
             $reg->flush();
             $this->addFlash("success","message admin envoyé");
 
             return $this->redirect("/");
         }
-        //on va générer le Html
         $formView= $form->createView();
 
-        // on rend la vue
         return $this->render('msgadmin/contact.html.twig', array('form' => $formView));
 
     }

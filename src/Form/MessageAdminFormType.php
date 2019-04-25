@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\MessageAdmin;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,7 +14,7 @@ class MessageAdminFormType extends AbstractType
     {
         $builder
             ->add('text')
-            ->add('email')
+            ->add('email',EmailType::class,["data"=>$options["email"]])
         ;
     }
 
@@ -21,6 +22,7 @@ class MessageAdminFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => MessageAdmin::class,
+            'email'=> "",
         ]);
     }
 }

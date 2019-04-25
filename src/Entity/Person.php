@@ -125,6 +125,7 @@ class Person extends FOSUser {
         $this->email=null;
         $this->banned=false;
         $this->rights=1;
+        $this->deleted=false;
     }
     /**
      * @return mixed
@@ -242,7 +243,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $photopath
      */
-    public function setPhotopath(string $photopath)
+    public function setPhotopath(?string $photopath)
     {
         $this->photopath = $photopath;
     }
