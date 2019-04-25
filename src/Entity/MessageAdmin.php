@@ -38,11 +38,24 @@ class MessageAdmin
     {   $this->isread=false;
     }
 
-
-    public function getId(): ?int
+    /**
+     * @return mixed
+     */
+    public function getId()
     {
         return $this->id;
     }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+
+
 
     public function getText(): ?string
     {

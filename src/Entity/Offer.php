@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use http\Exception\RuntimeException;
 
 //PLACEHOLDER SANS BDD A REMPLACER DANS LE PROJET FINAL
 /**
@@ -57,7 +58,7 @@ class Offer
      */
     public function __construct()
     {   $this->id=null;
-        $this->nom=null;
+        $this->active=true;
     }
 
 
@@ -88,7 +89,7 @@ class Offer
     /**
      * @param null $nom
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->nom = $name;
     }
@@ -111,8 +112,8 @@ class Offer
     /**
      * @param mixed $price
      */
-    public function setPrice($price): void
-    {
+    public function setPrice(int $price): void
+    {   if ($price<=0) throw new \RuntimeException();
         $this->price = $price;
     }
 
@@ -128,7 +129,7 @@ class Offer
     /**
      * @param mixed $photopath
      */
-    public function setPhotopath($photopath): void
+    public function setPhotopath(string $photopath): void
     {
         $this->photopath = $photopath;
     }
@@ -144,7 +145,7 @@ class Offer
     /**
      * @param mixed $description
      */
-    public function setDescription($description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -160,7 +161,7 @@ class Offer
     /**
      * @param mixed $active
      */
-    public function setActive($active): void
+    public function setActive(bool $active): void
     {
         $this->active = $active;
     }
@@ -176,7 +177,7 @@ class Offer
     /**
      * @param mixed $start
      */
-    public function setStart($start): void
+    public function setStart(\DateTime $start): void
     {
         $this->start = $start;
     }
@@ -192,7 +193,7 @@ class Offer
     /**
      * @param mixed $end
      */
-    public function setEnd($end): void
+    public function setEnd(\DateTime $end): void
     {
         $this->end = $end;
     }
@@ -208,17 +209,10 @@ class Offer
     /**
      * @param mixed $discount
      */
-    public function setDiscount($discount): void
+    public function setDiscount(int $discount): void
     {
         $this->discount = $discount;
     }
 
-    /**
-     * @return null
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
 
 }

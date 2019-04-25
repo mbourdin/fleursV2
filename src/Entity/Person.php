@@ -136,7 +136,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $name
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -150,7 +150,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $firstname
      */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname)
     {
         $this->firstname = $firstname;
     }
@@ -178,7 +178,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -192,7 +192,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $banned
      */
-    public function setBanned($banned)
+    public function setBanned(bool $banned)
     {
         $this->banned = $banned;
     }
@@ -210,7 +210,7 @@ class Person extends FOSUser {
     /**
      * @param int $rights
      */
-    public function setRights($rights)
+    public function setRights(int $rights)
     {
         $this->rights = $rights;
     }
@@ -226,7 +226,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $birthday
      */
-    public function setBirthday($birthday)
+    public function setBirthday (\DateTime $birthday)
     {
         $this->birthday = $birthday;
     }
@@ -250,22 +250,6 @@ class Person extends FOSUser {
     /**
      * @return mixed
      */
-    public function getChatbanned()
-    {
-        return $this->chatbanned;
-    }
-
-    /**
-     * @param mixed $chatbanned
-     */
-    public function setChatbanned($chatbanned)
-    {
-        $this->chatbanned = $chatbanned;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getDeleted()
     {
         return $this->deleted;
@@ -274,7 +258,7 @@ class Person extends FOSUser {
     /**
      * @param mixed $deleted
      */
-    public function setDeleted($deleted)
+    public function setDeleted(bool $deleted)
     {
         $this->deleted = $deleted;
     }
@@ -291,27 +275,10 @@ class Person extends FOSUser {
     /**
      * @param mixed $creationdate
      */
-    public function setCreationdate($creationdate)
+    public function setCreationdate(\DateTime $creationdate)
     {
         $this->creationdate = $creationdate;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * @param mixed $city
-     */
-    public function setCity($city)
-    {
-        $this->city = $city;
-    }
-
     /**
      * @return mixed
      */

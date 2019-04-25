@@ -57,7 +57,7 @@ class SaleTest extends TestCase
         $this->assertFalse($sale->getPaid());
         $this->assertEquals($sale->getDiscount(),0);
         $this->assertNull($sale->getPerson());
-        $this->assertTrue($sale->getDate() instanceof  DateTime);
+        $this->assertNull($sale->getDate());
         $this->assertTrue($sale->getProducts()->isEmpty());
         $this->assertTrue($sale->getOffers()->isEmpty());
         $this->assertTrue($sale->getServices()->isEmpty());

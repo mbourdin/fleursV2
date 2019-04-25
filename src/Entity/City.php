@@ -40,7 +40,7 @@ class City {
     /**
      * @param mixed $name
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
@@ -54,7 +54,7 @@ class City {
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -68,7 +68,7 @@ class City {
     /**
      * @param mixed $inseeid
      */
-    public function setInseeid($inseeid)
+    public function setInseeid(int $inseeid)
     {
         $this->inseeid = $inseeid;
     }
@@ -84,7 +84,7 @@ class City {
     /**
      * @param mixed $active
      */
-    public function setActive($active)
+    public function setActive(bool $active)
     {
         $this->active = $active;
     }

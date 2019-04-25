@@ -67,7 +67,6 @@ class Sale
         $this->paid = false;
         $this->discount = 0;
         $this->person = null;
-        $this->date=new DateTime();
         $this->products = new ArrayCollection();
         $this->offers = new ArrayCollection();
         $this->services = new ArrayCollection();
@@ -84,7 +83,7 @@ class Sale
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -100,7 +99,7 @@ class Sale
     /**
      * @param mixed $onlinepay
      */
-    public function setOnlinepay($onlinepay)
+    public function setOnlinepay(bool $onlinepay)
     {
         $this->onlinepay = $onlinepay;
     }
@@ -116,7 +115,7 @@ class Sale
     /**
      * @param mixed $paid
      */
-    public function setPaid($paid)
+    public function setPaid(bool $paid)
     {
         $this->paid = $paid;
     }
@@ -132,8 +131,8 @@ class Sale
     /**
      * @param mixed $discount
      */
-    public function setDiscount($discount)
-    {
+    public function setDiscount(int $discount)
+    {   if ($discount<0) throw new \RuntimeException;
         $this->discount = $discount;
     }
 
