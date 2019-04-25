@@ -2,10 +2,8 @@
 
 namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-
 use PHPUnit\Framework\TestCase;
-
+use DateTime;
 class SaleTest extends TestCase
 {
 
@@ -59,7 +57,7 @@ class SaleTest extends TestCase
         $this->assertFalse($sale->getPaid());
         $this->assertEquals($sale->getDiscount(),0);
         $this->assertNull($sale->getPerson());
-        $this->assertNull($sale->getDate());
+        $this->assertTrue($sale->getDate() instanceof  DateTime);
         $this->assertTrue($sale->getProducts()->isEmpty());
         $this->assertTrue($sale->getOffers()->isEmpty());
         $this->assertTrue($sale->getServices()->isEmpty());
@@ -77,9 +75,9 @@ class SaleTest extends TestCase
 
     public function testSetDate()
     {   $sale= new Sale();
-        $this->assertTrue($sale->getDate()<=time());
-        $sale->setDate(time()+100);
-        $this->assertTrue($sale->getDate()>time());
+    $currenttime=new DateTime();
+        $sale->setDate($currenttime);
+        $this->assertEquals($sale->getDate(),$currenttime);
     }
 
     public function testSetPaid()
@@ -121,19 +119,19 @@ class SaleTest extends TestCase
         $sale->add($offer,1);
         try{$sale->add($product,-1);
             $this->fail("expected UnexpectedValueException");
-        }catch (UnexpectedValueException $e)
+        }catch (\UnexpectedValueException $e)
         {}
         try{$sale->addProduct($product,-1);
             $this->fail("expected UnexpectedValueException");
-        }catch (UnexpectedValueException $e)
+        }catch (\UnexpectedValueException $e)
         {}
         try{$sale->addService($service,-1);
             $this->fail("expected UnexpectedValueException");
-        }catch (UnexpectedValueException $e)
+        }catch (\UnexpectedValueException $e)
         {}
         try{$sale->addOffer($offer,-1);
             $this->fail("expected UnexpectedValueException");
-        }catch (UnexpectedValueException $e)
+        }catch (\UnexpectedValueException $e)
         {}
         $this->assertFalse($sale->getOffers()->isEmpty());
         $this->assertFalse($sale->getServices()->isEmpty());

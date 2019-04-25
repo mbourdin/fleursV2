@@ -3,7 +3,6 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -88,7 +87,7 @@ class SaleOfferContent
      * @param mixed $quantity
      */
     public function setQuantity(int $quantity): void
-    {   if ($quantity<=0) throw new UnexpectedValueException("quantité négative");
+    {   if ($quantity<=0) throw new \UnexpectedValueException("quantité négative");
         $this->quantity = $quantity;
     }
     public function toString()

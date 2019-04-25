@@ -2,11 +2,10 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as FOSUser;
-use App\Interfaces\HasPhotopath;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  */
-class Person extends FOSUser implements HasPhotopath{
+class Person extends FOSUser {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

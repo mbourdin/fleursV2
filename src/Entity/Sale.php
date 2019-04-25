@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use DateTime;
 
 /**
@@ -224,7 +223,7 @@ class Sale
 
     public function add($object, $quantity)
     {
-        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
         if ($object instanceof Product) {
             $result = $this->addProduct($object, $quantity);
         } elseif ($object instanceof Service) {
@@ -240,7 +239,7 @@ class Sale
 //ajoute $quantity de $product au panier, renvoie vrai en cas de succes
     public function addProduct(Product $product, int $quantity)
     {
-        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
         foreach ($this->products->getIterator() as $i => $productContent) {
             if ($product->equals($productContent->getProduct())) {
 
@@ -264,7 +263,7 @@ class Sale
     public function addService(Service $service, int $quantity)
     {
 
-        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
         foreach ($this->services->getIterator() as $i => $serviceContent) {
             if ($service->equals($serviceContent->getService())) {
 
@@ -288,7 +287,7 @@ class Sale
 
     public function addOffer(Offer $offer, int $quantity)
     {
-        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
         foreach ($this->offers->getIterator() as $i => $offerContent) {
             if ($offer->equals($offerContent->getOffer())) {
 
@@ -363,7 +362,7 @@ class Sale
     //renvoie l'objet mis a jour
     public function updateQuantity($object, int $quantity)
     {
-        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
         if ($object instanceof Product) {
             return $this->updateProductQuantity($object, $quantity);
@@ -377,7 +376,7 @@ class Sale
     }
 
     public function updateProductQuantity(Product $product,int $quantity)
-    {   if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+    {   if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
         foreach ($this->products->getIterator() as $i => $productContent) {
             if ($product->equals($productContent->getProduct())) {
@@ -388,7 +387,7 @@ class Sale
         return null;
     }
     public function updateServiceQuantity(Service $service,int $quantity)
-    {   if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+    {   if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
         foreach ($this->services->getIterator() as $i => $serviceContent) {
             if ($service->equals($serviceContent->getService())) {
@@ -399,7 +398,7 @@ class Sale
         return null;
     }
     public function updateOfferQuantity(Offer $offer,int $quantity)
-    {   if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+    {   if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
         foreach ($this->offers->getIterator() as $i => $offerContent) {
             if ($offer->equals($offerContent->getOffer())) {
@@ -416,7 +415,7 @@ class Sale
             . "/onlinepay:" . $this->onlinepay
             . "/paid:" . $this->paid
             . "/discount:" . $this->discount
-            . "/date:" . $this->date;
+            . "/date:" . $this->date->format(DATE_ATOM);
         foreach ($this->products->getIterator() as $i => $productContent) {
             $str .= $productContent->toString();
         }

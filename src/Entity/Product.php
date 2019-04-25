@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -123,7 +122,7 @@ class Product
     }
 
     public function setPrice(int $price): self
-    {   if ($price<=0) throw new UnexpectedValueException("prix négatif");
+    {   if ($price<=0) throw new \UnexpectedValueException("prix négatif");
 
         $this->price = $price;
 

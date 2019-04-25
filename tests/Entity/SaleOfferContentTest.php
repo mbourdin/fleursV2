@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use PHPUnit\Framework\TestCase;
 class SaleOfferContentTest extends TestCase
 {
@@ -37,6 +36,6 @@ class SaleOfferContentTest extends TestCase
         try{
             $offercontent->setQuantity(-1);
             $this->fail("expected UnexpectedValueException");
-        }catch (UnexpectedValueException $e){}
+        }catch (\UnexpectedValueException $e){}
     }
 }
