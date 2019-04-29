@@ -6,6 +6,7 @@ use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class ProductForm extends AbstractType
 {
@@ -15,7 +16,7 @@ class ProductForm extends AbstractType
             ->add('name')
             ->add('description')
             ->add("active")
-            ->add('photopath')
+            ->add('imagefile',VichFileType::class,array('data_class'=>null))
             ->add('price')
             ;
     }

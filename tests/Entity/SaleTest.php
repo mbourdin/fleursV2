@@ -61,6 +61,7 @@ class SaleTest extends TestCase
         $this->assertTrue($sale->getProducts()->isEmpty());
         $this->assertTrue($sale->getOffers()->isEmpty());
         $this->assertTrue($sale->getServices()->isEmpty());
+        $this->assertFalse($sale->getValidated());
     }
 
     public function testSetDiscount()
@@ -159,5 +160,12 @@ class SaleTest extends TestCase
     {   $sale= new Sale();
         $sale->setId(666);
         $this->assertEquals(666,$sale->getId());
+    }
+    public function testSetValidated()
+    {   $sale= new Sale();
+        $sale->setValidated(false);
+        $this->assertFalse($sale->getValidated());
+        $sale->setValidated(true);
+        $this->assertTrue($sale->getValidated());
     }
 }

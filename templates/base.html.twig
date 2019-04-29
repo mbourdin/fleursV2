@@ -1,96 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
-
     {% block stylesheets %}
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        <link rel="stylesheet" href="{{ '/web/css/styleGeneral.css' }}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
               crossorigin="anonymous">
+    {% endblock %}
+</head>
+<body>
+
+<div class="container">
+    {% block navbar %}
+        <header>
+            <nav class="navbar navbar-light bg-light header">
+                <img class="nav-link logoHeaderUniflord-inline-block align-top"
+                     src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" width="20" height="20" alt="">
+                <h1>Uniflor</h1>
+                <span class="navbar-text navbarNetwork">
+                    <img class="logoHeader" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
+                    <img class="logoHeader" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
+                    <img class="logoHeader" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
+                    <img class="logoHeader" src="{{ '/web/images/site/icons8-pinterest-filled-96.png' }}" alt="">
+    </span>
+            </nav>
+
+
+        </header>
+        <nav class="site-header sticky-top py-1 navbarMenu">
+            <div class="container d-flex flex-column flex-md-row justify-content-between">
+                <a class="py-2" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="d-block mx-auto">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
+                        <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
+                        <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
+                        <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
+                        <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
+                        <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
+                    </svg>
+                </a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/icons8-accueil-vert-96.png' }}" alt=""> Accueil</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/icons8-plante-en-pot-vert-96.png' }}" alt="">Plantes
+                    & orchidées</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/icons8-bouquet-de-fleurs-vert-96.png' }}" alt="">Fleurs
+                    coupées</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/tombeFleurieREP.png' }}" alt="">R.E.P</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/renouveler_l_abonnement_vert-96.png' }}" alt="">Offres</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/icons8-code-barre-vert-96.png' }}" alt="">Promotions</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/icons8-donner-un-cadeau-filled-50.png' }}" alt="">Idées
+                    cadeaux</a>
+                <a class="py-2 d-none d-md-inline-block " href="#">
+                    <img class="iconImage" src="{{ '/web/images/site/icons8-cv-vert-96.png' }}" alt="">Emploi</a>
+                <a class="py-2 d-none d-md-inline-block " href="/panier/show">
+                    <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}" alt=""></a>
+                {% if app.session.get("connected") %}
+                    <a class="py-2 d-none d-md-inline-block " href="/logout">
+                        <img class="iconImageUser"
+                                {% if app.session.get("user")!=null %}
+                                    src="{{ '/images/persons/' ~ app.session.get('user').photopath }}"
+                                {% else %}
+                                    src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
+                                {% endif %}
+                                                                                  alt=""><br>connecté en tant
+                        que<br>{{ app.session.get("user").username }}<br>
+                        <button class="btn btn-success">logout</button>
+                    </a>
+                {% else %}
+                    <a class="py-2 d-none d-md-inline-block " href="/login"><img class="iconImageUser"
+                                                                                 src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
+                                                                                 alt=""></a>
+                {% endif %}
+            </div>
+        </nav>
 
     {% endblock %}
 
-    <link rel="stylesheet" href="{{ asset('web/css/style.css') }}">
-</head>
-<body class="bg-gray">
 
-{% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-black">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    {% block body %}
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto text-white">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        produits
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/product/add">créer</a>
-                        <a class="dropdown-item" href="/admin/product/list">liste</a>
+    {% endblock %}
+    {% block footer %}
+        <footer class="footerPrincipal">
+            <article>
+                <div class="follow">
+                    <h2>SUIVEZ-NOUS !</h2>
 
-                    </div>
-                </li>
-            </ul>
+                    <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-pinterest-filled-96.png' }}" alt="">
+                    <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
+                    <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
+                    <img class="logoFooterNetwork" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
+                </div>
+                <div class="logoFooter">
+                    <img src="{{ '/web/images/site/LogoUniflors.jpg' }}" width="30" height="30"
+                         class="d-inline-block align-top logoImgFooter" alt="">
+                </div>
+                <div class="aboutUniflor">
+                    <ul>
+                        <li class="footerPrincipal"><h2 class="h2Footer">A PROPOS D'UNIFLOR</h2></li>
+                        <li class="footerPrincipal"><a href="#">Qui sommes nous ?</a></li>
+                        <li class="footerPrincipal"><a a href="#">Moyen de paiement</a></li>
+                        <li class="footerPrincipal"><a a href="#">Condition de vente (CGV)</a></li>
+                    </ul>
+                </div>
+                <div class="needHelp">
+                    <ul>
+                        <li><h2 class="h2Footer">BESOIN D'AIDE</h2></li>
+                        <li class="footerPrincipal"><a href="#">Accès fleuriste</a></li>
+                        <li class="footerPrincipal"><a href="#">information livraisons</a></li>
+                        <li class="footerPrincipal"><a href="#">Questions fréquentes</a></li>
+                        <li class="footerPrincipal"><a href="#">Contactez nous</a></li>
+                    </ul>
+                </div>
 
-        </div>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto text-white">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        types produits
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/admin/productType/add">add</a>
-                        <a class="dropdown-item" href="/admin/productType/list">list</a>
+                <div class="contactUs">
+                    <ul>
+                        <li><h2 class="h2Footer">CONTACTEZ-NOUS</h2></li>
+                        <li class="footerPrincipal">0Xx0Xx0Xx</li>
+                        <li class="footerPrincipal">dulundi au vendredi de 10h à 18h</li>
+                    </ul>
+                </div>
+                <footer class="footerSecondaire">
+                    <p class="paragraFooter">Copyright &#64; 2019</p>
+                    <p class="paragraFooter">UNIFLOR spécialiste de la livraison de fleurs à domicile en France</p>
+                    <p class="paragraFooter">Nos fleuristes ont du talent et nos clients sont satisfait</p>
+                </footer>
+            </article>
+        </footer>
 
-                    </div>
-                </li>
-            </ul>
+    {% endblock %}
+</div>
 
-        </div>
-        <div>
-                        <a class="btn btn-primary" href="/panier/show">panier</a>
-        </div>
-        <div>
-            {%   if app.session.get("connected") %}
-            <a class="btn btn-primary" href="/logout">logout</a>
-            {% else %}
-            <a class="btn btn-primary" href="/login">login</a>
-            {% endif %}
-        </div>
-    </nav>
-{% endblock %}
-
-
-{% block flashmsg %}
-    <!--affiche les messages flash presents en session-->
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
-{% endblock %}
-
-{% block body %}
-{% endblock %}
-
-{% block content %}
-{% endblock %}
-{% block footer %}
-<a href="/contactAdmin">contacter l'administrateur</a>
-{% endblock %}
 {% block javascripts %}
-
     <script
             src="https://code.jquery.com/jquery-3.2.1.js"
             integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
@@ -103,7 +155,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-
 {% endblock %}
 </body>
 </html>

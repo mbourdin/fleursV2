@@ -12,7 +12,6 @@ class ServiceForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('photopath')
             ->add('name')
             ->add('description')
             ->add('price')

@@ -115,7 +115,7 @@ class Service
 
         return $this;
     }
-    public function equals($s)
+    public function equals(Service $s)
     {
         return $this->id==$s->id;
     }

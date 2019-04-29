@@ -3,8 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
+ *
+ * @Vich\Uploadable()
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
 class Product
@@ -45,10 +49,19 @@ class Product
      */
     private $producttype;
 
+
+    /**
+     *  @Vich\UploadableField(mapping="products_images",fileNameProperty="photopath")
+     * @var File
+     */
+    protected $imagefile;
+
     /**
      * Product constructor.
      * @param $active
      */
+
+
     public function __construct()
     {
         $this->active = true;
@@ -109,7 +122,7 @@ class Product
         return $this->photopath;
     }
 
-    public function setPhotopath(string $photopath): self
+    public function setPhotopath(?string $photopath): self
     {
         $this->photopath = $photopath;
 
@@ -128,7 +141,7 @@ class Product
 
         return $this;
     }
-    public function equals($p)
+    public function equals(Product $p)
     {
         return $this->id==$p->id;
     }
@@ -154,5 +167,47 @@ class Product
     {
         $this->producttype = $producttype;
     }
+
+    /**
+     * @return File
+     */
+    public function getImagefile(): ?File
+    {
+        return $this->imagefile;
+    }
+
+    /**
+     * @param File $imagefile
+     */
+    public function setImagefile(File $imagefile): void
+    {
+        $this->imagefile = $imagefile;
+        if( $this->imagefile instanceof UploadedFile)
+        {   $this->updatedAt= new \DateTime();
+
+        }
+    }
+
+//    /**
+//     * @ORM\Column(type="datetime")
+//     */
+//    private $uploadedAt;
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getUploadedAt()
+//    {
+//        return $this->uploadedAt;
+//    }
+//
+//    /**
+//     * @param mixed $uploadedAt
+//     */
+//    public function setUploadedAt($uploadedAt): void
+//    {
+//        $this->uploadedAt = $uploadedAt;
+//    }
+
 
 }

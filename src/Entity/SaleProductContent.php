@@ -17,7 +17,7 @@ class SaleProductContent
     private $id;
 
     /**
- * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"persist","remove"},inversedBy="products")
+ * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"persist"},inversedBy="products")
  * @ORM\JoinColumn(name="product_id", referencedColumnName="id",)
 
  */

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    {% block stylesheets %}
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+    {% endblock %}
+
+    <link rel="stylesheet" href="{{ asset('web/css/style.css') }}">
+</head>
+<body class="bg-gray">
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-black">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto text-white">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        produits
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/admin/product/add">créer</a>
+                        <a class="dropdown-item" href="/admin/product/list">liste</a>
+
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto text-white">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        types produits
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/admin/productType/add">add</a>
+                        <a class="dropdown-item" href="/admin/productType/list">list</a>
+
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+        <div>
+            <a class="btn btn-primary" href="/user/sale/edit">commande</a>
+        </div>
+        <div>
+                        <a class="btn btn-primary" href="/panier/show">panier</a>
+        </div>
+        <div>
+            {%   if app.session.get("connected") %}
+            <a class="btn btn-primary" href="/logout">logout</a>
+            {% else %}
+            <a class="btn btn-primary" href="/login">login</a>
+            {% endif %}
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block flashmsg %}
+    <!--affiche les messages flash presents en session-->
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+{% block footer %}
+<a href="/contactAdmin">contacter l'administrateur</a>
+{% endblock %}
+{% block javascripts %}
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+{% endblock %}
+</body>
+</html>

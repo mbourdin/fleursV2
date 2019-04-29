@@ -1,154 +1,81 @@
 <?php
-
-
 namespace App\Controller;
-
-use App\Entity\Product;
 use App\Entity\Service;
-use App\Form\ProductForm;
-use App\Form\ProductTypeForm;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Form\ServiceForm;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use App\Form\ServiceForm;
-
+/**
+ * @Route("/service")
+ */
 class ServiceController extends Controller
 {
     /**
-     * @param Request $request
-     * @return Response
-     *
-     * @Route("/Service")
+     * @Route("/", name="service_index", methods={"GET"})
      */
-    public function addServiceAction(Request $request)
+    public function index(): Response
+    {   $dao=$this->getDoctrine()->getRepository(Service::class);
+        return $this->render('service/index.html.twig', [
+            'services' => $dao->findAll(),
+        ]);
+    }
+    /**
+     * @Route("/new", name="service_new", methods={"GET","POST"})
+     */
+    public function new(Request $request): Response
     {
-        // on crée un service
         $service = new Service();
-
-        // ensuite on récupère le formulaire
         $form = $this->createForm(ServiceForm::class, $service);
-        $form->add('submit', SubmitType::class, [
-            'label' => 'ajouter',
-            'attr' => ['class' => 'btn btn-default pull-right'],
-        ]);
         $form->handleRequest($request);
-
-        //si le formulaire a été soumi
         if ($form->isSubmitted() && $form->isValid()) {
-            //on enregistre le produit dans la bdd
-
-            $reg = $this->getDoctrine()->getManager();
-
-            $reg->persist($service);
-            $reg->flush();
-
-
-            return new Response('Produit Ajouter');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($service);
+            $entityManager->flush();
+            return $this->redirectToRoute('service_index');
         }
-        //on va générer le Html
-        $formView= $form->createView();
-
-        // on rend la vue
-        return $this->render('ProductAffiche.html.twig', array('form' => $formView));
-
-    }
-
-    /**
-     * @Route("Service/read/all")
-     */
-
-    public function readServiceAction(){
-        $posts=$this->getDoctrine()->getRepository("App:Service");
-        $post=$posts->findAll();
-
-        return $this->render('ProductAfficheList.html.twig',array("list"=>$post));
-    }
-
-    /**
-     * @Route("Service/read/{id}")
-     */
-    public function readOneServiceAction($id){
-        $posts=$this->getDoctrine()->getRepository("App:Service");
-        $post=$posts->find($id);
-
-        return $this->render('ProductAfficheOne.html.twig', array('product' =>$post));
-
-
+        return $this->render('service/new.html.twig', [
+            'service' => $service,
+            'form' => $form->createView(),
+        ]);
     }
     /**
-     * @Route("/Service/save/{id}")
+     * @Route("/{id}", name="service_show", methods={"GET"})
      */
-
-    public function SaveServiceAction(Request $request,$id){
-        // on crée un produit
-        $posts=$this->getDoctrine()->getRepository("App:Service");
-        $service=$posts->find($id);
-
-        // ensuite on récupère le formulaire
+    public function show(Service $service): Response
+    {
+        return $this->render('service/show.html.twig', [
+            'service' => $service,
+        ]);
+    }
+    /**
+     * @Route("/{id}/edit", name="service_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Service $service): Response
+    {
         $form = $this->createForm(ServiceForm::class, $service);
-        $form->add('submit', SubmitType::class, [
-            'label' => 'sauvegarder',
-            'attr' => ['class' => 'btn btn-default pull-right'],
-        ]);
         $form->handleRequest($request);
-
-        //si le formulaire a été soumi
         if ($form->isSubmitted() && $form->isValid()) {
-            //on enregistre le produit dans la bdd
-
-            $reg = $this->getDoctrine()->getManager();
-
-            $reg->persist($service);
-            $reg->flush();
-
-
-            return new Response('Produit Ajouter');
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('service_index', [
+                'id' => $service->getId(),
+            ]);
         }
-        //on va générer le Html
-        $formView= $form->createView();
-
-        // on rend la vue
-        return $this->render('ProductAffiche.html.twig', array('form' => $formView));
-
+        return $this->render('service/edit.html.twig', [
+            'service' => $service,
+            'form' => $form->createView(),
+        ]);
     }
     /**
-     * @Route("/Service/delete/{id}")
+     * @Route("/{id}", name="service_delete", methods={"DELETE"})
      */
-
-    public function DeleteServiceAction(Request $request,$id){
-        // on crée un produit
-        $posts=$this->getDoctrine()->getRepository("App:Service");
-        $service=$posts->find($id);
-
-        // ensuite on récupère le formulaire
-        $form = $this->createForm(ServiceForm::class, $service);
-        $form->add('submit', SubmitType::class, [
-            'label' => 'supprimer',
-            'attr' => ['class' => 'btn btn-default pull-right'],
-        ]);
-        $form->handleRequest($request);
-
-        //si le formulaire a été soumi
-        if ($form->isSubmitted() && $form->isValid()) {
-            //on enregistre le produit dans la bdd
-
-            $reg = $this->getDoctrine()->getManager();
-
-            $reg->remove($service);
-            $reg->flush();
-
-
-            return new Response('Produit effacée');
+    public function delete(Request $request, Service $service): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$service->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($service);
+            $entityManager->flush();
         }
-        //on va générer le Html
-        $formView= $form->createView();
-
-        // on rend la vue
-        return $this->render('ProductAffiche.html.twig', array('form' => $formView));
-
+        return $this->redirectToRoute('service_index');
     }
-
-
 }

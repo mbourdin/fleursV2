@@ -2,6 +2,10 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as FOSUser;
+
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  */
@@ -48,10 +52,7 @@ class Person extends FOSUser {
      */
     private $banned;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $chatbanned;
+
 
     /**
      * @ORM\Column(type="boolean")
@@ -310,5 +311,29 @@ class Person extends FOSUser {
         {   $str.="/accAdmin";
         }
         return $str;
+    }
+    /**
+     *  @Vich\UploadableField(mapping="persons_images",fileNameProperty="photopath")
+     * @var File
+     */
+    protected $imagefile;
+    /**
+     * @return File
+     */
+    public function getImagefile(): ?File
+    {
+        return $this->imagefile;
+    }
+
+    /**
+     * @param File $imagefile
+     */
+    public function setImagefile(File $imagefile): void
+    {
+        $this->imagefile = $imagefile;
+        if( $this->imagefile instanceof UploadedFile)
+        {   $this->updatedAt= new \DateTime();
+
+        }
     }
 }

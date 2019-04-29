@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ProductOfferContent index{% endblock %}
+
+{% block body %}
+    <h1>Produit associé à une offre index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Quantité</th>
+            <th>Prix réel</th>
+            <th>Produit</th>
+            <th>Offre</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product_offer_content in product_offer_contents %}
+            <tr>
+                <td>{{ product_offer_content.id }}</td>
+                <td>{{ product_offer_content.quantity }}</td>
+                <td>{{ product_offer_content.product }}</td>
+                <td>{{ product_offer_content.offer }}</td>
+                <td>
+                    <a href="{{ path('product_offer_content_show', {'id': product_offer_content.id}) }}">show</a>
+                    <a href="{{ path('product_offer_content_edit', {'id': product_offer_content.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('product_offer_content_new') }}">Create new</a>
+{% endblock %}
