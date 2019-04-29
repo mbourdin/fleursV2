@@ -1,0 +1,209 @@
+
+
+body{
+    font-size: 14px ;
+    font-family: 'Roboto', sans-serif;
+    color: #424242;
+    background-color: #f8f9fa !important;
+    padding: 20px;
+}
+.container{
+
+    margin: 0 !important;
+    max-width: 100% !important;
+
+}
+.centered{
+    text-align: center;
+}
+
+
+.navbarMenu{
+    background-color: #fff !important;
+    border-left: solid 1px #69a038;
+    border-right: solid 1px #69a038;
+
+}
+.navbarMenu>.container>a{
+    color: #000 !important;
+    font-weight: bold;
+}
+.logoHeader{
+    width: 20px;
+    height:20px;
+    margin-top: 25px;
+    margin-right: 10px;
+}
+
+.logoHeaderUniflor {
+    width: 80px;
+    height: 80px;
+    padding-left: 5px !important;
+    padding-top: 5px !important;
+
+
+}
+
+.header{
+    max-width: 100%;
+    height: 100%;
+    padding: 0 !important;
+    border: solid 1px #69a038;
+}
+.imagehome{
+    background-image: url("/web/images/site/muguet.jpg");
+    position: absolute !important;
+}
+.header>h1{
+    color:#69a038 !important;
+}
+.py-2>img{
+    color: #000;
+}
+.iconImage, .iconImageKart, .iconImageUser{
+    width: 29px;
+    height: 29px;
+
+}
+.iconImageKart{
+    margin-left: 600px;
+}
+.iconImageUser{
+    margin-right: 20px;
+}
+li{
+    list-style: none;
+    font-size: 12px;
+    padding: 8px;
+}
+.titleSection{
+    padding: 20px;
+    color: #69a038;
+    border-radius: 0 !important;
+    border: solid 1px #69a038 !important;
+}
+h3{
+    font-family: 'Roboto', sans-serif;
+    width: 70px;
+    display: inline-block;
+}
+.productCard{
+    width: 300px;
+    padding: 20px;
+    margin-top: 80px;
+
+}
+.sectionOffre{
+    width: 1833px;
+    border-radius: 0 !important;
+    border: solid 1px #69a038!important;
+    padding: 50px;
+}
+.card>.card-img-top{
+    width: 70% !important;
+    margin: 0 auto;
+    padding: 10px !important;
+}
+.logoNav,.logoNavSegond{
+    width: 30px;
+    height: 30px;
+
+}
+.home,.plantOrchi,.fleurCoup,.tomb,.abonnement,.promos,.idKdo,.job,.navSecond {
+    width: 130px;
+    display: inline-block;
+    margin-top: -10px;
+    height: 190.867px;
+    border: 0;
+
+}
+.homeMenu{
+    display: none;
+    color: #689F38;
+}
+.navbarNetwork{
+    height: 80px;
+    margin: 0;
+}
+.secondNavBar{
+    color: #69a038;
+
+
+
+}
+.secondNavBarActive{
+    font-weight: bold;
+}
+
+.navSecond{
+    border: solid 1px #69a038;
+    height: 100%;
+
+}
+footer{
+    border: solid 1px #69a038;
+}
+h2,.logoFooterNetwork{
+    display: inline-block;
+    font-weight: initial;
+}
+.follow{
+    width: 480px;
+    height: 50px;
+    margin: 0 auto;
+    border: solid 1px #69a038;
+    margin-top: 20px;
+}
+.follow>h2{
+    margin-left: 30px;
+}
+.logoFooterNetwork{
+    width: 30px !important;
+    height: 30px !important;
+    margin-right: 20px;
+    margin-top: 10px;
+    float: right;
+
+}
+.logoImgFooter{
+    width: 120px;
+    height:120px;
+    margin-left: 50px;
+    margin-top: -120px;
+}
+h2{
+    color: #69a038;
+    font-size: 20px !important;
+    font-weight: initial;
+    margin-left: 50px;
+}
+
+.paragraFooter{
+    text-align: center;
+}
+.h2Footer{
+    margin-left: 0;
+}
+.footerPrincipal{
+    display: block;
+}
+.footerSecondaire{
+    background-color: #69a038;
+    color: #fff;
+}
+.logoFooter,.aboutUniflor,.needHelp{
+    width: 200px;
+    display: inline-block;
+
+}
+.contactUs{
+    width: 300px;
+    display: inline-block;
+    border: solid 1px #69a038;
+    height: 150px;
+}
+span{
+    font-size: 16px;
+    color: #69a038;
+    font-weight: bold;
+}

@@ -11,7 +11,7 @@ namespace App\Controller;
 
 use App\Entity\MessageAdmin;
 use App\Entity\Person;
-use App\Form\MessageAdminFormType;
+use App\Form\MessageAdminForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,9 +32,13 @@ class MessageAdminController extends Controller
         {   $user=$this->getDoctrine()->getRepository(Person::class)->find($session->get("user")->getId());
             $email = $user->getEmail();
         }
+        else
+        {
+            $email="";
+        }
         $msg = new MessageAdmin();
 
-        $form = $this->createForm(MessageAdminFormType::class, $msg,["email"=>$email]);
+        $form = $this->createForm(MessageAdminForm::class, $msg,["email"=>$email]);
         $form->add('submit', SubmitType::class, [
             'label' => 'envoyer',
             'attr' => ['class' => 'btn btn-default pull-right'],
@@ -93,7 +97,7 @@ class MessageAdminController extends Controller
 //        $product=$posts->find($id);
 //
 //        // ensuite on récupère le formulaire
-//        $form = $this->createForm(MessageAdminFormType::class, $product);
+//        $form = $this->createForm(MessageAdminForm::class, $product);
 //        $form->add('submit', SubmitType::class, [
 //            'label' => 'sauvegarder',
 //            'attr' => ['class' => 'btn btn-default pull-right'],

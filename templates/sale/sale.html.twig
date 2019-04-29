@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+Gestion du panier
+{% endblock %}
+
+
+{% block body %}
+    <h1>Gestion de la Commande</h1>
+
+    <h2>FORMULAIRE ADRESSE DE LIVRAISON DES SERVICES<br>et date de la premiere livraison</h2>
+    <h2> FORMULAIRE ADRESSE DE LIVRAISON DES OFFRES ET PRODUITS<br>et Date de Livraison</h2>
+
+    <table class="table">
+        <tr>
+            <th>article</th>
+            <th>id_article</th>
+            <th>quantite</th>
+            <th>prix_unitaire</th>
+            <th>prix_total</th>
+            <th></th>
+        </tr>
+        {% if sale!=null %}
+        <tr>
+            <th>PRODUITS</th>
+        </tr>
+        {% set i=0 %}
+        {% for productContent in sale.products %}
+            {% set i=1-i %}
+            <tr>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.product.name }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ productContent.product.id }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('product',{{ productContent.product.id }})" id="productinput" value="{{ productContent.quantity }}"
+                           type="text"></td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought * productContent.quantity }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                    <a href="/user/sale/rmProduct/{{ productContent.product.id }}"><button  class="btn btn-success ">-</button></a>
+                    <a href="/user/sale/addProduct/{{ productContent.product.id }}"><button class="btn  btn-success">+</button></a>
+                    <a href="/user/sale/delProduct/{{ productContent.product.id }}"><button class="btn  btn-danger">X</button></a>
+
+                </td>
+            </tr>
+        {% endfor %}
+
+        <tr>
+            <th>SERVICES</th>
+        </tr>
+        {% for serviceContent in sale.services %}
+            {% set i=1-i %}
+            <tr>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.service.name }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ serviceContent.service.id }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('service',{{ serviceContent.service.id }})" id="serviceinput" value="{{ serviceContent.quantity }}"
+                           type="text"></td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                    <a href="/user/sale/rmService/{{ serviceContent.service.id }}"><button class="btn btn-success">-</button></a>
+                    <a href="/user/sale/addService/{{ serviceContent.service.id }}"><button class="btn btn-success">+</button></a>
+                    <a href="/user/sale/delService/{{ serviceContent.service.id }}"><button class="btn  btn-danger">X</button></a>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th>OFFERS</th>
+        </tr>
+        {% for offerContent in sale.offers %}
+            {% set i=1-i %}
+            <tr>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.offer.name }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ offerContent.offer.id }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})" id="offerinput" value="{{ offerContent.quantity }}">
+                </td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
+                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                    <a href="/user/sale/rmOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">-</button></a>
+                    <a href="/user/sale/addOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">+</button></a>
+                    <a href="/user/sale/delOffer/{{ offerContent.offer.id }}"><button class="btn  btn-danger">X</button></a>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <th>TOTAL</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
+            <th>
+                <a href="/user/sale/validate"><button class="btn btn-success">VALIDER COMMANDER</button></a>
+                <br>
+                <a href="/user/sale/delete"><button class="btn  btn-danger">ANNULER COMMANDE </button></a>
+            </th>
+        </tr>
+        {% else %}
+            <tr>
+                <td>Pas de commande non valide trouvée</td>
+            </tr>
+        {% endif %}
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset("web/js/sale.js") }}">
+
+    </script>
+{% endblock %}

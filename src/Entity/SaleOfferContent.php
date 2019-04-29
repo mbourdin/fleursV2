@@ -17,7 +17,7 @@ class SaleOfferContent
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Offer",cascade={"persist","remove"},inversedBy="offers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Offer",cascade={"persist"},inversedBy="offers")
      * @ORM\JoinColumn(name="offer_id", referencedColumnName="id",)
      */
     private $offer;

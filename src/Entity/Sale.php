@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use DateTime;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
@@ -37,27 +38,31 @@ class Sale
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Person", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Person", fetch="LAZY",cascade={"persist"})
      */
     private $person;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist"},fetch="EAGER")
      * @ORM\JoinTable(name="saleproductcontent")
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist"},fetch="EAGER")
      * @ORM\JoinTable(name="saleoffercontent")
      */
     private $offers;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist"},fetch="EAGER")
      * @ORM\JoinTable(name="saleservicecontent")
      */
     private $services;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $validated;
     /**
      * Sale constructor.
      */
@@ -70,6 +75,7 @@ class Sale
         $this->products = new ArrayCollection();
         $this->offers = new ArrayCollection();
         $this->services = new ArrayCollection();
+        $this->validated=false;
     }
 
     /**
@@ -442,6 +448,29 @@ class Sale
         }
 
         return $result;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidated()
+    {
+        return $this->validated;
+    }
+
+    /**
+     * @param mixed $validated
+     */
+    public function setValidated($validated): void
+    {
+        $this->validated = $validated;
+    }
+    public function isEmpty():bool
+    {
+        return ($this->products->isEmpty()
+            && $this->offers->isEmpty()
+            && $this->services->isEmpty()
+        );
     }
 }
 

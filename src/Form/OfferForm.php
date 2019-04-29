@@ -1,28 +1,27 @@
 <?php
-
 namespace App\Form;
-
-use App\Entity\Service;
+use App\Entity\Offer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-class ServiceForm extends AbstractType
+class OfferForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
-            ->add('description')
             ->add('price')
+            ->add('description')
             ->add('active')
+            ->add('start')
+            ->add('end')
+            ->add('discount')
         ;
     }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Service::class,
+            'data_class' => Offer::class,
         ]);
     }
 }

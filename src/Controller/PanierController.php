@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Entity\Person;
 use App\Entity\Sale;
 use App\Entity\Product;
 use App\Entity\Service;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-class UserController extends Controller
+class PanierController extends Controller
 {
     /**
      * @Route("/panier/show",name="panier")
@@ -36,18 +37,21 @@ class UserController extends Controller
      */
     public function savePanierAction(Request $request)
     {   $sale=$this->sanitizeSale($request);
-        $nbItems=$sale->getProducts()->count()+$sale->getServices()->count()+$sale->getOffers()->count();
-        if($nbItems==0)
+
+        if($sale->isEmpty())
         {
             $this->addFlash("failure","impossible de commander : panier vide");
             return $this->redirect("/panier/show");
         }
-
+        $personDao=$this->getDoctrine()->getRepository(Person::class);
+        $person=$personDao->find($request->getSession()->get("user"));
+        $sale->setPerson($person);
+        $sale->setValidated(false);
         $em=$this->getDoctrine()->getManager();
         $em->persist($sale);
         $em->flush();
         $this->addFlash("success","panier sauvegardé");
-        return $this->redirect("/test/panier/list");
+        return $this->redirect("/user/sale/edit");
     }
 
     /**

@@ -18,7 +18,7 @@ class CityRestController extends Controller
      * @ParamConverter("city", converter="fos_rest.request_body")
      */
     public function createInactiveAction(City $city)
-    {   $dao=$this->getDoctrine()->getRepository('App:City');
+    {   $dao=$this->getDoctrine()->getRepository(City::class);
         $oldCity=$dao->findOneBy($city->getInseeid());
         if($oldCity!=null)
         {   $city=$oldCity;

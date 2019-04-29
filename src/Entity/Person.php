@@ -48,10 +48,7 @@ class Person extends FOSUser {
      */
     private $banned;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $chatbanned;
+
 
     /**
      * @ORM\Column(type="boolean")

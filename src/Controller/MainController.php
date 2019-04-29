@@ -13,7 +13,7 @@ class MainController extends Controller
      * @Route("/",name="index")
      */
     public function indexAction()
-    {   return  $this->render("default/index.html.twig");
+    {   return  $this->render("default/home.html.twig");
     }
     /**
      * @Route("/planning")

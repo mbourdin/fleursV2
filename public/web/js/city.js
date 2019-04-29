@@ -35,7 +35,7 @@ function onSuccessDepList(result)
         opt=new Option(dep.code+" "+dep.nom,dep.code)
         $("#departement").append(opt)
     }
-    console.log(result);
+    //console.log(result);
 }
 function onSuccessCityList(result){
 
