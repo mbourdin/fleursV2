@@ -19,6 +19,12 @@ class ServiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Service::class);
     }
 
+    public function findByNameLikeAndActiveTrue($name)
+    {   $em=$this->getEntityManager();
+        $query=$em->createQuery('SELECT p FROM App\Entity\Service p WHERE p.name LIKE :name AND p.active=true');
+        $query->setParameter('name', "%".$name."%");
+        return $query->getResult();
+    }
     // /**
     //  * @return Service[] Returns an array of Service objects
     //  */

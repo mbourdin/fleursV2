@@ -8,15 +8,16 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
               crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     {% endblock %}
 </head>
 <body>
 
-<div class="container">
+<div class="main">
     {% block navbar %}
         <header>
             <nav class="navbar navbar-light bg-light header">
-                <img class="nav-link logoHeaderUniflord-inline-block align-top"
+                <img class="nav-link logoHeaderUniflord-inline-block"
                      src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" width="20" height="20" alt="">
                 <h1>Uniflor</h1>
                 <span class="navbar-text navbarNetwork">
@@ -29,7 +30,7 @@
 
 
         </header>
-        <nav class="site-header sticky-top py-1 navbarMenu">
+        <nav class="site-header sticky-top py-1">
             <div class="container d-flex flex-column flex-md-row justify-content-between">
                 <a class="py-2" href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -46,7 +47,7 @@
                 </a>
                 <a class="py-2 d-none d-md-inline-block " href="#">
                     <img class="iconImage" src="{{ '/web/images/site/icons8-accueil-vert-96.png' }}" alt=""> Accueil</a>
-                <a class="py-2 d-none d-md-inline-block " href="#">
+                <a class="py-2 d-none d-md-inline-block " href="/orchid">
                     <img class="iconImage" src="{{ '/web/images/site/icons8-plante-en-pot-vert-96.png' }}" alt="">Plantes
                     & orchidées</a>
                 <a class="py-2 d-none d-md-inline-block " href="#">
@@ -66,17 +67,17 @@
                 <a class="py-2 d-none d-md-inline-block " href="/panier/show">
                     <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}" alt=""></a>
                 {% if app.session.get("connected") %}
-                    <a class="py-2 d-none d-md-inline-block " href="/logout">
+                    <a class="py-2 d-none d-md-inline-block " href="/myAccount">
                         <img class="iconImageUser"
-                                {% if app.session.get("user")!=null %}
+                                {% if app.session.get("user").photopath!=null %}
                                     src="{{ '/images/persons/' ~ app.session.get('user').photopath }}"
                                 {% else %}
                                     src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
                                 {% endif %}
-                                                                                  alt=""><br>connecté en tant
-                        que<br>{{ app.session.get("user").username }}<br>
-                        <button class="btn btn-success">logout</button>
+                             alt="">{{ app.session.get("user").username }}
+
                     </a>
+                    <a class="py-2 d-none d-md-inline-block " href="/logout"><button class="btn btn-success">logout</button></a>
                 {% else %}
                     <a class="py-2 d-none d-md-inline-block " href="/login"><img class="iconImageUser"
                                                                                  src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
@@ -92,52 +93,77 @@
 
     {% endblock %}
     {% block footer %}
-        <footer class="footerPrincipal">
-            <article>
-                <div class="follow">
-                    <h2>SUIVEZ-NOUS !</h2>
+        {# <footer class="footerPrincipal">
+             <article>
+                 <div class="follow">
+                     <h2>SUIVEZ-NOUS !</h2>
+                     <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-pinterest-filled-96.png' }}" alt="">
+                     <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
+                     <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
+                     <img class="logoFooterNetwork" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
+                 </div>
+                 <div class="logoFooter">
+                     <img class="nav-link-inline-block"
+                          src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" width="20" height="20" alt="">
+                 </div>
+                 <div class="aboutUniflor">
+                     <ul>
+                         <li class="footerPrincipal"><h2 class="h2Footer">A PROPOS D'UNIFLOR</h2></li>
+                         <li class="footerPrincipal"><a href="#">Qui sommes nous ?</a></li>
+                         <li class="footerPrincipal"><a a href="#">Moyen de paiement</a></li>
+                         <li class="footerPrincipal"><a a href="#">Condition de vente (CGV)</a></li>
+                     </ul>
+                 </div>
+                 <div class="needHelp">
+                     <ul>
+                         <li><h2 class="h2Footer">BESOIN D'AIDE</h2></li>
+                         <li class="footerPrincipal"><a href="#">Accès fleuriste</a></li>
+                         <li class="footerPrincipal"><a href="#">information livraisons</a></li>
+                         <li class="footerPrincipal"><a href="#">Questions fréquentes</a></li>
+                         <li class="footerPrincipal"><a href="#">Contactez nous</a></li>
+                     </ul>
+                 </div>
+                 <div class="contactUs">
+                     <ul>
+                         <li><h2 class="h2Footer">CONTACTEZ-NOUS</h2></li>
+                         <li class="footerPrincipal">0Xx0Xx0Xx</li>
+                         <li class="footerPrincipal">dulundi au vendredi de 10h à 18h</li>
+                     </ul>
+                 </div>
+                 <footer class="footerSecondaire">
+                     <p class="paragraFooter">Copyright &#64; 2019</p>
+                     <p class="paragraFooter">UNIFLOR spécialiste de la livraison de fleurs à domicile en France</p>
+                     <p class="paragraFooter">Nos fleuristes ont du talent et nos clients sont satisfait</p>
+                 </footer>
+             </article>
+         </footer>#}
 
-                    <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-pinterest-filled-96.png' }}" alt="">
-                    <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
-                    <img class="logoFooterNetwork" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
-                    <img class="logoFooterNetwork" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="card">
+                    <img class="nav-link-inline-block"
+                         src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" width="80" height="80" alt="">
                 </div>
-                <div class="logoFooter">
-                    <img src="{{ '/web/images/site/LogoUniflors.jpg' }}" width="30" height="30"
-                         class="d-inline-block align-top logoImgFooter" alt="">
+            </div>
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
                 </div>
-                <div class="aboutUniflor">
-                    <ul>
-                        <li class="footerPrincipal"><h2 class="h2Footer">A PROPOS D'UNIFLOR</h2></li>
-                        <li class="footerPrincipal"><a href="#">Qui sommes nous ?</a></li>
-                        <li class="footerPrincipal"><a a href="#">Moyen de paiement</a></li>
-                        <li class="footerPrincipal"><a a href="#">Condition de vente (CGV)</a></li>
-                    </ul>
+            </div>
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Special title treatment</h5>
+                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
                 </div>
-                <div class="needHelp">
-                    <ul>
-                        <li><h2 class="h2Footer">BESOIN D'AIDE</h2></li>
-                        <li class="footerPrincipal"><a href="#">Accès fleuriste</a></li>
-                        <li class="footerPrincipal"><a href="#">information livraisons</a></li>
-                        <li class="footerPrincipal"><a href="#">Questions fréquentes</a></li>
-                        <li class="footerPrincipal"><a href="#">Contactez nous</a></li>
-                    </ul>
-                </div>
-
-                <div class="contactUs">
-                    <ul>
-                        <li><h2 class="h2Footer">CONTACTEZ-NOUS</h2></li>
-                        <li class="footerPrincipal">0Xx0Xx0Xx</li>
-                        <li class="footerPrincipal">dulundi au vendredi de 10h à 18h</li>
-                    </ul>
-                </div>
-                <footer class="footerSecondaire">
-                    <p class="paragraFooter">Copyright &#64; 2019</p>
-                    <p class="paragraFooter">UNIFLOR spécialiste de la livraison de fleurs à domicile en France</p>
-                    <p class="paragraFooter">Nos fleuristes ont du talent et nos clients sont satisfait</p>
-                </footer>
-            </article>
-        </footer>
+            </div>
+        </div>
 
     {% endblock %}
 </div>

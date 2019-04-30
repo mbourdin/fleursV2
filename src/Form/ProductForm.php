@@ -16,7 +16,7 @@ class ProductForm extends AbstractType
             ->add('name')
             ->add('description')
             ->add("active")
-            ->add('imagefile',VichFileType::class,array('data_class'=>null))
+            ->add('imagefile',VichFileType::class,array('data_class'=>null,'required'=>false))
             ->add('price')
             ;
     }

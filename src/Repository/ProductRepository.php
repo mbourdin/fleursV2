@@ -14,11 +14,20 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Product::class);
     }
 
+
+    public function findByNameLikeAndActiveTrue($name)
+    {   $em=$this->getEntityManager();
+        $query=$em->createQuery('SELECT p FROM App\Entity\Product p WHERE p.name LIKE :name AND p.active=true');
+        $query->setParameter('name', "%".$name."%");
+        return $query->getResult();
+    }
     // /**
     //  * @return ProductController[] Returns an array of ProductController objects
     //  */

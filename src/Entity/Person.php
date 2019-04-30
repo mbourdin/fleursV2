@@ -331,9 +331,5 @@ class Person extends FOSUser {
     public function setImagefile(File $imagefile): void
     {
         $this->imagefile = $imagefile;
-        if( $this->imagefile instanceof UploadedFile)
-        {   $this->updatedAt= new \DateTime();
-
-        }
     }
 }
