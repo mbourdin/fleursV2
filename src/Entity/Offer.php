@@ -2,10 +2,10 @@
 
 
 namespace App\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use http\Exception\RuntimeException;
+use \RuntimeException;
 
-//PLACEHOLDER SANS BDD A REMPLACER DANS LE PROJET FINAL
 /**
 * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
 */
@@ -20,17 +20,6 @@ class Offer
      * @ORM\Column(type="string", length=30)
      */
     private $name;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $photopath;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $price;
-
     /**
      * @ORM\Column(type="text")
      */
@@ -53,12 +42,20 @@ class Offer
      * @ORM\Column(type="integer")
      */
     private $discount;
+
     /**
-     * Product constructor.
+     * @ORM\OneToMany(targetEntity="App\Entity\OfferProductContent",mappedBy="offer",cascade={"persist"},fetch="LAZY")
+     * @ORM\JoinTable(name="offer_product_content")
+     */
+    private $products;
+
+    /**
+     * Offer constructor.
      */
     public function __construct()
     {   $this->id=null;
         $this->active=true;
+        $this->products = new ArrayCollection();
     }
 
 
@@ -91,7 +88,7 @@ class Offer
      */
     public function setName(string $name)
     {
-        $this->nom = $name;
+        $this->name = $name;
     }
     public function equals(Offer $o)
     {   return $this->id==$o->id;
@@ -100,40 +97,6 @@ class Offer
     {   $str="/offer/id/".$this->id."/nom/".$this->name;
         return $str;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * @param mixed $price
-     */
-    public function setPrice(int $price): void
-    {   if ($price<=0) throw new \RuntimeException();
-        $this->price = $price;
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getPhotopath()
-    {
-        return $this->photopath;
-    }
-
-    /**
-     * @param mixed $photopath
-     */
-    public function setPhotopath(string $photopath): void
-    {
-        $this->photopath = $photopath;
-    }
-
     /**
      * @return mixed
      */
@@ -213,6 +176,14 @@ class Offer
     {
         $this->discount = $discount;
     }
+    public function getPrice()
+    {   $sum=0;
+//        foreach ($this->products->getIterator() as $i => $productContent) {
+//        $sum+=$productContent->getProduct()->getPrice();
+//        }
 
+        $result=($sum*(100-$this->discount))/100;
+        return $result;
 
+    }
 }

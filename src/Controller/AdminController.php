@@ -87,7 +87,7 @@ class AdminController extends Controller
         $dao=$this->getDoctrine()->getRepository(Product::class);
         $products=$dao->findAll();
 
-        return $this->render('product/list.html.twig',array("list"=>$products));
+        return $this->render('product/list.html.twig',array("products"=>$products));
     }
 
     /**

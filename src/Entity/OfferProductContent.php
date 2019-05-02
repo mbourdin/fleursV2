@@ -17,14 +17,6 @@ class OfferProductContent
      */
     private $quantity;
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $priceReal;
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-    /**
      * @var Product|string
      * @ORM\ManyToOne(targetEntity="Product", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")

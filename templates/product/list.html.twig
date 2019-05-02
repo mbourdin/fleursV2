@@ -15,7 +15,7 @@ Produits
             <th>typeId</th>
             <th></th>
         </tr>
-    {%  for product in list %}
+    {%  for product in products %}
         <tr>
             <td> {{   product.id }}</td>
             <td> {{  product.name }}</td>
@@ -23,7 +23,7 @@ Produits
             <td> {{ product.price }}</td>
             <td> {{ product.active }}</td>
             <td>
-                <img src="{{ asset('images/products/'~ product.photopath) }}" class="productimage">
+                <img src="{{ asset('images/products/'~ product.photopath) }}" alt="{{  product.name }}" class="productimage">
                 </td>
             <td>{% if product.producttype %}{{ product.producttype.id }}{% endif %}</td>
             <td><a  href="/admin/product/edit/{{   product.id }}"><button>edit</button></a></td>

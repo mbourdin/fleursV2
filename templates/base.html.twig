@@ -16,11 +16,13 @@
 <div class="main">
     {% block navbar %}
         <header>
-            <nav class="navbar navbar-light bg-light header">
+            <nav class="navbar navbar-light bg-light header secondNavBar">
                 <img class="nav-link logoHeaderUniflord-inline-block"
                      src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" width="20" height="20" alt="">
-                <h1>Uniflor</h1>
-                <span class="navbar-text navbarNetwork">
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Rechercher ..." aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+                </form>                <span class="navbar-text navbarNetwork">
                     <img class="logoHeader" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
                     <img class="logoHeader" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
                     <img class="logoHeader" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
@@ -30,7 +32,7 @@
 
 
         </header>
-        <nav class="site-header sticky-top py-1">
+        <nav class="site-header sticky-top py-1 secondNavBar">
             <div class="container d-flex flex-column flex-md-row justify-content-between">
                 <a class="py-2" href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -47,7 +49,7 @@
                 </a>
                 <a class="py-2 d-none d-md-inline-block " href="#">
                     <img class="iconImage" src="{{ '/web/images/site/icons8-accueil-vert-96.png' }}" alt=""> Accueil</a>
-                <a class="py-2 d-none d-md-inline-block " href="/orchid">
+                <a class="py-2 d-none d-md-inline-block " href="/search/products/orchid">
                     <img class="iconImage" src="{{ '/web/images/site/icons8-plante-en-pot-vert-96.png' }}" alt="">Plantes
                     & orchidées</a>
                 <a class="py-2 d-none d-md-inline-block " href="#">
@@ -67,7 +69,7 @@
                 <a class="py-2 d-none d-md-inline-block " href="/panier/show">
                     <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}" alt=""></a>
                 {% if app.session.get("connected") %}
-                    <a class="py-2 d-none d-md-inline-block " href="/myAccount">
+                    <a class="py-2 d-none d-md-inline-block " href="/profile">
                         <img class="iconImageUser"
                                 {% if app.session.get("user").photopath!=null %}
                                     src="{{ '/images/persons/' ~ app.session.get('user').photopath }}"
@@ -138,32 +140,69 @@
              </article>
          </footer>#}
 
+        <div class="row follow">
+            <nav class="navbar navbar-expand-lg navbar-light navFooter">
+                <h4>SUIVEZ-NOUS </h4>
+                {#<div class="collapse navbar-collapse" id="navbarText">#}
+                <span class="navbar-text navbarNetwork">
+                    <img class="logoFooter" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
+                    <img class="logoFooter" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
+                    <img class="logoFooter" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
+                    <img class="logoFooter" src="{{ '/web/images/site/icons8-pinterest-filled-96.png' }}" alt="">
+    </span>
+                {#  </div>#}
+            </nav>
+        </div>
         <div class="row">
-            <div class="col-sm-2">
-                <div class="card">
+            <div class="col-sm-3">
+                <div class="card footercard">
                     <img class="nav-link-inline-block"
-                         src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" width="80" height="80" alt="">
+                         src="{{ '/web/images/site/LogoVecTransparent_UNIFLOR.png' }}" alt="">
                 </div>
             </div>
-            <div class="col-sm-2">
-                <div class="card">
+            <div class="col-sm-3">
+                <div class="card footercard">
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"> <h5 class="card-title">À PROPOS D'UNIFLOR</h5></li>
+                            <li class="list-group-item">Qui sommes nous ?</li>
+                            <li class="list-group-item">Moyens de paiement</li>
+                            <li class="list-group-item">Conditions de ventes (CGV)</li>
+                            <li class="list-group-item">Mentions légales</li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-2">
-                <div class="card">
+            <div class="col-sm-3">
+                <div class="card footercard">
                     <div class="card-body">
-                        <h5 class="card-title">Special title treatment</h5>
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><h5 class="card-title">BESOIN D'AIDE ? </h5></li>
+                            <li class="list-group-item">Accès fleuriste</li>
+                            <li class="list-group-item">Informations livraisons</li>
+                            <li class="list-group-item">Contactez-nous</li>
+                            <li class="list-group-item">Mentions légales</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="card footercard contact">
+                    <div class="card-body contactUs">
+                        <h5 class="card-title">Contactez-nous</h5>
+                        <p class="card-text">0XxXxXxXxX (0.25€/min)</p>
+                        <p class="cardd-text">du lundi au vendredi de 10h à 18h</p>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row footerSecondaire">
+            <p class="text-center">Copyright @ 2019</p>
+            <p class="text-center">UNIFLOR spécialiste de la livraison de fleur à domicile en france, livre du lundi au venrdredi</p>
+            <p class="text-center">Nos fleuriste on du talent</p>
+        </div>
+
 
     {% endblock %}
 </div>

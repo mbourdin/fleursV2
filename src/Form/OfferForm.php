@@ -9,8 +9,7 @@ class OfferForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('price')
+            ->add("name")
             ->add('description')
             ->add('active')
             ->add('start')

@@ -59,32 +59,6 @@ class Person extends FOSUser {
      */
     private $deleted;
 
-//      remplacé par l'attribut hérité de la classe parente : enabled
-//    /**
-//     * @ORM\Column(type="boolean")
-//     */
-//    private $active;
-
-
-//      remplacé par l'attribut hérité de la classe parente : confirmationToken
-//    /**
-//     * @ORM\Column(type="string", length=32)
-//     */
-//    private $validationtoken;
-
-
-//      doublon fonctionnel avec l'attribut hérité confirmationtoken
-//    /**
-//     * @ORM\Column(type="string", length=32)
-//     */
-//    private $recoverytoken;
-
-//      remplacé par l'attribut hérité de la classe mère : password_requested_at
-//    /**
-//     * @ORM\Column(type="datetime")
-//     */
-//    private $recoverytokendate;
-
 
     /**
      * @ORM\Column(type="datetime")

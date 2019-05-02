@@ -16,10 +16,7 @@ class Service
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $photopath;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -53,19 +50,6 @@ class Service
     public function setId($id): void
     {
         $this->id = $id;
-    }
-
-
-    public function getPhotopath(): ?string
-    {
-        return $this->photopath;
-    }
-
-    public function setPhotopath(?string $photopath): self
-    {
-        $this->photopath = $photopath;
-
-        return $this;
     }
 
     public function getName(): ?string

@@ -10,7 +10,6 @@ class OfferProductContentForm extends AbstractType
     {
         $builder
             ->add('quantity')
-            ->add('priceReal')
             ->add('product')
             ->add('offer')
         ;

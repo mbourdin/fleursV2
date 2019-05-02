@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Offer index{% endblock %}
+
+{% block body %}
+    <h1>Les offres</h1>
+
+    {% include 'offer/listBody.html' %}
+
+    <a class="btn btn-outline-success" href="{{ path('offer_new') }}">Créer une nouvelle offre</a>
+{% endblock %}

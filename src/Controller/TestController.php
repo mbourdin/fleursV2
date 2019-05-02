@@ -14,16 +14,20 @@ class TestController extends Controller
      * @Route("/test",name="test")
      */
     public function testAction(Request $request)
-    {   //$cookie=$request->cookies->get("bucket");
-        $cookie=null;
+    {   $cookie=$request->cookies->get("bucket");
+        $userDao=$this->getDoctrine()->getRepository(Entity\Person::class);
+        $sessionUser=$request->getSession()->get("user");
+        if($sessionUser!=null){
+            $user=$userDao->find($sessionUser->getId());
+        }
+        else {$user=null;}
+        $request->getSession()->set("user",$user);
         $sale=new Entity\Sale();
-        if($cookie!=null)
+        if($cookie!=null )
         {   $sale=unserialize($cookie);
-            $request->cookies->remove("bucket");
         }
-        else{
-            $sale->setId(null);
-        }
+
+        $sale->setId(null);
         $productDao=$this->getDoctrine()->getRepository(Entity\Product::class);
         $product=$productDao->find(1);
         $sale->add($product,3);
@@ -42,15 +46,5 @@ class TestController extends Controller
         $response->headers->setCookie($cookie);
         $response->send();
         return $this->render("/testing/test.html.twig");
-    }
-
-    /**
-     * @Route ("/test/panier/list")
-     */
-
-    public function panierListAction(){
-        $dao=$this->getDoctrine()->getRepository(Entity\Sale::class);
-        $paniers=$dao->findAll();
-        return $this->render("/panier/list.html.twig",["paniers"=>$paniers]);
     }
 }

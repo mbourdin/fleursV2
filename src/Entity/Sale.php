@@ -43,19 +43,19 @@ class Sale
     private $person;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist"},fetch="EAGER")
-     * @ORM\JoinTable(name="saleproductcontent")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist"},fetch="LAZY")
+     * @ORM\JoinTable(name="sale_product_content")
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist"},fetch="EAGER")
-     * @ORM\JoinTable(name="saleoffercontent")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist"},fetch="LAZY")
+     * @ORM\JoinTable(name="sale_offer_content")
      */
     private $offers;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist"},fetch="EAGER")
-     * @ORM\JoinTable(name="saleservicecontent")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist"},fetch="LAZY")
+     * @ORM\JoinTable(name="sale_service_content")
      */
     private $services;
 

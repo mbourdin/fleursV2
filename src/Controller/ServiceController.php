@@ -16,7 +16,7 @@ class ServiceController extends Controller
      */
     public function index(): Response
     {   $dao=$this->getDoctrine()->getRepository(Service::class);
-        return $this->render('service/index.html.twig', [
+        return $this->render('service/list.html.twig', [
             'services' => $dao->findAll(),
         ]);
     }
@@ -40,7 +40,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/{id}", name="service_show", methods={"GET"})
+     * @Route("/show/{id}", name="service_show", methods={"GET"})
      */
     public function show(Service $service): Response
     {
@@ -49,7 +49,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/{id}/edit", name="service_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="service_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Service $service): Response
     {
@@ -67,7 +67,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/{id}", name="service_delete", methods={"DELETE"})
+     * @Route("/delete/{id}", name="service_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Service $service): Response
     {

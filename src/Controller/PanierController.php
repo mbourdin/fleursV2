@@ -29,7 +29,6 @@ class PanierController extends Controller
         else {
             $sale = unserialize($cookie);
         }
-
         return $this->render("/panier/panier.html.twig",["sale"=>$sale]);
     }
     /**
@@ -216,19 +215,28 @@ class PanierController extends Controller
         $serviceDao=$this->getDoctrine()->getRepository(Service::class);
         $offerDao=$this->getDoctrine()->getRepository(Offer::class);
         $cookie=$request->cookies->get("bucket");
-        $sale=unserialize($cookie);
-        if(!$sale instanceof Sale){throw new \RuntimeException("class invalide");}
-        //On empeche l'utilisateur de modifier la BDD en rechargeant les éléments
-        $sale->setId(null);
-        foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
-            $productContent->setProduct($productDao->find($productContent->getProduct()->getId()));
+        if($cookie==null)
+        {
+            $sale=new Sale();
         }
-        foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
-            $serviceContent->setService($serviceDao->find($serviceContent->getService()->getId()));
+        else{
+            $sale=unserialize($cookie);
+            if(!$sale instanceof Sale){throw new \RuntimeException("class invalide");}
+            //On empeche l'utilisateur de modifier la BDD en rechargeant les éléments
+            $sale->setId(null);
+            foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
+                $productContent->setProduct($productDao->find($productContent->getProduct()->getId()));
+            }
+            foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
+                $serviceContent->setService($serviceDao->find($serviceContent->getService()->getId()));
+            }
+            foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
+                $offerContent->setOffer($offerDao->find($offerContent->getOffer()->getId()));
+            }
         }
-        foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
-            $offerContent->setOffer($offerDao->find($offerContent->getOffer()->getId()));
-        }
+
+
+
         return $sale;
     }
     private function sendCookie($sale)

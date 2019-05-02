@@ -17,7 +17,7 @@ class OfferController extends Controller
      */
     public function index(): Response
     {   $offerRepository=$this->getDoctrine()->getRepository(Offer::class);
-        return $this->render('offer/index.html.twig', [
+        return $this->render('offer/list.html.twig', [
             'offers' => $offerRepository->findAll(),
         ]);
     }
@@ -41,7 +41,7 @@ class OfferController extends Controller
         ]);
     }
     /**
-     * @Route("/{id}", name="offer_show", methods={"GET"})
+     * @Route("/show/{id}", name="offer_show", methods={"GET"})
      */
     public function show(Offer $offer): Response
     {
@@ -50,17 +50,17 @@ class OfferController extends Controller
         ]);
     }
     /**
-     * @Route("/{id}/edit", name="offer_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="offer_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Offer $offer): Response
     {
         $form = $this->createForm(OfferForm::class, $offer);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('offer_index', [
-                'id' => $offer->getId(),
-            ]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->merge($offer);
+            $entityManager->flush();
+            return $this->redirectToRoute('offer_index');
         }
         return $this->render('offer/edit.html.twig', [
             'offer' => $offer,
@@ -68,7 +68,7 @@ class OfferController extends Controller
         ]);
     }
     /**
-     * @Route("/{id}", name="offer_delete", methods={"DELETE"})
+     * @Route("/delete/{id}", name="offer_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Offer $offer): Response
     {
