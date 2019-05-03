@@ -15,7 +15,7 @@
                     <p class="card-text">{{ product.description }}</p>
                     <a href="/product/show/{{ product.id }}"><button type="button" class="btn btn-secondary"><i class="fas fa-info-circle"></i>Détails</button></a>
                     <span>{{ product.price/100.0 }} €</span>
-                    <a href="/panier/addProduct/{{ product.id }}"><button type="button" class="btn btn-success"><i class="fas fa-cart-plus"></i>Ajouter au panier</button></a>
+                    <a href="/panier/addProduct/{{ product.id }}"><button type="button" class="btn btn-success"><i class="fas fa-cart-plus"></i>Ajouter</button></a>
                 </div>
             </div>
     {% set i=i+1 %}

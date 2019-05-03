@@ -78,14 +78,27 @@ class SearchController extends Controller
         return $this->render("offer/list.html.twig",["offers"=>$list]);
     }
     /**
-     * @Route("/search/combo/{name}")
+     * @Route("/search/combo")
      */
-    public function comboAction(string $name)
-    {
+    public function comboAction(Request $request)
+    {   if($request->getSession()->get("admin")==true)
+        {   $view="admin";
+        }
+        else
+        {
+            $view="client";
+        }
+        $name=$request->request->get("name");
         $products=$this->searchProducts($name);
         $services=$this->searchServices($name);
         $offers=$this->searchOffers($name);
-        return $this->render("/searchResult",["offers"=>$offers,"services"=>$services,"products"=>$products]);
+        if($view=="admin"){
+            return $this->render("/searchResult.html.twig",["offers"=>$offers,"services"=>$services,"products"=>$products]);
+        }
+        else
+        {
+            return $this->render("/searchResult.html.twig",["offers"=>$offers,"services"=>$services,"products"=>$products]);
+        }
     }
 
 }
