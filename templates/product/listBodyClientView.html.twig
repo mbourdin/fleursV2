@@ -12,9 +12,9 @@
                 <img class="card-img-top" src="{{ asset('images/products/'~ product.photopath) }}" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text">{{ product.price/100.0 }} €</p>
                     <a href="/product/show/{{ product.id }}"><button type="button" class="btn btn-secondary"><i class="fas fa-info-circle"></i>Détails</button></a>
-                    <span>{{ product.price/100.0 }} €</span>
+
                     <a href="/panier/addProduct/{{ product.id }}"><button type="button" class="btn btn-success"><i class="fas fa-cart-plus"></i>Ajouter</button></a>
                 </div>
             </div>

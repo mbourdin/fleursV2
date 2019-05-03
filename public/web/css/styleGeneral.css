@@ -258,3 +258,9 @@ span{
     color: #69a038;
     font-weight: bold;
 }
+
+#roadname,#additionaladdress
+{
+    width: 100%;
+
+}

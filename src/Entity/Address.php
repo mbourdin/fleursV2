@@ -1,7 +1,6 @@
 <?php
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\City;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AddressRepository")
  */
@@ -33,11 +32,147 @@ class Address {
      */
     private $postalcode;
     /**
-     * @ORM\ManyToOne(targetEntity="City", cascade={"merge"}, fetch="EAGER")
+     * @ORM\Column(type="integer")
      */
     private $city;
-//    /**
-//     * @ORM\ManyToOne(targetEntity="AddressNumberAddition", cascade={"merge"}, fetch="EAGER")
-//     */
-//    private $addressnumberaddition;
+    /**
+     * @ORM\Column(type="string",length=10)
+     */
+    private $numberaddition;
+
+    /**
+     * Address constructor.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param mixed $number
+     */
+    public function setNumber($number): void
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoadtype()
+    {
+        return $this->roadtype;
+    }
+
+    /**
+     * @param mixed $roadtype
+     */
+    public function setRoadtype($roadtype): void
+    {
+        $this->roadtype = $roadtype;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoadname()
+    {
+        return $this->roadname;
+    }
+
+    /**
+     * @param mixed $roadname
+     */
+    public function setRoadname($roadname): void
+    {
+        $this->roadname = $roadname;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdditionaladdress()
+    {
+        return $this->additionaladdress;
+    }
+
+    /**
+     * @param mixed $additionaladdress
+     */
+    public function setAdditionaladdress($additionaladdress): void
+    {
+        $this->additionaladdress = $additionaladdress;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostalcode()
+    {
+        return $this->postalcode;
+    }
+
+    /**
+     * @param mixed $postalcode
+     */
+    public function setPostalcode($postalcode): void
+    {
+        $this->postalcode = $postalcode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city): void
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNumberaddition()
+    {
+        return $this->numberaddition;
+    }
+
+    /**
+     * @param mixed $numberaddition
+     */
+    public function setNumberaddition($numberaddition): void
+    {
+        $this->numberaddition = $numberaddition;
+    }
+
 }

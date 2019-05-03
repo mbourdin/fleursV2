@@ -7,30 +7,11 @@
 
             <!--formulaire villes-->
             <h1 class="centered">Ajouter une Ville</h1>
-            <table class="table">
-                <tr class="centered">
-                    <th>departement</th>
-                    <th>ville</th>
-                    <th>action</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select id="departement" onblur="changeDepartement()">
-                            <option value=null>choisir un departement</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="cityOptions" onfocusin="requestCities()">
-                            <option value=null >choisir une ville</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button onclick="add()" class="btn btn-success">
-                            ajouter
-                        </button>
-                    </td>
-                </tr>
-            </table>
+
+            <form action="/admin/city/addActive" method="post">
+                {% include "city/form.html.twig" %}
+                <input type="submit" class="btn btn-success" value="ajouter ville">
+            </form>
             <!--fin formulaire villes-->
 
 
@@ -53,8 +34,15 @@
                         <td>{{ city.inseeid }}</td>
                         <td>{{ city.activeString }}</td>
                         <td>
-                            <button class="btn btn-success" onclick="enable({{ city.inseeid }})">activer</button>
-                            <button class="btn btn-secondary" onclick="disable({{ city.inseeid }})">desactiver</button>
+                            <a href="/admin/city/activate/{{ city.id }}">
+                                <button class="btn btn-success">activer</button>
+                            </a>
+                            <a href="/admin/city/deactivate/{{ city.id }}">
+                            <button class="btn btn-secondary" >desactiver</button>
+                            </a>
+                            <a href="/admin/city/delete/{{ city.id }}">
+                                <button class="btn btn-danger" >supprimer</button>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

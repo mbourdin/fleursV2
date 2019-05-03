@@ -11,9 +11,13 @@ class CityController extends Controller
 {   // Section City
     private function getCityFromApi(int $inseeid): City
     {   $city=new City();
-
-
-
+        $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
+        $json=json_decode($response);
+        if ($json==null){
+            return null;
+        }
+        $city->setName($json->nom);
+        $city->setInseeid($inseeid);
         return $city;
     }
     private function saveCity(City $city)
@@ -23,10 +27,11 @@ class CityController extends Controller
 
     }
     /**
-     * @Route("/admin/city/addActive/{id}", name="cityaddactive")
+     * @Route("/admin/city/addActive", name="cityaddactive")
      */
-    public function addActiveAction(Request $request,int $id)
-    {   $dao=$this->getDoctrine()->getRepository(City::class);
+    public function addActiveAction(Request $request)
+    {   $id=$request->request->get("inseeid");
+        $dao=$this->getDoctrine()->getRepository(City::class);
         $city=$dao->findOneBy(["inseeid"=>$id]);
         if($city==null)
         {   $city=$this->getCityFromApi($id);
@@ -46,43 +51,58 @@ class CityController extends Controller
 
         return $this->redirect("/admin/city");
     }
+
+
     /**
-     * @Route("/user/city/addInactive/{id}", name="cityaddinactive")
-     */
-    public function addInactiveAction(Request $request,int $id)
-    {   $dao=$this->getDoctrine()->getRepository(City::class);
-        $city=$dao->findOneBy(["inseeid"=>$id]);
-        if($city==null)
-        {   $city=$this->getCityFromApi($id);
-            $city->setActive(false);
-            $this->saveCity($city);
-        }
-        return $this->redirect("/admin/city");
-    }
-    /**
-     * @Route("/admin/city/activate/{id}", name="cityaddinactive")
+     * @Route("/admin/city/activate/{id}", name="cityactivate")
      */
     public function activateAction(int $id)
     {   $dao=$this->getDoctrine()->getRepository(City::class);
-        $city=$dao->findOneBy(["inseeid"=>$id]);
-        if($city==null)
-        {   $city=$this->getCityFromApi($id);
-            $city->setActive(true);
+        $city=$dao->find($id);
+        if($city!=null)
+        {   $city->setActive(true);
             $this->addFlash("success","ville  activée");
+            $this->saveCity($city);
+        }
+        else{
+            $this->addFlash("error","ville inexistante dans la base");
         }
         return $this->redirect("/admin/city");
     }
     /**
-     * @Route("/admin/city/deactivate/{id}", name="cityaddinactive")
+     * @Route("/admin/city/deactivate/{id}", name="citydeactivate")
      */
     public function deactivateAction(int $id)
     {   $dao=$this->getDoctrine()->getRepository(City::class);
-        $city=$dao->findOneBy(["inseeid"=>$id]);
-        if($city==null)
-        {   $city=$this->getCityFromApi($id);
-            $city->setActive(false);
-            $this->addFlash("success","ville  activée");
+        $city=$dao->find($id);
+        if($city!=null)
+        {   $city->setActive(false);
+            $this->addFlash("success","ville  désactivée");
+            $this->saveCity($city);
+        }
+        else
+        {
+            $this->addFlash("error","ville inexistante dans la base");
         }
         return $this->redirect("/admin/city");
     }
+    /**
+     * @Route("/admin/city/delete/{id}")
+     */
+    public function deleteAction(int $id)
+    {   $dao=$this->getDoctrine()->getRepository(City::class);
+        $city=$dao->find($id);
+        if($city!=null)
+        {   $em=$this->getDoctrine()->getManager();
+            $em->remove($city);
+            $em->flush();
+            $this->addFlash("success","ville  supprimée");
+        }
+        else
+        {
+            $this->addFlash("error","ville inexistante dans la base");
+        }
+        return $this->redirect("/admin/city");
+    }
+
 }

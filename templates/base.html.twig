@@ -79,7 +79,7 @@
                              alt="">{{ app.session.get("user").username }}
 
                     </a>
-                    <a class="py-2 d-none d-md-inline-block " href="/logout"><button class="btn btn-success">logout</button></a>
+                    <a class="py-2 d-none d-md-inline-block " href="/logout"><button class="btn btn-success">déconnexion</button></a>
                 {% else %}
                     <a class="py-2 d-none d-md-inline-block " href="/login"><img class="iconImageUser"
                                                                                  src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
@@ -89,7 +89,17 @@
         </nav>
 
     {% endblock %}
+    {% block flashmsg %}
+        <!--affiche les messages flash presents en session-->
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
 
+    {% endblock %}
 
     {% block body %}
 

@@ -68,36 +68,3 @@ function requestCities()
     });
     }
 }
-function add()
-{   //TODO corriger cette fonction
-    cityId=document.getElementById("cityOptions").value;
-    console.log(cityId);
-    id="insee"+cityId;
-    console.log(id);
-    cityName=document.getElementById(id).dataset.nom;
-    console.log(cityName);
-    console.log(ownSiteAdress+"/api/city/createActive")
-    $.ajax({
-    url: ownSiteAdress+"/api/city/createActive",
-    type: "post",
-    dataType: "json",
-    data:{
-        "'inseeid'":"'"+cityId+"'",
-        "'name'":"'"+cityName+"'"
-        },
-    contentType: "application/json",
-    success: onSuccessAdd,
-    error: onError
-    })
-
-}
-function onSuccessAdd(result)
-{   console.log(result);
-
-}
-function enable(cityObject)
-{   //TODO requete vers restController qui va sauvegarder la ville a l'état actif
-}
-function disable(cityObject)
-{   //TODO requete vers restController qui va sauvegarder la ville a l'état inactif
-}

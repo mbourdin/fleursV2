@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <form>
+<table class="table">
+    <tr>
+
+            <td >
+
+                <label for="number">numéro</label>
+            </td>
+            <td>
+                <input type="number" name="number" id="number">
+
+                    <select name="numberaddition">
+                        <option value=""> </option>
+                        <option value="bis">bis</option>
+                        <option value="ter">ter</option>
+                        <option value="quater">quater</option>
+                        <option value="quinquies">quinquies</option>
+                        <option value="sexies">sexies</option>
+                        <option value="septies">septies</option>
+                        <option value="octies">octies</option>
+                        <option value="novies">novies</option>
+                        <option value="decies">decies</option>
+                    </select>
+
+            </td>
+        </tr>
+    <tr>
+            <td >
+                <label for="roadtype">type de voie</label>
+            </td><td>
+                <input type="text" name="roadtype" id="roadtype">
+            </td>
+    </tr><tr>
+        <td >
+
+            <label for="roadname" id="roadnamelabel">nom de la voie</label>
+        </td><td>
+            <input type="text" name="roadname" id="roadname">
+
+        </td>
+    </tr><tr>
+        <td >
+
+                <label for="additionaladdress" id="additionaladdresslabel">complément d'adresse</label>
+        </td><td>
+            <input type="text" name="additionaladress" id="additionaladdress">
+
+        </td>
+    </tr><tr>
+        <td >
+
+            <label for="postalcode" >code postal</label>
+        </td><td>
+            <input type="text" name="postalcode" id="postalcode">
+
+        </td>
+
+    </tr>
+    {% include "city/form.html.twig" %}
+</table>
+    </form>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset('web/js/city.js') }}">
+
+    </script>
+{% endblock %}

@@ -47,4 +47,11 @@ class TestController extends Controller
         $response->send();
         return $this->render("/testing/test.html.twig");
     }
+    /**
+     * @Route("/testAdressForm")
+     */
+    public function adressFormAction()
+    {
+        return $this->render("address/form.html.twig");
+    }
 }
