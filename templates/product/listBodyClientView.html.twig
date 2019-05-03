@@ -1,0 +1,23 @@
+    <div class="card-header">
+        <h1>Liste de produits</h1>
+    </div>
+    {% set i=0 %}
+    <div class="card-deck">
+    {% for  product in products %}
+        {% if (i%4 == 0 and i!=0)%}
+        </div>
+        <div class="card-deck">
+        {% endif %}
+            <div class="card ">
+                <img class="card-img-top" src="{{ asset('images/products/'~ product.photopath) }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <a href="/product/show/{{ product.id }}"><button type="button" class="btn btn-secondary"><i class="fas fa-info-circle"></i>Détails</button></a>
+                    <span>{{ product.price/100.0 }} €</span>
+                    <a href="/panier/addProduct/{{ product.id }}"><button type="button" class="btn btn-success"><i class="fas fa-cart-plus"></i>Ajouter au panier</button></a>
+                </div>
+            </div>
+    {% set i=i+1 %}
+    {% endfor %}
+    </div>

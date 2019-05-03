@@ -124,7 +124,7 @@ class AdminController extends Controller
 
             $reg = $this->getDoctrine()->getManager();
 
-            $reg->merge($product);
+            $reg->persist($product);
             $reg->flush();
 
 
