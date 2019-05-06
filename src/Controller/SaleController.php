@@ -3,6 +3,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Entity\Sale;
 use App\Entity\Offer;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,6 @@ class SaleController extends Controller
     {   $em=$this->getDoctrine()->getManager();
         $em->persist($sale);
         $em->flush();
-
     }
     /**
     * @Route("/user/sale/edit")
@@ -222,4 +222,28 @@ class SaleController extends Controller
         return $this->redirect("/");
     }
 
+    /**
+     * @Route ("/user/sale/updateQuantity/{class}/{id}")
+     */
+    public function updateQuantity(string $class,int $id,Request $request){
+        switch ($class) {
+            case "product":
+                $dao=$this->getDoctrine()->getRepository(Product::class);
+                break;
+            case "offer":
+                $dao=$this->getDoctrine()->getRepository(Offer::class);
+                break;
+            case "service":
+                $dao=$this->getDoctrine()->getRepository(Product::class);
+                break;
+            default :
+                throw new RuntimeException('invalid class value in updateQuantity function');
+        }
+        $quantity=$request->request->get("quantity");
+        $sale=$this->getUserSale($request);
+        $object=$dao->find($id);
+        $sale->updateQuantity($object,$quantity);
+        $this->saveUserSale($sale);
+        return $this->redirect("/user/sale/edit");
+    }
 }

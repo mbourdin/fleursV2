@@ -7,9 +7,21 @@ Gestion du panier
 {% block body %}
     <h1>Gestion de la Commande</h1>
 
-    <h2>FORMULAIRE ADRESSE DE LIVRAISON DES SERVICES<br>et date de la premiere livraison</h2>
-    <h2> FORMULAIRE ADRESSE DE LIVRAISON DES OFFRES ET PRODUITS<br>et Date de Livraison</h2>
+    <form method="post" action="/user/sale/validate" id="form">
 
+        <table>
+        <tr>
+            <td>
+            <label>Nom du destinataire</label><input type="text">
+            </td><td>
+            <label for="onlinepay">paiement en ligne</label>
+            <input type="checkbox" id="onlinepay" name="onlinepay"{% if sale.onlinepay %} checked {% endif %} value="true">
+            </td>
+        </tr>
+        </table>
+        Entrez l'adresse de livraison(s)
+    {{ include('address/form.html.twig') }}
+    </form>
     <table class="table">
         <tr>
             <th>article</th>
@@ -27,13 +39,16 @@ Gestion du panier
         {% for productContent in sale.products %}
             {% set i=1-i %}
             <tr>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.product.name }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ productContent.product.id }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('product',{{ productContent.product.id }})" id="productinput" value="{{ productContent.quantity }}"
-                           type="text"></td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought * productContent.quantity }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ productContent.product.name }}</td>
+                <td > {{ productContent.product.id }}</td>
+                <td ><form method="post" action="/user/sale/updateQuantity/product/{{ productContent.product.id }}" id="productinputform{{ productContent.product.id }}">
+                    <input id="productinput{{ productContent.product.id }}" value="{{ productContent.quantity }}"
+                           type="text" name="quantity" onchange="upQte('productinputform{{ productContent.product.id }}')">
+                    </form>
+                </td>
+                <td >{{ productContent.pricewhenbought }}</td>
+                <td >{{ productContent.pricewhenbought * productContent.quantity }}</td>
+                <td >
                     <a href="/user/sale/rmProduct/{{ productContent.product.id }}"><button  class="btn btn-success ">-</button></a>
                     <a href="/user/sale/addProduct/{{ productContent.product.id }}"><button class="btn  btn-success">+</button></a>
                     <a href="/user/sale/delProduct/{{ productContent.product.id }}"><button class="btn  btn-danger">X</button></a>
@@ -46,15 +61,15 @@ Gestion du panier
             <th>SERVICES</th>
         </tr>
         {% for serviceContent in sale.services %}
-            {% set i=1-i %}
+
             <tr>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.service.name }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ serviceContent.service.id }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('service',{{ serviceContent.service.id }})" id="serviceinput" value="{{ serviceContent.quantity }}"
+                <td >{{ serviceContent.service.name }}</td>
+                <td> {{ serviceContent.service.id }}</td>
+                <td><input  id="serviceinput{{ serviceContent.service.id }}" value="{{ serviceContent.quantity }}"
                            type="text"></td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ serviceContent.pricewhenbought }}</td>
+                <td >{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
+                <td >
                     <a href="/user/sale/rmService/{{ serviceContent.service.id }}"><button class="btn btn-success">-</button></a>
                     <a href="/user/sale/addService/{{ serviceContent.service.id }}"><button class="btn btn-success">+</button></a>
                     <a href="/user/sale/delService/{{ serviceContent.service.id }}"><button class="btn  btn-danger">X</button></a>
@@ -67,13 +82,13 @@ Gestion du panier
         {% for offerContent in sale.offers %}
             {% set i=1-i %}
             <tr>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.offer.name }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ offerContent.offer.id }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})" id="offerinput" value="{{ offerContent.quantity }}">
+                <td >{{ offerContent.offer.name }}</td>
+                <td > {{ offerContent.offer.id }}</td>
+                <td ><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})" id="offerinput{{ offerContent.offer.id }}" value="{{ offerContent.quantity }}">
                 </td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ offerContent.pricewhenbought }}</td>
+                <td >{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
+                <td >
                     <a href="/user/sale/rmOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">-</button></a>
                     <a href="/user/sale/addOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">+</button></a>
                     <a href="/user/sale/delOffer/{{ offerContent.offer.id }}"><button class="btn  btn-danger">X</button></a>
@@ -87,7 +102,7 @@ Gestion du panier
             <th></th>
             <th>{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
             <th>
-                <a href="/user/sale/validate"><button class="btn btn-success">VALIDER COMMANDER</button></a>
+                <button class="btn btn-success" onclick="submitform()">VALIDER COMMANDER</button>
                 <br>
                 <a href="/user/sale/delete"><button class="btn  btn-danger">ANNULER COMMANDE </button></a>
             </th>
@@ -104,6 +119,7 @@ Gestion du panier
 {% block javascripts %}
     {{ parent() }}
     <script type="application/javascript" src="{{ asset("web/js/sale.js") }}">
-
+    </script>
+    <script type="application/javascript" src="{{ asset('web/js/city.js') }}">
     </script>
 {% endblock %}

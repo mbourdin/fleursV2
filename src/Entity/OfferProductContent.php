@@ -24,7 +24,7 @@ class OfferProductContent
     private $product;
     /**
      * @var Offer|string
-     * @ORM\ManyToOne(targetEntity="Offer", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Offer", cascade={"persist"},inversedBy="products")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $offer;

@@ -1,7 +1,9 @@
-currentDomain=window.location.origin;
-function updateProductQuantity(classe,id)
-{   quantity=document.getElementById(classe+"input").value;
-    getstring=currentDomain+"/user/sale/updateQuantity/"+classe+"/"+id+"/"+quantity;
-    $.get(getstring,null,window.location.reload());
-    console.log(getstring);
+function upQte(id)
+{   console.log(id);
+    document.forms[id].submit();
+}
+console.log("up");
+function submitform()
+{
+    document.forms["form"].submit();
 }

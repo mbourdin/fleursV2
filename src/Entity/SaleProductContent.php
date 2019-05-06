@@ -17,13 +17,13 @@ class SaleProductContent
     private $id;
 
     /**
- * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"persist"},inversedBy="products")
+ * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"persist"})
  * @ORM\JoinColumn(name="product_id", referencedColumnName="id",)
 
  */
     private $product;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="products"))
      * @ORM\JoinColumn(name="sale_id", referencedColumnName="id")
      */
     private $sale;

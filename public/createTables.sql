@@ -1,24 +1,21 @@
-create table if not exists addressnumberaddition
+create table if not exists address
 (
-    id   int auto_increment,
-    name char(3) null,
-    constraint AddressNumberAddition_id_uindex
+    id                int auto_increment,
+    number            int         null,
+    roadtype          varchar(20) null,
+    roadname          varchar(60) null,
+    additionaladdress varchar(60) null,
+    postalcolde       varchar(6)  null,
+    city              int         null,
+    numberaddition    varchar(10) null,
+    constraint address_id_uindex
         unique (id)
 );
 
-alter table addressnumberaddition
-    add primary key (id);
+create index if not exists address_city_id_fk
+    on address (city);
 
-create table if not exists channel
-(
-    id       int        not null,
-    name     varchar(6) not null,
-    maxusers int        not null,
-    constraint channel_id_uindex
-        unique (id)
-);
-
-alter table channel
+alter table address
     add primary key (id);
 
 create table if not exists city
@@ -34,27 +31,6 @@ create table if not exists city
 );
 
 alter table city
-    add primary key (id);
-
-create table if not exists address
-(
-    id                       int auto_increment,
-    number                   int         null,
-    roadtype                 varchar(20) null,
-    roadname                 varchar(60) null,
-    additionaladdress        varchar(60) null,
-    postalcolde              varchar(6)  null,
-    city_id                  int         null,
-    addressnumberaddition_id int         null,
-    constraint address_id_uindex
-        unique (id),
-    constraint address_addressnumberaddition_id_fk
-        foreign key (addressnumberaddition_id) references addressnumberaddition (id),
-    constraint address_city_id_fk
-        foreign key (city_id) references city (id)
-);
-
-alter table address
     add primary key (id);
 
 create table if not exists contact
@@ -87,7 +63,6 @@ create table if not exists offer
 (
     id          int auto_increment,
     photopath   varchar(255)         null,
-    price       int                  not null,
     name        varchar(30)          null,
     description text                 null,
     active      tinyint(1) default 1 not null,
@@ -125,12 +100,15 @@ create table if not exists person
     plain_password        varchar(40)          null,
     last_login            timestamp            null,
     roles                 longtext             null,
+    chatbanned            tinyint(1)           null,
     constraint Person_email_uindex
         unique (email),
     constraint Person_id_uindex
         unique (id),
     constraint Person_validationtoken_uindex
         unique (confirmation_token),
+    constraint person_username_uindex
+        unique (username),
     constraint Person_address_id_fk
         foreign key (address_id) references address (id)
 );
@@ -138,23 +116,26 @@ create table if not exists person
 alter table person
     add primary key (id);
 
-create table if not exists chatmessage
+create table if not exists product_delivery
 (
-    id         int                  not null,
-    text       varchar(255)         null,
-    date       timestamp            null,
-    reported   tinyint(1) default 0 not null,
-    channel_id int                  null,
-    person_id  int                  null,
-    constraint ChatMessage_id_uindex
+    id           int                                     not null,
+    deliveryDate timestamp                               null,
+    plannedDate  timestamp default '0000-00-00 00:00:00' not null,
+    orders_id    int                                     not null,
+    address_id   int                                     not null,
+    contact_id   int                                     null,
+    constraint productDelivery_id_uindex
         unique (id),
-    constraint ChatMessage_channel_id_fk
-        foreign key (channel_id) references channel (id),
-    constraint ChatMessage_person_id_fk
-        foreign key (person_id) references person (id)
+    constraint productDelivery_address_id_fk
+        foreign key (address_id) references address (id),
+    constraint productDelivery_contact_id_fk
+        foreign key (contact_id) references contact (id)
 );
 
-alter table chatmessage
+create index if not exists productDelivery_order_id_fk
+    on product_delivery (orders_id);
+
+alter table product_delivery
     add primary key (id);
 
 create table if not exists producttype
@@ -209,7 +190,7 @@ create table if not exists sale
     discount  int        default 0                 not null,
     date      timestamp  default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     person_id int                                  null,
-    validated tinyint(1) default 0                 not null,
+    validated tinyint(1) default 0                 null,
     constraint orders_id_uindex
         unique (id),
     constraint orders_person_id_fk
@@ -217,27 +198,6 @@ create table if not exists sale
 );
 
 alter table sale
-    add primary key (id);
-
-create table if not exists productdelivery
-(
-    id           int                                     not null,
-    deliveryDate timestamp                               null,
-    plannedDate  timestamp default '0000-00-00 00:00:00' not null,
-    orders_id    int                                     not null,
-    address_id   int                                     not null,
-    contact_id   int                                     null,
-    constraint productDelivery_id_uindex
-        unique (id),
-    constraint productDelivery_address_id_fk
-        foreign key (address_id) references address (id),
-    constraint productDelivery_contact_id_fk
-        foreign key (contact_id) references contact (id),
-    constraint productDelivery_order_id_fk
-        foreign key (orders_id) references sale (id)
-);
-
-alter table productdelivery
     add primary key (id);
 
 create table if not exists sale_offer_content
@@ -249,6 +209,8 @@ create table if not exists sale_offer_content
     id              int auto_increment,
     constraint sale_offer_content_id_uindex
         unique (id),
+    constraint sale_offer_content_pk
+        unique (sale_id, offer_id),
     constraint sale_offer_content_offer_id_fk
         foreign key (offer_id) references offer (id),
     constraint sale_offer_content_sale_id_fk
@@ -263,15 +225,50 @@ create table if not exists sale_product_content
     sale_id         int           not null,
     product_id      int           not null,
     quantity        int default 1 not null,
-    pricewhenbought int default 0 not null,
-    id              int auto_increment,
-    constraint sale_product_content_id_uindex
-        unique (id),
+    pricewhenbought int           not null,
+    id              int auto_increment
+        primary key,
     constraint sale_product_content_pk
-        unique (sale_id, product_id)
+        unique (sale_id, product_id),
+    constraint sale_product_content_product_id_fk
+        foreign key (product_id) references product (id),
+    constraint sale_product_content_sale_id_fk
+        foreign key (sale_id) references sale (id)
 );
 
-alter table sale_product_content
+create table if not exists service_delivery
+(
+    id           int auto_increment,
+    deliverydate timestamp null,
+    planneddate  timestamp null,
+    orders_id    int       not null,
+    address_id   int       not null,
+    contact_id   int       null,
+    constraint ServiceDelivery_id_uindex
+        unique (id),
+    constraint ServiceDelivery_address_id_fk
+        foreign key (address_id) references address (id),
+    constraint ServiceDelivery_contact_id_fk
+        foreign key (contact_id) references contact (id),
+    constraint ServiceDelivery_orders_id_fk
+        foreign key (orders_id) references sale (id)
+);
+
+alter table service_delivery
+    add primary key (id);
+
+create table if not exists servicetype
+(
+    id        int auto_increment,
+    name      varchar(30)  null,
+    photopath varchar(255) null,
+    price     int          not null,
+    active    tinyint(1)   not null,
+    constraint servicetype_id_uindex
+        unique (id)
+);
+
+alter table servicetype
     add primary key (id);
 
 create table if not exists service
@@ -282,11 +279,11 @@ create table if not exists service
     description    text         null,
     name           varchar(30)  null,
     active         tinyint(1)   null,
-    serviceType_id int          null,
+    servicetype_id int          null,
     constraint Service_id_uindex
         unique (id),
-    constraint Service_producttype_id_fk
-        foreign key (serviceType_id) references producttype (id)
+    constraint service_servicetype_id_fk
+        foreign key (servicetype_id) references servicetype (id)
 );
 
 alter table service
@@ -301,6 +298,8 @@ create table if not exists sale_service_content
     id              int auto_increment,
     constraint sale_service_content_id_uindex
         unique (id),
+    constraint sale_service_content_pk
+        unique (sale_id, service_id),
     constraint sale_service_content_sale_id_fk
         foreign key (sale_id) references sale (id),
     constraint sale_service_content_service_id_fk
@@ -321,39 +320,4 @@ create table if not exists service_product_content
     constraint ServiceProductContent_service_id_fk
         foreign key (service_id) references service (id)
 );
-
-create table if not exists servicedelivery
-(
-    id           int auto_increment,
-    deliverydate timestamp null,
-    planneddate  timestamp null,
-    orders_id    int       not null,
-    address_id   int       not null,
-    contact_id   int       null,
-    constraint ServiceDelivery_id_uindex
-        unique (id),
-    constraint ServiceDelivery_address_id_fk
-        foreign key (address_id) references address (id),
-    constraint ServiceDelivery_contact_id_fk
-        foreign key (contact_id) references contact (id),
-    constraint ServiceDelivery_orders_id_fk
-        foreign key (orders_id) references sale (id)
-);
-
-alter table servicedelivery
-    add primary key (id);
-
-create table if not exists servicetype
-(
-    id        int auto_increment,
-    name      varchar(30)  null,
-    photopath varchar(255) null,
-    price     int          not null,
-    active    tinyint(1)   not null,
-    constraint servicetype_id_uindex
-        unique (id)
-);
-
-alter table servicetype
-    add primary key (id);
 

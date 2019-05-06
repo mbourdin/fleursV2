@@ -17,12 +17,12 @@ class SaleOfferContent
      */
     private $id;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Offer",cascade={"persist"},inversedBy="offers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Offer",cascade={"persist"})
      * @ORM\JoinColumn(name="offer_id", referencedColumnName="id",)
      */
     private $offer;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="offers"))
      * @ORM\JoinColumn(name="sale_id", referencedColumnName="id")
      */
     private $sale;

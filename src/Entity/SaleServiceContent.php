@@ -16,11 +16,11 @@ class SaleServiceContent
      */
     private $id;
     /**
- * @ORM\ManyToOne(targetEntity="App\Entity\Service",cascade={"persist"},inversedBy="services"))
+ * @ORM\ManyToOne(targetEntity="App\Entity\Service",cascade={"persist"})
  */
     private $service;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sale"))
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="services")))
      */
     private $sale;
     /**
