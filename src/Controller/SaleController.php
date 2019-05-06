@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Entity\Address;
 use App\Entity\Product;
 use App\Entity\Sale;
 use App\Entity\Offer;
@@ -196,6 +197,16 @@ class SaleController extends Controller
      */
     public function validateAction(Request $request)
     {   $sale=$this->getUserSale($request);
+        $address=new Address;
+        $address->setNumber($request->request->get("number"));
+        $address->setRoadname($request->request->get("roadname"));
+        $address->setRoadtype($request->request->get("roadtype"));
+        $address->setAdditionaladdress($request->request->get("additionaladress"));
+        $address->setPostalcode($request->request->get("postalcode"));
+        $address->setCityId($request->request->get("inseeid"));
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($address);
+        $sale->setAddress($address);
         $sale->setValidated(true);
         $this->saveUserSale($sale);
         $this->addFlash("success","commande validée");

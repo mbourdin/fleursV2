@@ -34,7 +34,7 @@ class Address {
     /**
      * @ORM\Column(type="integer")
      */
-    private $city;
+    private $cityId;
     /**
      * @ORM\Column(type="string",length=10)
      */
@@ -146,18 +146,20 @@ class Address {
     /**
      * @return mixed
      */
-    public function getCity()
+    public function getCityId()
     {
-        return $this->city;
+        return $this->cityId;
     }
 
     /**
-     * @param mixed $city
+     * @param mixed $cityId
      */
-    public function setCity($city): void
+    public function setCityId($cityId): void
     {
-        $this->city = $city;
+        $this->cityId = $cityId;
     }
+
+
 
     /**
      * @return mixed
