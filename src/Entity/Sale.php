@@ -64,6 +64,16 @@ class Sale
      */
     private $validated;
     /**
+     * @ORM\Column(type="string")
+     */
+    private $recipient;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Address", fetch="LAZY",cascade={"persist"})
+     */
+    private $address;
+
+
+    /**
      * Sale constructor.
      */
     public function __construct()
@@ -472,5 +482,38 @@ class Sale
             && $this->services->isEmpty()
         );
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRecipient()
+    {
+        return $this->recipient;
+    }
+
+    /**
+     * @param mixed $recipient
+     */
+    public function setRecipient($recipient): void
+    {
+        $this->recipient = $recipient;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param mixed $address
+     */
+    public function setAddress($address): void
+    {
+        $this->address = $address;
+    }
+
 }
 

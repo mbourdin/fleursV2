@@ -1,9 +1,9 @@
+/*
 body{
     font-size: 14px ;
     font-family: 'Roboto', sans-serif;
     color: #424242;
     background-color: #f8f9fa !important;
-
 }
 .form-control{
     width: 400px !important;
@@ -12,7 +12,7 @@ h1{
     color: #69A038 !important;
 }
 h2{
-    color: #424242;
+   color: #424242;
     font-weight: bold !important;
 }
 h5{
@@ -25,24 +25,7 @@ a{
 .main{
     margin: 0 !important;
     max-width: 100% !important;
-
 }
-.card{
-    border: solid 1px #69A038 !important ;
-}
-.col-sm-2>.card{
-    padding: 50px;
-}
-.card-header{
-    background-color: #F1F8E9 !important;
-    border-bottom: solid 1px #69A038 !important;
-    padding: 20px !important;
-}
-
-.card-deck {
-    padding: 20px;
-}
-
 .secondNavBar>.container>a{
     padding: 10px;
     max-width: 100%;
@@ -52,7 +35,6 @@ a{
     width: 120px;
     height: 120px;
 }
-
 .footercard>img{
     width: 200px;
     height: 200px;
@@ -60,35 +42,28 @@ a{
 .centered{
     text-align: center;
 }
-
-
-
 .navbarMenu>.container>a{
     color: #000 !important;
     font-weight: bold;
     font-size: 10px;
-}
+}*/
 .logoHeader{
-    width: 30px;
-    height:30px;
-    margin-top: 10px;
-    margin-right: 10px;
-}
+    width: 25px;
+    height:25px;
 
+
+}
+/*
 .logoHeaderUniflor {
     width: 80px;
     height: 80px;
     padding-left: 5px !important;
     padding-top: 5px !important;
-
-
 }
-
 .header{
     max-width: 100%;
     height: 100%;
     padding: 0 !important;
-
 }
 .imagehome{
     background-image: url("/web/images/site/champmuguetclair25PC.png");
@@ -102,12 +77,13 @@ a{
 .py-2>img{
     color: #000;
 }
+*/
 .iconImage, .iconImageKart, .iconImageUser{
     width: 29px;
     height: 29px;
 
 }
-
+/*
 li{
     list-style: none;
     font-size: 12px;
@@ -127,55 +103,35 @@ h3{
 .productimage{
     height: 50px;
 }
-
-
 .sectionOffre{
     border-radius: 0 !important;
     border: solid 1px #69a038!important;
     padding: 50px;
 }
-.card>.card-img-top{
-    width: 70% !important;
-    margin: 0 auto;
-    padding: 10px !important;
-}
 .logoNav,.logoNavSegond{
     width: 30px;
     height: 30px;
-
 }
-.home,.plantOrchi,.fleurCoup,.tomb,.abonnement,.promos,.idKdo,.job,.navSecond {
-    width: 130px;
-    display: inline-block;
-    margin-top: -10px;
-    height: 190.867px;
-    border: 0;
-
+.promos{
+    background-color: #FFFF00 !important;
 }
 .homeMenu{
     display: none;
     color: #689F38;
 }
-
 .secondNavBar{
     background-color: #fff;
-
-
-
 }
 .secondNavBarActive{
     font-weight: bold;
 }
-
 .navSecond{
     border: solid 1px #69a038;
     height: 100%;
-
 }
 .row{
     background-color: #fff;
 }
-
 .row>.navFooter{
     background-color: #fff;
     border: solid 1px #69A038;
@@ -188,16 +144,6 @@ h3{
 }
 .contactUs{
     border: solid 1px  #69a038 ;
-
-
-}
-.card-body>h5, .list-group-item>h5{
-    color:  #69a038;
-    font-weight: bold;
-}
-.list-group-item, .card-body>p{
-    font-weight: bold;
-    font-size: 12px !important;
 }
 .col-sm-3> .footercard{
     border: 0 !important;
@@ -219,7 +165,6 @@ h2,.logoFooterNetwork{
     margin-right: 20px;
     margin-top: 10px;
     float: right;
-
 }
 .logoImgFooter{
     width: 120px;
@@ -227,7 +172,6 @@ h2,.logoFooterNetwork{
     margin-left: 50px;
     margin-top: -120px;
 }
-
 .paragraFooter{
     text-align: center;
 }
@@ -238,10 +182,10 @@ h2,.logoFooterNetwork{
     display: block;
 }
 .footerSecondaire{
-    display: block !important;
-    margin: 0 auto !important;
-    color: #69a038;
-    font-weight: bold;
+   display: block !important;
+   margin: 0 auto !important;
+   color: #69a038;
+   font-weight: bold;
     padding-top: 20px;
     padding-bottom: 20px;
     border-top: solid 1px #ccc;
@@ -249,16 +193,15 @@ h2,.logoFooterNetwork{
 .logoFooter{
     width: 20px;
     height: 20px;
-
-
 }
-
 span{
     font-size: 16px;
     color: #69a038;
     font-weight: bold;
+    margin-left: 220px;
+    margin-top: -5px;
 }
-
+*/
 #roadname,#additionaladdress
 {
     width: 100%;
