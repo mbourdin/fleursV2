@@ -13,7 +13,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm">
-                    <label>Nom du destinataire</label><input type="text" name="recipient" required>
+                    <label>Nom du destinataire</label><input type="text" name="recipient" required id="recipient" onchange="buttonEnabler()">
                 </div>
                 <div class="col-sm">
                     <label for="onlinepay">paiement en ligne</label>
@@ -27,11 +27,11 @@
             </div>
             <div class="col-sm">
                 <label for="useownaddress">Utiliser ma propre adresse</label>
-                <input type="checkbox" id="useownaddress" name="useownaddress" value="true">
+                <input type="checkbox" id="useownaddress" name="useownaddress" value="true" onchange="buttonEnabler()">
             </div>
             </div>
         </div>
-        {{ include('address/form.html.twig') }}
+       <div onchange="buttonEnabler()">{{ include('address/form.html.twig') }}</div>
     </form>
     <table class="table">
         <tr>
@@ -136,7 +136,7 @@
                 <th></th>
                 <th>{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
                 <th>
-                    <button class="btn btn-success" onclick="submitform()">VALIDER COMMANDER</button>
+                    <button class="btn btn-success" onclick="submitform()" id="submitbutton" disabled="disabled">VALIDER COMMANDER</button>
                     <br>
                     <a href="/user/sale/delete">
                         <button class="btn  btn-danger">ANNULER COMMANDE</button>
