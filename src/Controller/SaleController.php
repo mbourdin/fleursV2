@@ -29,7 +29,15 @@ class SaleController extends Controller
     */
     public function editSaleAction(Request $request)
     {   $sale=$this->getUserSale($request);
-        return $this->render("/sale/sale.html.twig",["sale"=>$sale,]);
+        if($sale!=null)
+        {
+            return $this->render("/sale/sale.html.twig",["sale"=>$sale,]);
+        }
+        else
+        {   $this->addFlash("error","pas de commande non validée trouvée");
+            return $this->render("default/home.html.twig");
+
+        }
 
     }
 
@@ -197,17 +205,31 @@ class SaleController extends Controller
      */
     public function validateAction(Request $request)
     {   $sale=$this->getUserSale($request);
-        $address=new Address;
-        $address->setNumber($request->request->get("number"));
-        $address->setRoadname($request->request->get("roadname"));
-        $address->setRoadtype($request->request->get("roadtype"));
-        $address->setAdditionaladdress($request->request->get("additionaladress"));
-        $address->setPostalcode($request->request->get("postalcode"));
-        $address->setCityId($request->request->get("inseeid"));
-        $em=$this->getDoctrine()->getManager();
-        $em->persist($address);
+        $useownaddress=$request->request->get("useownaddress");
+        if($useownaddress!="true") {
+            $address = new Address;
+            $address->setNumber($request->request->get("number"));
+            $address->setRoadname($request->request->get("roadname"));
+            $address->setRoadtype($request->request->get("roadtype"));
+            $address->setAdditionaladdress($request->request->get("additionaladress"));
+            $address->setPostalcode($request->request->get("postalcode"));
+            $address->setCityId($request->request->get("inseeid"));
+
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($address);
+        }
+        else{
+            $address=$sale->getPerson()->getAddress();
+            if($address==null)
+            {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
+                return $this->redirect("/user/sale/validate");
+
+            }
+        }
+
         $sale->setAddress($address);
         $sale->setValidated(true);
+        $sale->setRecipient($request->request->get("recipient"));
         $this->saveUserSale($sale);
         $this->addFlash("success","commande validée");
         return $this->redirect("/");

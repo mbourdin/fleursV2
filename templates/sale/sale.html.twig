@@ -1,26 +1,37 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-Gestion du panier
+    Gestion du panier
 {% endblock %}
 
 
 {% block body %}
     <h1>Gestion de la Commande</h1>
 
+    {% set address= app.session.get("user").address %}
     <form method="post" action="/user/sale/validate" id="form">
 
-        <table>
-        <tr>
-            <td>
-            <label>Nom du destinataire</label><input type="text">
-            </td><td>
-            <label for="onlinepay">paiement en ligne</label>
-            <input type="checkbox" id="onlinepay" name="onlinepay"{% if sale.onlinepay %} checked {% endif %} value="true">
-            </td>
-        </tr>
-        </table>
-        Entrez l'adresse de livraison(s)    <label for="useownaddress">Utiliser ma propre adresse</label><input type="checkbox" id="useownaddress" name="useownaddress" value="true">
-    {{ include('address/form.html.twig') }}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <label>Nom du destinataire</label><input type="text" name="recipient" required>
+                </div>
+                <div class="col-sm">
+                    <label for="onlinepay">paiement en ligne</label>
+                    <input type="checkbox" id="onlinepay" name="onlinepay"{% if sale.onlinepay %} checked {% endif %}
+                           value="true">
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-sm">
+                Entrez l'adresse de livraison(s)
+            </div>
+            <div class="col-sm">
+                <label for="useownaddress">Utiliser ma propre adresse</label>
+                <input type="checkbox" id="useownaddress" name="useownaddress" value="true">
+            </div>
+            </div>
+        </div>
+        {{ include('address/form.html.twig') }}
     </form>
     <table class="table">
         <tr>
@@ -32,81 +43,106 @@ Gestion du panier
             <th></th>
         </tr>
         {% if sale!=null %}
-        <tr>
-            <th>PRODUITS</th>
-        </tr>
-        {% set i=0 %}
-        {% for productContent in sale.products %}
-            {% set i=1-i %}
             <tr>
-                <td >{{ productContent.product.name }}</td>
-                <td > {{ productContent.product.id }}</td>
-                <td ><form method="post" action="/user/sale/updateQuantity/product/{{ productContent.product.id }}" id="productinputform{{ productContent.product.id }}">
-                    <input id="productinput{{ productContent.product.id }}" value="{{ productContent.quantity }}"
-                           type="text" name="quantity" onchange="upQte('productinputform{{ productContent.product.id }}')">
-                    </form>
-                </td>
-                <td >{{ productContent.pricewhenbought }}</td>
-                <td >{{ productContent.pricewhenbought * productContent.quantity }}</td>
-                <td >
-                    <a href="/user/sale/rmProduct/{{ productContent.product.id }}"><button  class="btn btn-success ">-</button></a>
-                    <a href="/user/sale/addProduct/{{ productContent.product.id }}"><button class="btn  btn-success">+</button></a>
-                    <a href="/user/sale/delProduct/{{ productContent.product.id }}"><button class="btn  btn-danger">X</button></a>
-
-                </td>
+                <th>PRODUITS</th>
             </tr>
-        {% endfor %}
+            {% set i=0 %}
+            {% for productContent in sale.products %}
+                {% set i=1-i %}
+                <tr>
+                    <td>{{ productContent.product.name }}</td>
+                    <td> {{ productContent.product.id }}</td>
+                    <td>
+                        <form method="post" action="/user/sale/updateQuantity/product/{{ productContent.product.id }}"
+                              id="productinputform{{ productContent.product.id }}">
+                            <input id="productinput{{ productContent.product.id }}"
+                                   value="{{ productContent.quantity }}"
+                                   type="text" name="quantity"
+                                   onchange="upQte('productinputform{{ productContent.product.id }}')">
+                        </form>
+                    </td>
+                    <td>{{ productContent.pricewhenbought }}</td>
+                    <td>{{ productContent.pricewhenbought * productContent.quantity }}</td>
+                    <td>
+                        <a href="/user/sale/rmProduct/{{ productContent.product.id }}">
+                            <button class="btn btn-success ">-</button>
+                        </a>
+                        <a href="/user/sale/addProduct/{{ productContent.product.id }}">
+                            <button class="btn  btn-success">+</button>
+                        </a>
+                        <a href="/user/sale/delProduct/{{ productContent.product.id }}">
+                            <button class="btn  btn-danger">X</button>
+                        </a>
 
-        <tr>
-            <th>SERVICES</th>
-        </tr>
-        {% for serviceContent in sale.services %}
+                    </td>
+                </tr>
+            {% endfor %}
 
             <tr>
-                <td >{{ serviceContent.service.name }}</td>
-                <td> {{ serviceContent.service.id }}</td>
-                <td><input  id="serviceinput{{ serviceContent.service.id }}" value="{{ serviceContent.quantity }}"
-                           type="text"></td>
-                <td >{{ serviceContent.pricewhenbought }}</td>
-                <td >{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
-                <td >
-                    <a href="/user/sale/rmService/{{ serviceContent.service.id }}"><button class="btn btn-success">-</button></a>
-                    <a href="/user/sale/addService/{{ serviceContent.service.id }}"><button class="btn btn-success">+</button></a>
-                    <a href="/user/sale/delService/{{ serviceContent.service.id }}"><button class="btn  btn-danger">X</button></a>
-                </td>
+                <th>SERVICES</th>
             </tr>
-        {% endfor %}
-        <tr>
-            <th>OFFERS</th>
-        </tr>
-        {% for offerContent in sale.offers %}
-            {% set i=1-i %}
+            {% for serviceContent in sale.services %}
+
+                <tr>
+                    <td>{{ serviceContent.service.name }}</td>
+                    <td> {{ serviceContent.service.id }}</td>
+                    <td><input id="serviceinput{{ serviceContent.service.id }}" value="{{ serviceContent.quantity }}"
+                               type="text"></td>
+                    <td>{{ serviceContent.pricewhenbought }}</td>
+                    <td>{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
+                    <td>
+                        <a href="/user/sale/rmService/{{ serviceContent.service.id }}">
+                            <button class="btn btn-success">-</button>
+                        </a>
+                        <a href="/user/sale/addService/{{ serviceContent.service.id }}">
+                            <button class="btn btn-success">+</button>
+                        </a>
+                        <a href="/user/sale/delService/{{ serviceContent.service.id }}">
+                            <button class="btn  btn-danger">X</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
             <tr>
-                <td >{{ offerContent.offer.name }}</td>
-                <td > {{ offerContent.offer.id }}</td>
-                <td ><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})" id="offerinput{{ offerContent.offer.id }}" value="{{ offerContent.quantity }}">
-                </td>
-                <td >{{ offerContent.pricewhenbought }}</td>
-                <td >{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
-                <td >
-                    <a href="/user/sale/rmOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">-</button></a>
-                    <a href="/user/sale/addOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">+</button></a>
-                    <a href="/user/sale/delOffer/{{ offerContent.offer.id }}"><button class="btn  btn-danger">X</button></a>
-                </td>
+                <th>OFFERS</th>
             </tr>
-        {% endfor %}
-        <tr>
-            <th>TOTAL</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
-            <th>
-                <button class="btn btn-success" onclick="submitform()">VALIDER COMMANDER</button>
-                <br>
-                <a href="/user/sale/delete"><button class="btn  btn-danger">ANNULER COMMANDE </button></a>
-            </th>
-        </tr>
+            {% for offerContent in sale.offers %}
+                {% set i=1-i %}
+                <tr>
+                    <td>{{ offerContent.offer.name }}</td>
+                    <td> {{ offerContent.offer.id }}</td>
+                    <td><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})"
+                               id="offerinput{{ offerContent.offer.id }}" value="{{ offerContent.quantity }}">
+                    </td>
+                    <td>{{ offerContent.pricewhenbought }}</td>
+                    <td>{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
+                    <td>
+                        <a href="/user/sale/rmOffer/{{ offerContent.offer.id }}">
+                            <button class="btn btn-success">-</button>
+                        </a>
+                        <a href="/user/sale/addOffer/{{ offerContent.offer.id }}">
+                            <button class="btn btn-success">+</button>
+                        </a>
+                        <a href="/user/sale/delOffer/{{ offerContent.offer.id }}">
+                            <button class="btn  btn-danger">X</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th>TOTAL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
+                <th>
+                    <button class="btn btn-success" onclick="submitform()">VALIDER COMMANDER</button>
+                    <br>
+                    <a href="/user/sale/delete">
+                        <button class="btn  btn-danger">ANNULER COMMANDE</button>
+                    </a>
+                </th>
+            </tr>
         {% else %}
             <tr>
                 <td>Pas de commande non valide trouvée</td>

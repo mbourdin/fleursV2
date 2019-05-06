@@ -8,10 +8,13 @@ use App\Entity\Product;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/product")
+ */
 class ProductController extends Controller
 {
     /**
-     * @Route("/accueil/produits")
+     * @Route("/list")
      */
 
     public function produitAction(){

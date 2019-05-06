@@ -82,7 +82,6 @@ class Person extends FOSUser {
     //(rights/n)%2, où n désigne la valeur nominale du droit
     //n est forcément une puissance positive de 2
 
-    private $city;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Address", cascade={"merge"}, fetch="LAZY")
      */

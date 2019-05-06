@@ -6,9 +6,9 @@
                 <label for="number">numéro</label>
             </td>
             <td>
-                <input type="number" name="number" id="number">
+                <input type="number" name="number" id="number" {% if address==null %}required {% endif %}>
 
-                    <select name="numberaddition">
+                    <select name="numberaddition" {% if address==null %}required {% endif %}>
                         <option value=""> </option>
                         <option value="bis">bis</option>
                         <option value="ter">ter</option>
@@ -25,16 +25,16 @@
         </tr>
     <tr>
             <td >
-                <label for="roadtype">type de voie</label>
+                <label for="roadtype" >type de voie</label>
             </td><td>
-                <input type="text" name="roadtype" id="roadtype">
+                <input type="text" name="roadtype" id="roadtype" {% if address==null %}required {% endif %}>
             </td>
     </tr><tr>
         <td >
 
             <label for="roadname" id="roadnamelabel">nom de la voie</label>
         </td><td>
-            <input type="text" name="roadname" id="roadname">
+            <input type="text" name="roadname" id="roadname" {% if address==null %}required {% endif %}>
 
         </td>
     </tr><tr>

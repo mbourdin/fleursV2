@@ -78,4 +78,12 @@ class ServiceController extends Controller
         }
         return $this->redirectToRoute('service_index');
     }
+    /**
+     * @Route("/list")
+     */
+    public function list()
+    {
+        $dao=$this->getDoctrine()->getRepository(Service::class);
+        return $this->render("service/listClientView.html.twig",["services"=>$dao->findAll()]);
+    }
 }

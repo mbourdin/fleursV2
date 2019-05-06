@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service index{% endblock %}
+
+{% block body %}
+    {{ include('service/listBodyClientView.html.twig') }}
+
+    <a class="btn btn-outline-success" href="{{ path('service_new') }}">Create new</a>
+{% endblock %}

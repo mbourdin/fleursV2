@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use App\Entity\Offer;
+use App\Entity\Product;
 use App\Form\OfferForm;
 use App\Repository\OfferRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -78,5 +79,14 @@ class OfferController extends Controller
             $entityManager->flush();
         }
         return $this->redirectToRoute('offer_index');
+    }
+
+    /**
+     * @Route("/list")
+     */
+    public function list()
+    {
+        $dao=$this->getDoctrine()->getRepository(Offer::class);
+        return $this->render("offer/listClientView.html.twig",["offers"=>$dao->findAll()]);
     }
 }
