@@ -11,39 +11,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\City;
 
+/**
+ * Class AdminController
+ * @package App\Controller
+ * @Route("/admin")
+ */
 class AdminController extends Controller
-{   // Section City
+{
 
-
-    /**
-     * @Route("/admin/city", name="city")
-     */
-    public function cityAction(Request $request)
-    {   $dao=$this->getDoctrine()->getRepository(City::class);
-        $city =new City();
-
-        $cities =$dao->findAll();
-        /*
-        $form=$this->get('form.factory')->create(CityType::class,$city,['action_origin_is_admin'=>true]);
-        //Si POST
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($city);
-            $entityManager->flush();
-            return $this->redirect("/");
-
-        }
-        */
-        //Si GET
-        return $this->render("admin/city.html.twig",["cities"=>$cities]);
-    }
 
     // Section Produits et Types produits
 
     /**
      * @param Request $request
      * @return Response
-     * @Route("/admin/product/add")
+     * @Route("/product/add")
      */
     public function addProductAction(Request $request)
     {
@@ -80,7 +62,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/product/list")
+     * @Route("/product/list")
      */
 
     public function readProductAction(){
@@ -91,7 +73,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("admin/product/read/{id}")
+     * @Route("/product/read/{id}")
      */
     public function readOneProductAction($id){
         $dao=$this->getDoctrine()->getRepository(Product::class);
@@ -102,7 +84,7 @@ class AdminController extends Controller
 
     }
     /**
-     * @Route("/admin/product/edit/{id}")
+     * @Route("/product/edit/{id}")
      */
 
     public function SaveProductAction(Request $request,$id){
@@ -142,7 +124,7 @@ class AdminController extends Controller
     }
 //      Cette fonction n'est pas utile à l'application
 //    /**
-//     * @Route("/admin/product/delete/{id}")
+//     * @Route("/product/delete/{id}")
 //     */
 //
 //    public function DeleteProductAction(Request $request,$id){
@@ -184,7 +166,7 @@ class AdminController extends Controller
      * @param Request $request
      * @return Response
      *
-     * @Route("/admin/productType/add")
+     * @Route("/productType/add")
      */
     public function addProductTypeAction(Request $request)
     {
@@ -221,7 +203,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/productType/list")
+     * @Route("/productType/list")
      */
     public function readProductTypeAction()
     {
@@ -232,7 +214,7 @@ class AdminController extends Controller
 
     }
     /**
-     * @Route("/admin/productType/read/{id}")
+     * @Route("/productType/read/{id}")
      */
     public function readOneProductTypeAction($id)
     {
@@ -246,7 +228,7 @@ class AdminController extends Controller
 
 
     /**
-     * @Route("/admin/productType/edit/{id}")
+     * @Route("/productType/edit/{id}")
      */
 
     public function SaveProductTypeAction(Request $request,$id){

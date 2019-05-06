@@ -8,7 +8,32 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\City;
 
 class CityController extends Controller
-{   // Section City
+{
+    /**
+     * @Route("/admin/city", name="city")
+     */
+    public function cityAction(Request $request)
+    {   $dao=$this->getDoctrine()->getRepository(City::class);
+        $city =new City();
+
+        $cities =$dao->findAll();
+        /*
+        $form=$this->get('form.factory')->create(CityType::class,$city,['action_origin_is_admin'=>true]);
+        //Si POST
+        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+            $entityManager=$this->getDoctrine()->getManager();
+            $entityManager->persist($city);
+            $entityManager->flush();
+            return $this->redirect("/");
+
+        }
+        */
+        //Si GET
+        return $this->render("admin/city.html.twig",["cities"=>$cities]);
+    }
+
+
+    // Section City
     private function getCityFromApi(int $inseeid): City
     {   $city=new City();
         $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
