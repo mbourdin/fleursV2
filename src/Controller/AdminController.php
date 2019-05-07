@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Entity\Offer;
 use App\Entity\Product;
 use App\Entity\Producttype;
 use App\Form\ProductForm;
@@ -9,7 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\City;
+use App\Entity\Person;
+use App\Entity\Service;
 
 /**
  * Class AdminController
@@ -302,6 +304,40 @@ class AdminController extends Controller
 //        return $this->render('product/typeList.html.twig', array('form' => $formView));
 //
 //    }
+    /**
+     * @Route("/dashboard")
+     */
+    public function dashboardAction()
+    {
+        return $this->render('admin/dashboard.html.twig');
+    }
 
+    /**
+     * @Route("/user/list")
+     */
+    public function userListAction()
+    {
+        $dao = $this->getDoctrine()->getRepository(Person::class);
+        $result = $dao->findAll();
+        return $this->render('user/list.html.twig', array('users' => $result));
+    }
+    /**
+     * @Route("/service/list")
+     */
+    public function serviceListAction()
+    {
+        $dao = $this->getDoctrine()->getRepository(Service::class);
+        $result = $dao->findAll();
+        return $this->render('service/list.html.twig', array('services' => $result));
+    }
+    /**
+     * @Route("/offer/list")
+     */
+    public function offerListAction()
+    {
+        $dao = $this->getDoctrine()->getRepository(Offer::class);
+        $result = $dao->findAll();
+        return $this->render('offer/list.html.twig', array('offers' => $result));
+    }
 
 }

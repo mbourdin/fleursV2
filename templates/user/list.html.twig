@@ -1,0 +1,62 @@
+{% extends 'admin/dashboard.html.twig' %}
+{% block title %}Uniflor - Administration - Utilisateurs{% endblock %}
+
+{% block body %}
+
+
+    Rappel des droits utilisateur :
+    1 = normal
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Né(e) le</th>
+            <th scope="col">Email</th>
+            <th scope="col">Photo</th>
+            <th scope="col">Banni</th>
+            <th scope="col">Supprimé</th>
+            <th scope="col">Actif</th>
+            <th scope="col">Droits</th>
+            <th scope="col">Pseudo</th>
+            <th scope="col">Last Connected</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th>{{ user.id }}</th>
+                <td>{{ user.Name }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.birthday }}</td>
+                <td>{{ user.email }}</td>
+                <td><img src="{{ asset('images/persons/' ~ user.photopath )}}">
+
+                </td>
+                <td>
+                        <input type="checkbox" id="checkbox{{ user.id }}" onchange="submitban({{ user.id }})" {% if user.banned %} checked {% endif %}>
+                </td>
+                <td>
+                    <input type="checkbox" id="checkboxdelete{{ user.id }}" onchange="submitdelete({{ user.id }})" {% if user.deleted %} checked {% endif %}>
+                </td>
+                <td>{{ user.enabled }}</td>
+                <td>
+                    <input type="text" value="{{ user.rights }}" onchange="submitrights({{ user.id }})" id="rights{{ user.id }}">
+                </td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.last_login }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br/>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset("web/js/userlist.js") }}">
+    </script>
+
+{% endblock %}

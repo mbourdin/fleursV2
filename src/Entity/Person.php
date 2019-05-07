@@ -86,6 +86,26 @@ class Person extends FOSUser {
      * @ORM\ManyToOne(targetEntity="App\Entity\Address", cascade={"merge"}, fetch="LAZY")
      */
     private $address;
+    /*
+     * @ORM\Column(type="dateTime")
+     */
+    protected $last_login;
+
+    /**
+     * @return mixed
+     */
+    public function getLast_login()
+    {
+        return $this->last_login;
+    }
+
+    /**
+     * @param mixed $last_login
+     */
+    public function setLastLogin(?\DateTime $last_login=null): void
+    {
+        $this->last_login = $last_login;
+    }
 
     /**
      * User constructor.
@@ -304,5 +324,9 @@ class Person extends FOSUser {
     public function setImagefile(File $imagefile): void
     {
         $this->imagefile = $imagefile;
+    }
+    public function equals(Person $p)
+    {   return $p->id==$this->id;
+
     }
 }
