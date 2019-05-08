@@ -1,23 +1,34 @@
-    <div class="card-header">
-        <h1>Liste de produits</h1>
-    </div>
-    {% set i=0 %}
-    <div class="card-deck">
-    {% for  product in products %}
-        {% if (i%4 == 0 and i!=0)%}
+<div class="container">
+    <div class="jumbotron p-3 p-md-5 text-white rounded bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-5 ">Bienvenue sur le site d'Uniflor, en cette saison du printemps !</h1>
+            <p class="lead my-3 font-italic">Pas besoin de pousser mémé dans les orties pour avoir la main verte...</p>
+            <a href="#" class="text-white font-weight-bold"><button type="button" class="btn btn-success">voir les offres</button></a>
         </div>
-        <div class="card-deck">
-        {% endif %}
-            <div class="card ">
-                <img class="card-img-top" src="{{ asset('images/products/'~ product.photopath) }}" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.price/100.0 }} €</p>
-                    <a href="/product/show/{{ product.id }}"><button type="button" class="btn btn-secondary"><i class="fas fa-info-circle"></i>Détails</button></a>
+    </div>
 
-                    <a href="/panier/addProduct/{{ product.id }}"><button type="button" class="btn btn-success"><i class="fas fa-cart-plus"></i>Ajouter</button></a>
+    <h1><i class="fas fa-seedling"></i> Fleurs de saison</h1>
+    <div class="row">
+        {%  for product in products %}
+            <div class="card" style="width: 16rem;">
+                <img src="{{ asset('images/products/'~ product.photopath) }}" class="rounded mx-auto d-block" alt="..."width="150" height="150">
+                <div class="card-body">
+                    <h3 class="card-title text-center">{{  product.name }}</h3>
+                    <p class="card-text text-center">{{ product.price/100.0 }}€</p>
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <a href="/produits/detail/{{ product.id }}" class="btn btn-success">détail</a>
+                        </div>
+                        <div class="col-4">
+                            <a href="#" class="btn btn-warning">Ajout</a>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-    {% set i=i+1 %}
-    {% endfor %}
+        {% endfor%}
     </div>
+
+
+
+</div>

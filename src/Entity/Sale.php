@@ -68,6 +68,10 @@ class Sale
      */
     private $recipient;
     /**
+     * @ORM\Column(type="string")
+     */
+    private $contact;
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Address", fetch="LAZY",cascade={"persist"})
      */
     private $address;
@@ -514,6 +518,23 @@ class Sale
     {
         $this->address = $address;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * @param mixed $contact
+     */
+    public function setContact($contact): void
+    {
+        $this->contact = $contact;
+    }
+
 
 }
 

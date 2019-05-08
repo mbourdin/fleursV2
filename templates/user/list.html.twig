@@ -25,12 +25,13 @@
         </tr>
         </thead>
         <tbody>
+        {% set sessionId=(app.session.get('user').id) %}
         {% for user in users %}
-            <tr>
+            <tr {% if sessionId==(user.id)%}class="bg-warning" {% endif %}>
                 <th>{{ user.id }}</th>
                 <td>{{ user.Name }}</td>
                 <td>{{ user.firstName }}</td>
-                <td>{{ user.birthday }}</td>
+                <td>{% if user.birthday!=null %}{{ user.birthday|date }}{% endif %}</td>
                 <td>{{ user.email }}</td>
                 <td><img src="{{ asset('images/persons/' ~ user.photopath )}}">
 
@@ -46,7 +47,7 @@
                     <input type="text" value="{{ user.rights }}" onchange="submitrights({{ user.id }})" id="rights{{ user.id }}">
                 </td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.last_login }}</td>
+                <td>{% if user.lastLogin!=null %}{{ user.lastLogin|date }}{% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

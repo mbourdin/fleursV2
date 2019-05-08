@@ -18,12 +18,11 @@ function buttonEnabler()
 {   button=document.getElementById("submitbutton");
 
 
-    recipientIsEmpty=( document.getElementById("recipient").value ===undefined || document.getElementById("recipient").value==="" );
-    numeroIsEmpty=(document.getElementById("number").value==="" || document.getElementById("number").value<0);
-
     if
     (
         !isEmpty("recipient")
+        &&
+        !isEmpty("contact")
         &&
         (    document.getElementById("useownaddress").checked
 
@@ -34,6 +33,7 @@ function buttonEnabler()
                 !isEmpty("roadname")
                 &&
                 !isEmpty("cityOptions")
+
             )
         )
     )

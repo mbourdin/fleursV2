@@ -9,7 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Service;
-
+/**
+ * @Route("/user/sale")
+ */
 class SaleController extends Controller
 {
     private function getUserSale(Request $request):?Sale
@@ -25,7 +27,7 @@ class SaleController extends Controller
         $em->flush();
     }
     /**
-    * @Route("/user/sale/edit")
+    * @Route("/edit")
     */
     public function editSaleAction(Request $request)
     {   $sale=$this->getUserSale($request);
@@ -42,7 +44,7 @@ class SaleController extends Controller
     }
 
     /**
-     * @Route("/user/sale/addProduct/{id}")
+     * @Route("/addProduct/{id}")
      */
     public function addToProductAction(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -53,7 +55,7 @@ class SaleController extends Controller
         return $this->redirect("/user/sale/edit");
     }
     /**
-     * @Route("/user/sale/addOffer/{id}")
+     * @Route("/addOffer/{id}")
      */
     public function addToOfferAction(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -65,7 +67,7 @@ class SaleController extends Controller
     }
 
     /**
-     * @Route("/user/sale/addService/{id}")
+     * @Route("/addService/{id}")
      */
     public function addToServiceAction(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -77,7 +79,7 @@ class SaleController extends Controller
     }
 
     /**
-     * @Route("/user/sale/rmProduct/{id}"))
+     * @Route("/rmProduct/{id}"))
      */
     public function rmProduct(Request $request,int $id)
     {
@@ -94,7 +96,7 @@ class SaleController extends Controller
         return $this->redirect("/user/sale/edit");
     }
     /**
-     * @Route("/user/sale/rmService/{id}"))
+     * @Route("/rmService/{id}"))
      */
     public function rmService(Request $request,int $id)
     {
@@ -112,7 +114,7 @@ class SaleController extends Controller
     }
 
     /**
-     * @Route("/user/sale/rmOffer/{id}"))
+     * @Route("/rmOffer/{id}"))
      */
     public function rmOffer(Request $request,int $id)
     {
@@ -129,7 +131,7 @@ class SaleController extends Controller
         return $this->redirect("/user/sale/edit");
     }
     /**
-     * @Route("/user/sale/delProduct/{id}"))
+     * @Route("/delProduct/{id}"))
      */
     public function delProduct(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -153,7 +155,7 @@ class SaleController extends Controller
         return $this->redirect("/user/sale/edit");
     }
     /**
-     * @Route("/user/sale/delService/{id}"))
+     * @Route("/delService/{id}"))
      */
     public function delService(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -177,7 +179,7 @@ class SaleController extends Controller
         return $this->redirect("/user/sale/edit");
     }
     /**
-     * @Route("/user/sale/delOffer/{id}"))
+     * @Route("/delOffer/{id}"))
      */
     public function delOffer(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -201,7 +203,7 @@ class SaleController extends Controller
         return $this->redirect("/user/sale/edit");
     }
     /**
-     * @Route("/user/sale/validate")
+     * @Route("/validate")
      */
     public function validateAction(Request $request)
     {   $sale=$this->getUserSale($request);
@@ -215,6 +217,7 @@ class SaleController extends Controller
             $address->setPostalcode($request->request->get("postalcode"));
             $address->setCityId($request->request->get("inseeid"));
 
+
             $em=$this->getDoctrine()->getManager();
             $em->persist($address);
         }
@@ -226,7 +229,7 @@ class SaleController extends Controller
 
             }
         }
-
+        $sale->setContact($request->request->get("contact"));
         $sale->setAddress($address);
         $sale->setValidated(true);
         $sale->setRecipient($request->request->get("recipient"));
@@ -235,7 +238,7 @@ class SaleController extends Controller
         return $this->redirect("/");
     }
     /**
-     * @Route("/user/sale/delete")
+     * @Route("/delete")
      */
     public function deleteAction(Request $request)
     {   $sale=$this->getUserSale($request);
@@ -256,7 +259,7 @@ class SaleController extends Controller
     }
 
     /**
-     * @Route ("/user/sale/updateQuantity/{class}/{id}")
+     * @Route ("/updateQuantity/{class}/{id}")
      */
     public function updateQuantity(string $class,int $id,Request $request){
         switch ($class) {

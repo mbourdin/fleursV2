@@ -12,20 +12,23 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-sm">
-                    <label>Nom du destinataire</label><input type="text" name="recipient" required id="recipient" onchange="buttonEnabler()">
+                <div class="col-md-5">
+                    <label for="recipient">Nom du destinataire</label><input type="text" name="recipient" required id="recipient" onchange="buttonEnabler()">
                 </div>
-                <div class="col-sm">
+                <div class="col-md-5">
+                    <label for="contact">Contact</label><input type="text" name="contact" id="contact" onchange="buttonEnabler()">
+                </div>
+                <div class="col-md-2">
                     <label for="onlinepay">paiement en ligne</label>
                     <input type="checkbox" id="onlinepay" name="onlinepay"{% if sale.onlinepay %} checked {% endif %}
                            value="true">
                 </div>
             </div>
             <div class="row">
-            <div class="col-sm">
+            <div class="col-md">
                 Entrez l'adresse de livraison(s)
             </div>
-            <div class="col-sm">
+            <div class="col-md">
                 <label for="useownaddress">Utiliser ma propre adresse</label>
                 <input type="checkbox" id="useownaddress" name="useownaddress" value="true" onchange="buttonEnabler()">
             </div>

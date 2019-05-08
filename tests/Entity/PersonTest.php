@@ -75,12 +75,6 @@ class PersonTest extends TestCase
     }
     public function test__Construct()
     {   $person=new Person();
-        $this->assertNull($person->getName());
-        $this->assertNull($person->getFirstName());
-        $this->assertNull($person->getPassword());
-        $this->assertNull($person->getId());
-        $this->assertNull($person->getEmail());
-        $this->assertFalse($person->getBanned());
         $this->assertEquals($person->getRights(),1);
     }
 }

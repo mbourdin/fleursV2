@@ -15,7 +15,7 @@ class OfferTest extends TestCase
     public function test__construct()
     {   $offer=new Offer();
         $this->assertNull($offer->getId());
-        $this->assertNull($offer->getPrice());
+        $this->assertEquals($offer->getPrice(),0);
         $this->assertNull($offer->getDiscount());
         $this->assertNull($offer->getName());
         $this->assertNull($offer->getDescription());

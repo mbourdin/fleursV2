@@ -1,18 +1,22 @@
 <?php
 namespace App\Entity;
-use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Model\User as FOSUser;
-
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use FOS\UserBundle\Model\User as FOSUser;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
+ *@Vich\Uploadable()
  */
-class Person extends FOSUser {
+#J'ai fait étendre UserInterface à mon entité person.
+class Person extends FOSUser implements UserInterface
+{
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     protected $id;
@@ -21,123 +25,67 @@ class Person extends FOSUser {
      */
     private $name;
     /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $firstname;
-    /**
      * @ORM\Column(type="datetime")
      */
-    private $birthday;
+    private $creationdate;
 
-//      Défini dans la classe mère
-//    /**
-//     * @ORM\Column(type="string",length=50)
-//     */
-//    protected $email;
-
-
-//      Défini dans la classe mère
-//    /**
-//     * @ORM\Column(type="string", length=32)
-//     */
-//    protected $password;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->rights=1;
+        $this->setEmailCanonical(null);
+        $this->deleted=false;
+        $this->banned=false;
+    }
+    /**
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $firstname;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $birthday;
 
     /**
-     * @ORM\Column(type="string",length=255)
+     * @ORM\Column(type="integer")
+     */
+    private $rights;
+
+    /**
+     *  @Vich\UploadableField(mapping="products_images",fileNameProperty="photopath")
+     * @var File
+     */
+    protected $imagefile;
+
+    /**
+     * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $photopath;
-
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
     /**
      * @ORM\Column(type="boolean")
      */
     private $banned;
 
-
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $deleted;
-
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $creationdate;
-
-    // cet attribut devra etre remplacé par l'utilisation correcte des groupes et roles
-
-    /**
-     *  @ORM\Column(type="smallint")
-     */
-
-
-    private $rights;
-    //Les droits sont gérés comme les droits de fichier unix:
-    //1 pour utilisateur normal,
-    //2 pour admin,
-    //4 pour administrateur de comptes
-    //addition pour cumuler les droits
-    //pour lire les droits, l'opération doit etre la suivant :
-    //(rights/n)%2, où n désigne la valeur nominale du droit
-    //n est forcément une puissance positive de 2
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Address", cascade={"merge"}, fetch="LAZY")
-     */
-    private $address;
-    /*
-     * @ORM\Column(type="dateTime")
-     */
-    protected $last_login;
-
     /**
      * @return mixed
      */
-    public function getLast_login()
-    {
-        return $this->last_login;
-    }
 
-    /**
-     * @param mixed $last_login
-     */
-    public function setLastLogin(?\DateTime $last_login=null): void
+    public function getId(): ?int
     {
-        $this->last_login = $last_login;
-    }
-
-    /**
-     * User constructor.
-     */
-    public function __construct()
-    {   parent::__construct();
-        $this->name=null;
-        $this->firstname=null;
-        $this->password=null;
-        $this->id=null;
-        $this->email=null;
-        $this->banned=false;
-        $this->rights=1;
-        $this->deleted=false;
+        return $this->id;
     }
     /**
-     * @return mixed
+     * @param mixed $id
      */
-    public function getName()
+    public function setId($id): void
     {
-        return $this->name;
+        $this->id = $id;
     }
-    /**
-     * @param mixed $name
-     */
-    public function setName(string $name)
-    {
-        $this->name = $name;
-    }
-    /**
-     * @return mixed
-     */
     public function getFirstname()
     {
         return $this->firstname;
@@ -145,71 +93,10 @@ class Person extends FOSUser {
     /**
      * @param mixed $firstname
      */
-    public function setFirstname(string $firstname)
+    public function setFirstname($firstname): void
     {
         $this->firstname = $firstname;
     }
-    /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    /**
-     * @param mixed $id
-     */
-    public function setId(int $id)
-    {
-        $this->id = $id;
-    }
-    /**
-     * @return mixed
-     */
-    public function getBanned()
-    {
-        return $this->banned;
-    }
-    /**
-     * @param mixed $banned
-     */
-    public function setBanned(bool $banned)
-    {
-        $this->banned = $banned;
-    }
-    /**
-     * @return mixed
-     */
-
-    /**
-     * @return int
-     */
-    public function getRights()
-    {
-        return $this->rights;
-    }
-    /**
-     * @param int $rights
-     */
-    public function setRights(int $rights)
-    {
-        $this->rights = $rights;
-    }
-
     /**
      * @return mixed
      */
@@ -217,13 +104,63 @@ class Person extends FOSUser {
     {
         return $this->birthday;
     }
-
     /**
      * @param mixed $birthday
      */
-    public function setBirthday (\DateTime $birthday)
+    public function setBirthday($birthday): void
     {
         $this->birthday = $birthday;
+    }
+    /**
+     * @ORM\ManyToOne(targetEntity="Address", cascade={"merge"}, fetch="LAZY")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $address;
+    /**
+     * @return mixed
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+    /**
+     * @param mixed $address
+     */
+    public function setAddress($address): void
+    {
+        $this->address = $address;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRights()
+    {
+        return $this->rights;
+    }
+
+    /**
+     * @param mixed $rights
+     */
+    public function setRights($rights): void
+    {
+        $this->rights = $rights;
+    }
+
+    /**
+     * @return File
+     */
+    public function getImagefile(): ?File
+    {
+        return $this->imagefile;
+    }
+
+    /**
+     * @param File $imagefile
+     */
+    public function setImagefile(?File $imagefile): void
+    {
+        $this->imagefile = $imagefile;
     }
 
     /**
@@ -237,9 +174,52 @@ class Person extends FOSUser {
     /**
      * @param mixed $photopath
      */
-    public function setPhotopath(?string $photopath)
+    public function setPhotopath($photopath): void
     {
         $this->photopath = $photopath;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreationdate()
+    {
+        return $this->creationdate;
+    }
+
+    /**
+     * @param mixed $creationdate
+     */
+    public function setCreationdate($creationdate): void
+    {
+        $this->creationdate = $creationdate;
+    }
+
+
+    public function getEmailCanonical()
+    {
+        return parent::getEmailCanonical(); // TODO: Change the autogenerated stub
+    }
+
+    public function setEmailCanonical($emailCanonical)
+    {
+        return parent::setEmailCanonical($emailCanonical); // TODO: Change the autogenerated stub
     }
 
     /**
@@ -253,80 +233,28 @@ class Person extends FOSUser {
     /**
      * @param mixed $deleted
      */
-    public function setDeleted(bool $deleted)
+    public function setDeleted($deleted): void
     {
         $this->deleted = $deleted;
     }
 
-
     /**
      * @return mixed
      */
-    public function getCreationdate()
+    public function getBanned()
     {
-        return $this->creationdate;
+        return $this->banned;
     }
 
     /**
-     * @param mixed $creationdate
+     * @param mixed $banned
      */
-    public function setCreationdate(\DateTime $creationdate)
+    public function setBanned($banned): void
     {
-        $this->creationdate = $creationdate;
+        $this->banned = $banned;
     }
-    /**
-     * @return mixed
-     */
-    public function getAddress()
+    public function equals(Person $person)
     {
-        return $this->address;
-    }
-
-    /**
-     * @param mixed $address
-     */
-    public function setAddress($address): void
-    {
-        $this->address = $address;
-    }
-
-
-
-    public function rightsString()
-    {   $str="right:";
-        if($this->rights%2==1 )
-        {   $str.="/user";
-        }
-        if(($this->rights/2)%2==1 )
-        {   $str.="/admin";
-        }
-        if(($this->rights/4)%2==1 )
-        {   $str.="/accAdmin";
-        }
-        return $str;
-    }
-    /**
-     *  @Vich\UploadableField(mapping="persons_images",fileNameProperty="photopath")
-     * @var File
-     */
-    protected $imagefile;
-    /**
-     * @return File
-     */
-    public function getImagefile(): ?File
-    {
-        return $this->imagefile;
-    }
-
-    /**
-     * @param File $imagefile
-     */
-    public function setImagefile(File $imagefile): void
-    {
-        $this->imagefile = $imagefile;
-    }
-    public function equals(Person $p)
-    {   return $p->id==$this->id;
-
+        return $person->id==$this->id;
     }
 }

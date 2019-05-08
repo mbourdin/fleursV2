@@ -14,7 +14,7 @@
                     {% if csrf_token %}
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
                     {% endif %}
-                    {#champs du login  ou email#}
+                    champs du login ou email
                     <div class="form-group">
                         <div class="form-label-group">
 
@@ -25,12 +25,12 @@
                         </div>
 
                     </div>
-                    {#champs du mot de passe #}
+                    champs du mot de passe
                     <div class="form-group">
                         <div class="form-label-group">
                             <input type="password" id="password" class="form-control" name="_password"
                                    placeholder="Mot de passe" required="required" autofocus="autofocus">
-                            <label for="username">{{ 'security.login.password'|trans }}</label>
+                            <label for="password">{{ 'security.login.password'|trans }}</label>
                         </div>
                     </div>
 
