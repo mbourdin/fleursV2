@@ -102,12 +102,11 @@ create table if not exists person
 alter table person
     add primary key (id);
 
-create table if not exists producttype
+create table if not exists product_type
 (
     id        int auto_increment,
     name      varchar(30)          null,
     photopath varchar(255)         null,
-    price     int                  not null,
     active    tinyint(1) default 1 not null,
     constraint ProductType_id_uindex
         unique (id)
@@ -118,17 +117,17 @@ alter table product_type
 
 create table if not exists product
 (
-    id             int auto_increment,
-    photopath      varchar(255) null,
-    price          int          null,
-    description    text         null,
-    name           varchar(30)  null,
-    active         tinyint(1)   null,
-    producttype_id int          null,
+    id              int auto_increment,
+    photopath       varchar(255) null,
+    price           int          null,
+    description     text         null,
+    name            varchar(30)  null,
+    active          tinyint(1)   null,
+    product_type_id int          null,
     constraint Product_id_uindex
         unique (id),
-    constraint Product_producttype_id_fk
-        foreign key (producttype_id) references product_type (id)
+    constraint product_product_type_id_fk
+        foreign key (product_type_id) references product_type (id)
 );
 
 alter table product
@@ -144,6 +143,17 @@ create table if not exists offer_product_content
         foreign key (offer_id) references offer (id),
     constraint offerProductContent_product_id_fk
         foreign key (product_id) references product (id)
+);
+
+create table if not exists products_types
+(
+    product_id      int not null,
+    product_type_id int not null,
+    primary key (product_id, product_type_id),
+    constraint products_types_product_id_fk
+        foreign key (product_id) references product (id),
+    constraint products_types_product_type_id_fk
+        foreign key (product_type_id) references product_type (id)
 );
 
 create table if not exists sale
