@@ -2,9 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
+ * @Vich\Uploadable()
  * @ORM\Entity(repositoryClass="App\Repository\ProducttypeRepository")
  */
 class ProductType
@@ -29,11 +34,23 @@ class ProductType
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photopath;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Product", mappedBy="productTypes")
+     */
+    private $products;
+
+    /**
+     *  @Vich\UploadableField(mapping="productTypes_images",fileNameProperty="photopath")
+     * @var File
+     */
+    protected $imagefile;
     /**
      * Producttype constructor.
      */
     public function __construct()
     {   $this->active=true;
+        $this->products =new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,4 +95,48 @@ class ProductType
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products): void
+    {
+        $this->products = $products;
+    }
+
+    /**
+     * @return File
+     */
+    public function getImagefile(): ?File
+    {
+        return $this->imagefile;
+    }
+
+    /**
+     * @param File $imagefile
+     */
+    public function setImagefile(?File $imagefile): void
+    {
+        $this->imagefile = $imagefile;
+    }
+    public function addProduct(Product $product)
+    {
+        if(! $this->products->contains($product))
+            $this->products->add($product);
+            $product->addType($this);
+    }
+    public function removeProduct(Product $product)
+    {
+        $this->products->removeElement($product);
+        $product->removeType($this);
+    }
+
 }

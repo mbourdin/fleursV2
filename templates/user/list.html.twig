@@ -3,28 +3,26 @@
 
 {% block body %}
 
-    <div class="row">
-    <table class="table table-bordered container">
-        <thead>
+    <table  class="table table-bordered w-auto table-responsive">
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nom</th>
-            <th scope="col">Prénom</th>
-            <th scope="col">Né(e) le</th>
-            <th scope="col">Email</th>
-            <th scope="col">Photo</th>
-            <th scope="col">Banni</th>
-            <th scope="col">Supprimé</th>
-            <th scope="col">Actif</th>
-            <th scope="col">Droits</th>
-            <th scope="col">Pseudo</th>
-            <th scope="col">Last Connected</th>
+            <th scope="col" >#</th>
+            <th scope="col" >Nom</th>
+            <th scope="col" >Prénom</th>
+            <th scope="col" >Né(e) le</th>
+            <th scope="col" >Email</th>
+            <th scope="col" >Photo</th>
+            <th scope="col" >Banni</th>
+            <th scope="col" >Supprimé</th>
+            <th scope="col" >Actif</th>
+            <th scope="col" >Droits</th>
+            <th scope="col" >Pseudo</th>
+            <th scope="col" >Last Connected</th>
         </tr>
-        </thead>
-        <tbody>
+
+
         {% set sessionId=(app.session.get('user').id) %}
         {% for user in users %}
-            <tr {% if sessionId==(user.id)%}class="bg-warning" {% endif %}>
+            <tr {% if sessionId==(user.id)%}class="bg-primary " {% endif %}>
                 <th>{{ user.id }}</th>
                 <td>{{ user.Name }}</td>
                 <td>{{ user.firstName }}</td>
@@ -47,10 +45,10 @@
                 <td>{% if user.lastLogin!=null %}{{ user.lastLogin|date }}{% endif %}</td>
             </tr>
         {% endfor %}
-        </tbody>
+
     </table>
-    <br/>
-    </div>
+
+
 {% endblock %}
 
 {% block javascripts %}

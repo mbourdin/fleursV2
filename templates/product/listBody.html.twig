@@ -5,7 +5,7 @@
         <th>description</th>
         <th>prix</th>
         <th>actif</th>
-        <th>chemin vers photo</th>
+        <th>photo</th>
         <th></th>
     </tr>
     {%  for product in products %}
@@ -16,7 +16,7 @@
         <td> {{ product.price }}</td>
         <td> {{ product.active }}</td>
         <td>
-            <img src="{{ asset('images/products/'~ product.photopath) }}" alt="nomProduit:{{  product.name }}" class="productimage">
+            <img class="logo" src="{{ asset('images/products/'~ product.photopath) }}" alt="nomProduit:{{  product.name }}" class="productimage">
         </td>
         <td><a  href="/admin/product/edit/{{   product.id }}"><button>edit</button></a></td>
     </tr>

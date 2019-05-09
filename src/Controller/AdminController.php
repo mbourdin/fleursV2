@@ -38,7 +38,7 @@ class AdminController extends Controller
         $form = $this->createForm(ProductForm::class, $product);
         $form->add('submit', SubmitType::class, [
             'label' => 'ajouter',
-            'attr' => ['class' => 'btn btn-default pull-right'],
+            'attr' => ['class' => 'btn btn-primary pull-right'],
         ]);
         $form->handleRequest($request);
 
@@ -121,7 +121,8 @@ class AdminController extends Controller
         $formView= $form->createView();
 
         // on rend la vue
-        return $this->render('product/form.html.twig', array('form' => $formView));
+        $productTypes=$this->getDoctrine()->getRepository(ProductType::class)->findAll();
+        return $this->render('product/form.html.twig', array('form' => $formView,"edit"=>true,"productTypes"=>$productTypes,"product"=>$product));
 
     }
 //      Cette fonction n'est pas utile à l'application

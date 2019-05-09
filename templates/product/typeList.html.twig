@@ -1,12 +1,10 @@
-{% extends 'base.html.twig' %}
-{% block body %}
+{% extends 'admin/dashboard.html.twig' %}{% block body %}
     <h1 class="centered">Liste des Types de Produit</h1>>
     <table class="table">
         <tr>
             <th>id</th>
             <th>nom</th>
             <th>photo</th>
-            <th>prix</th>
             <th>actif</th>
             <th></th>
         </tr>
@@ -14,8 +12,7 @@
             <tr>
                 <td>{{ type.id }}</td>
                 <td>{{ type.name }}</td>
-                <td>{{ type.photopath }}</td>
-                <td>{{ type.price }}</td>
+                <td><img src="{{ asset('images/productTypes/' ~ type.photopath) }}" class="logo"></td>
                 <td>{{ type.active }}</td>
                 <td><a href="/admin/productType/edit/{{ type.id }}"><button>edit</button></a></td>
             </tr>

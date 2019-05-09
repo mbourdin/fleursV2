@@ -1,8 +1,6 @@
 let departement;
 let departementChanged=false;
-let cityChoice;
 let port=":8000";
-let ownSiteAdress="http://"+window.location.hostname+port;
 //chargement de la liste des departements
 $(document).ready(
     function () {

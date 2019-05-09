@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/dashboard.html.twig' %}
 {% block title %}
     creation produit
 {% endblock %}
@@ -9,4 +9,28 @@
 {{ form_widget(form) }}
 
 {{ form_end(form) }}
+    {% if edit is defined %}
+        <div>
+            <label for="productTypes">Choisir les Types de produit</label>
+            <select id="productTypes">
+                <option value=""> </option>
+                {% for productType in productTypes %}
+                    <option value={{ productType.id }}>{{ productType.name }}</option>
+                {% endfor %}
+            </select>
+            <button onclick="add({{ product.id }})">associer</button>
+            <button onclick="remove({{ product.id }})">dissocier</button>
+        </div>
+        <h3>Liste des types associes</h3>
+        <ul>
+            {% for productType in product.productTypes %}
+                {{productType.name }}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="application/javascript" src="{{ asset('web/js/productType.js') }}"></script>
 {% endblock %}

@@ -46,16 +46,8 @@ class Product
      */
     private $price;
     /**
-     * @ORM\ManyToMany(targetEntity="ProductType", fetch="LAZY",inversedBy="products")
-     * @ORM\JoinTable(
-     *  name="products_types",
-     *  joinColumns={
-     *      @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     *  },
-     *  inverseJoinColumns={
-     *      @ORM\JoinColumn(name="product_type_id", referencedColumnName="id")
-     *  }
-     * )
+     * @ORM\ManyToMany(targetEntity="ProductType", inversedBy="products")
+     * @ORM\JoinTable(name="products_types")
      */
     private $productTypes;
 
@@ -166,17 +158,17 @@ class Product
     /**
      * @return mixed
      */
-    public function getProductType()
+    public function getProductTypes()
     {
-        return $this->productType;
+        return $this->productTypes;
     }
 
     /**
      * @param mixed $productType
      */
-    public function setProductType($productType): void
+    public function setProductTypes($productTypes): void
     {
-        $this->productType = $productType;
+        $this->productTypes = $productTypes;
     }
 
     /**
@@ -199,6 +191,13 @@ class Product
         }
     }
 
+    public function addType(ProductType $pt)
+    {   if(! $this->productTypes->contains($pt))
+        $this->productTypes->add($pt);
+    }
+    public function removeType(ProductType $pt)
+    {   $this->productTypes->removeElement($pt);
+    }
 //    /**
 //     * @ORM\Column(type="datetime")
 //     */

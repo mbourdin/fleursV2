@@ -3,6 +3,8 @@
 
 namespace App\Controller;
 use App\Entity\Person;
+use App\Entity\ProductType;
+use App\Entity\Product;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,5 +97,32 @@ class AdminRestController extends Controller
         $em->flush();
         return new Response();
     }
-
+    /**
+     * @Rest\Put("/admin/product/associateType/{productId}/{typeId}")
+     */
+    public function associateProductType(int $productId,int $typeId)
+    {   $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $typeDao=$this->getDoctrine()->getRepository(ProductType::class);
+        $product=$productDao->find($productId);
+        $type=$typeDao->find($typeId);
+        $product->addType($type);
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($product);
+        $em->flush();
+        return new Response();
+    }
+    /**
+     * @Rest\Put("/admin/product/dissociateType/{productId}/{typeId}")
+     */
+    public function dissociateProductType(int $productId,int $typeId)
+    {   $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $typeDao=$this->getDoctrine()->getRepository(ProductType::class);
+        $product=$productDao->find($productId);
+        $type=$typeDao->find($typeId);
+        $product->removeType($type);
+        $em=$this->getDoctrine()->getManager();
+        $em->merge($product);
+        $em->flush();
+        return new Response();
+    }
 }
