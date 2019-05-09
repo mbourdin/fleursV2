@@ -6,7 +6,6 @@
         <th>prix</th>
         <th>actif</th>
         <th>chemin vers photo</th>
-        <th>typeId</th>
         <th></th>
     </tr>
     {%  for product in products %}
@@ -19,7 +18,6 @@
         <td>
             <img src="{{ asset('images/products/'~ product.photopath) }}" alt="nomProduit:{{  product.name }}" class="productimage">
         </td>
-        <td>{% if product.producttype %}{{ product.producttype.id }}{% endif %}</td>
         <td><a  href="/admin/product/edit/{{   product.id }}"><button>edit</button></a></td>
     </tr>
     {% endfor%}

@@ -1,3 +1,13 @@
 h2{
     margin-bottom: 0 !important;
 }
+.jumbotron{
+    background-image:url(../images/site/champmuguetclair25PC.png);
+    background-size: cover;
+}
+.card{
+    border: 0 !important;
+}
+.card-deck{
+    margin-top: 20px;
+}

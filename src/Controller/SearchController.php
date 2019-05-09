@@ -47,7 +47,7 @@ class SearchController extends Controller
      */
     public function orchideesAction()
     {   $list=$this->searchProducts("orchid");
-        return $this->render("product/list.html.twig",["products"=>$list]);
+        return $this->render("product/listClientView.html.twig",["products"=>$list,"title"=>"Orchidées"]);
     }
     /**
      * @Route("/rip")

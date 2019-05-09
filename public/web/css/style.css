@@ -7,13 +7,10 @@
 }
 .bg-gray
 {
-    background-color: #AAAAAA;
+    background-color: #CCCCCC;
 }
 .bg-black{
     background-color: black;
-}
-.centered{
-    text-align: center;
 }
 .largeur30{
     width: 30px;
@@ -26,9 +23,4 @@
 .hauteur50
 {
     min-height: 100px;
-}
-td{
-    border-style: solid;
-    border-width: 2px;
-    border-color: white;
 }

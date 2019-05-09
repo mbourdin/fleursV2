@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Producttype;
+use App\Entity\ProductType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +13,6 @@ class ProductTypeForm extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('price')
             ->add('active')
             ->add('photopath')
         ;
@@ -22,7 +21,7 @@ class ProductTypeForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Producttype::class,
+            'data_class' => ProductType::class,
         ]);
     }
 }

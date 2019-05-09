@@ -3,11 +3,8 @@
 
 {% block body %}
 
-
-    Rappel des droits utilisateur :
-    1 = normal
-
-    <table class="table table-bordered">
+    <div class="row">
+    <table class="table table-bordered container">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -37,14 +34,14 @@
 
                 </td>
                 <td>
-                        <input type="checkbox" id="checkbox{{ user.id }}" onchange="submitban({{ user.id }})" {% if user.banned %} checked {% endif %}>
+                        <input type="checkbox" id="checkbox{{ user.id }}" onchange="submitban({{ user.id }})" {% if user.banned %} checked {% endif %} {% if sessionId==(user.id)%}disabled{% endif %}>
                 </td>
                 <td>
-                    <input type="checkbox" id="checkboxdelete{{ user.id }}" onchange="submitdelete({{ user.id }})" {% if user.deleted %} checked {% endif %}>
+                    <input type="checkbox" id="checkboxdelete{{ user.id }}" onchange="submitdelete({{ user.id }})" {% if user.deleted %} checked {% endif %} {% if sessionId==(user.id)%}disabled{% endif %}>
                 </td>
                 <td>{{ user.enabled }}</td>
                 <td>
-                    <input type="text" value="{{ user.rights }}" onchange="submitrights({{ user.id }})" id="rights{{ user.id }}">
+                    <input type="text" value="{{ user.rights }}" onchange="submitrights({{ user.id }})" id="rights{{ user.id }}" {% if sessionId==(user.id)%}readonly{% endif %}>
                 </td>
                 <td>{{ user.username }}</td>
                 <td>{% if user.lastLogin!=null %}{{ user.lastLogin|date }}{% endif %}</td>
@@ -53,6 +50,7 @@
         </tbody>
     </table>
     <br/>
+    </div>
 {% endblock %}
 
 {% block javascripts %}

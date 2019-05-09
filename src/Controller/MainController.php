@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Entity\Product;
 use App\Entity\Sale;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use FOS\UserBundle\Event\FormEvent;
@@ -24,7 +25,8 @@ class MainController extends Controller
      * @Route("/",name="index")
      */
     public function indexAction()
-    {   return  $this->render("default/home.html.twig");
+    {  $products=$this->getDoctrine()->getRepository(Product::class)->findAll();
+        return  $this->render("default/home.html.twig",["products"=>$products]);
     }
     /**
      * @Route("/planning")

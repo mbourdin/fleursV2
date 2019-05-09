@@ -2,7 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>
+
+        {% block title %}
+            {% if title is defined %}
+            {{ title }}
+            {% endif %}
+        {% endblock %}
+
+    </title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ '/web/css/styleGeneral.css' }}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -190,7 +198,7 @@
                     <h5 class="card-title">BESOIN D'AIDE</h5>
                     <li class="list-group-item"><a href="">Accès fleuriste</a></li>
                     <li class="list-group-item"><a href="">Informations livraison</a></li>
-                    <li class="list-group-item"><a href="">Contactez-nous</a></li>
+                    <li class="list-group-item"><a href="/contactAdmin">Contactez-nous</a></li>
                 </ul>
             </div>
             <div class="col">

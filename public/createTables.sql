@@ -113,7 +113,7 @@ create table if not exists producttype
         unique (id)
 );
 
-alter table producttype
+alter table product_type
     add primary key (id);
 
 create table if not exists product
@@ -128,7 +128,7 @@ create table if not exists product
     constraint Product_id_uindex
         unique (id),
     constraint Product_producttype_id_fk
-        foreign key (producttype_id) references producttype (id)
+        foreign key (producttype_id) references product_type (id)
 );
 
 alter table product

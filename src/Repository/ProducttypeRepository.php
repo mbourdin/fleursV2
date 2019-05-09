@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\Producttype;
+use App\Entity\ProductType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Producttype|null find($id, $lockMode = null, $lockVersion = null)
- * @method Producttype|null findOneBy(array $criteria, array $orderBy = null)
- * @method Producttype[]    findAll()
- * @method Producttype[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ProductType|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ProductType|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ProductType[]    findAll()
+ * @method ProductType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ProducttypeRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Producttype::class);
+        parent::__construct($registry, ProductType::class);
     }
 
     // /**

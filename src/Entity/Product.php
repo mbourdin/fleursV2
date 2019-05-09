@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -45,9 +46,18 @@ class Product
      */
     private $price;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Producttype", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="ProductType", fetch="LAZY",inversedBy="products")
+     * @ORM\JoinTable(
+     *  name="products_types",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="product_type_id", referencedColumnName="id")
+     *  }
+     * )
      */
-    private $producttype;
+    private $productTypes;
 
 
     /**
@@ -65,6 +75,7 @@ class Product
     public function __construct()
     {
         $this->active = true;
+        $this->productTypes= new ArrayCollection();
     }
 
 
@@ -155,17 +166,17 @@ class Product
     /**
      * @return mixed
      */
-    public function getProducttype()
+    public function getProductType()
     {
-        return $this->producttype;
+        return $this->productType;
     }
 
     /**
-     * @param mixed $producttype
+     * @param mixed $productType
      */
-    public function setProducttype($producttype): void
+    public function setProductType($productType): void
     {
-        $this->producttype = $producttype;
+        $this->productType = $productType;
     }
 
     /**

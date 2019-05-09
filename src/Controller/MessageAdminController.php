@@ -41,7 +41,7 @@ class MessageAdminController extends Controller
         $form = $this->createForm(MessageAdminForm::class, $msg,["email"=>$email]);
         $form->add('submit', SubmitType::class, [
             'label' => 'envoyer',
-            'attr' => ['class' => 'btn btn-default pull-right'],
+            'attr' => ['class' => 'btn btn-success pull-right'],
         ]);
         $form->handleRequest($request);
 

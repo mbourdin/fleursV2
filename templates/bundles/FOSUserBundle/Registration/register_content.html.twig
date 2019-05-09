@@ -1,11 +1,20 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% block body %}
 
 
+    <div class="container rounded bg-gray">
+    <h2 class="text-white text-center bg-success ">Inscription</h2>
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
     {{ form_widget(form) }}
-    <div>
-        <input class="btn btn-primary" type="submit" value="{{ 'registration.submit'|trans }}" />
+    <div class="text-center row" >
+        <div class="col">
+        <input class="btn btn-success btn-block" type="submit" value="{{ 'registration.submit'|trans }}" />
+        </div>
     </div>
+        <div>_</div>
 
 {{ form_end(form) }}
+        </div>
+
+{% endblock %}

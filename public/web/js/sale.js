@@ -48,3 +48,45 @@ function buttonEnabler()
 
     console.log("useownaddres"+ document.getElementById("useownaddress").value);
 }
+
+
+function requestCities()
+{   postcode=document.getElementById("postalcode").value;
+    clearCityList();
+    //TODO requete vers la liste des villes (api la poste ou equivalent)
+    // puis traitement pour inclure cette liste dans le options
+    $.ajax({
+        url: 'https://geo.api.gouv.fr/communes?codePostal=' + postcode + '&fields=nom,code&format=json&geometry=centre',
+        type: 'get',
+        dataType: 'json',
+        contentType: 'application/json',
+
+        success: onSuccessCityList,
+        error: onError
+    });
+
+}
+
+function onSuccessCityList(result){
+
+        //TODO parse la liste pour la rajouter aux options
+        {   for(city of result)
+        {   opt=new Option(city.code+" "+city.nom,city.code);
+            opt.setAttribute("data-nom",city.nom);
+        opt.id="insee"+city.code;
+        $("#cityOptions").append(opt);
+        //console.log(city);
+    }
+    }
+    //console.log(result);
+}
+
+function onError(result) {console.log("error");
+}
+
+function clearCityList()
+{   console.log("clearCityList()");
+    $('#cityOptions').children('option:not(:first)').remove();
+
+}
+

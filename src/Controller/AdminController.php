@@ -2,7 +2,7 @@
 namespace App\Controller;
 use App\Entity\Offer;
 use App\Entity\Product;
-use App\Entity\Producttype;
+use App\Entity\ProductType;
 use App\Form\ProductForm;
 use App\Form\ProductTypeForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -173,7 +173,7 @@ class AdminController extends Controller
     public function addProductTypeAction(Request $request)
     {
         // on crée un Type produit
-        $productType = new Producttype();
+        $productType = new ProductType();
 
         // ensuite on récupère le formulaire
         $form = $this->createForm(ProductTypeForm::class, $productType);
@@ -209,7 +209,7 @@ class AdminController extends Controller
      */
     public function readProductTypeAction()
     {
-        $dao = $this->getDoctrine()->getRepository(Producttype::class);
+        $dao = $this->getDoctrine()->getRepository(ProductType::class);
         $types = $dao->findAll();
 
         return $this->render('product/typeList.html.twig', array("types" => $types));
@@ -220,7 +220,7 @@ class AdminController extends Controller
      */
     public function readOneProductTypeAction($id)
     {
-        $dao = $this->getDoctrine()->getRepository(Producttype::class);
+        $dao = $this->getDoctrine()->getRepository(ProductType::class);
         $pt = $dao->find($id);
 
         return $this->render('product/typeDetail.twig', array('productType' => $pt));
@@ -235,7 +235,7 @@ class AdminController extends Controller
 
     public function SaveProductTypeAction(Request $request,$id){
         // on crée un produit
-        $posts=$this->getDoctrine()->getRepository(Producttype::class);
+        $posts=$this->getDoctrine()->getRepository(ProductType::class);
         $productType=$posts->find($id);
 
         // ensuite on récupère le formulaire
