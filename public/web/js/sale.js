@@ -1,5 +1,5 @@
-baseurl=window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/";
-
+var baseurl=window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/";
+var addresses=null;
 function upQte(id)
 {   console.log(id);
     document.forms[id].submit();
@@ -13,23 +13,26 @@ function submitform()
 function isEmpty(id)
 {   console.log(id);
     val=document.getElementById(id);
-    return val.value===undefined || val.value==="";
+    return val.value===undefined || val.value==="" || val.value===-1;
 }
 
 function buttonEnabler()
 {   button=document.getElementById("submitbutton");
-
-
     if
     (
         !isEmpty("recipient")
         &&
         !isEmpty("contact")
         &&
-        (    document.getElementById("useownaddress").checked
+        (    (
+                !document.getElementById("radioNew").checked
+                &&
+                document.getElementById("addressId").value!==undefined
 
+            )
             ||
-            (
+            (   document.getElementById("radioNew").checked
+                &&
                 !isEmpty("number")
                 &&
                 !isEmpty("roadname")
@@ -37,6 +40,12 @@ function buttonEnabler()
                 !isEmpty("cityOptions")
 
             )
+        )
+        &&
+        (
+        document.getElementById("onlinepay").checked
+        ||
+        document.getElementById("totalprice").value<5000
         )
     )
     {
@@ -47,8 +56,7 @@ function buttonEnabler()
     {   console.log("disable");
         button.disabled=true;
     }
-
-    console.log("useownaddres"+ document.getElementById("useownaddress").value);
+    //console.log("cityOptions : " + isEmpty("cityOptions"))
 }
 
 
@@ -83,7 +91,9 @@ function onSuccessCityList(result){
     //console.log(result);
 }
 
-function onError(result) {console.log("error");
+function onError(result)
+{
+    alert(result);
 }
 
 function clearCityList()
@@ -91,8 +101,10 @@ function clearCityList()
     $('#cityOptions').children('option:not(:first)').remove();
 
 }
+
 function getOwnAddress()
-{    $.ajax({
+{   document.getElementById("addressId").value=undefined;
+    $.ajax({
     url: baseurl+"user/address/getOwn",
     type: 'get',
     dataType: 'json',
@@ -103,9 +115,54 @@ function getOwnAddress()
 });
 
 }
+function getUsedAddresses()
+{   disableform(true);
+    document.getElementById("addressId").value=undefined;
+    if(addresses==null)
+    {
+    $.ajax({
+    url: baseurl+"user/address/getUsed",
+    type: 'get',
+    dataType: 'json',
+    contentType: 'application/json',
+
+    success: onSuccessUsedAddresses,
+    error: onError
+
+    })
+    }
+};
+
+function addressToString(address)
+{    if (address.numberaddition===null)
+    {numberaddition="";}
+    else
+    {numberaddition=address.numberaddition;}
+    return address.number+" "+
+    numberaddition+" "+
+    address.roadtype+" "+
+    address.roadname+" "+
+    address.postalcode;
+}
+
+function onSuccessUsedAddresses(result)
+{   i=0;
+    var numberaddition;
+    for(address of result)
+    {
+        opt=new Option(addressToString(address),i);
+        $("#addressSelector").append(opt);
+        i++;
+    }
+    addresses=result;
+
+}
+
 function onSuccessOwnAddress(result)
 {   setAddress(result);
-
+    document.getElementById("addressId").value=result.id;
+    disableform(true);
+    document.getElementById("ownAddress").value=addressToString(result);
 }
 
 function setAddress(address)
@@ -116,8 +173,37 @@ function setAddress(address)
     document.getElementById("roadname").value=address.roadname;
     document.getElementById("additionaladdress").value=address.additionaladdress;
     document.getElementById("postalcode").value=address.postalcode;
-    requestCities();
-    document.getElementById("cityOptions").value=address.cityId;
+    //document.getElementById("cityOptions").value=address.cityId;
+    document.getElementById("cityOptions").value=undefined;
 
+}
+function setSelectedAddress()
+{
+    index=document.getElementById("addressSelector").value;
+    setAddress(addresses[index]);
+    document.getElementById("addressId").value=addresses[index].id;
+}
+function disableform(boolvalue) {
+    if (boolvalue)
+    {
+        document.getElementById("number").setAttribute("disabled", true);
+    document.getElementById("numberaddition").setAttribute("disabled", true);
+    document.getElementById("roadtype").setAttribute("disabled", true);
+    document.getElementById("roadname").setAttribute("disabled", true);
+    document.getElementById("additionaladdress").setAttribute("disabled", true);
+    document.getElementById("postalcode").setAttribute("disabled", true);
+    document.getElementById("cityOptions").setAttribute("disabled", true);
+    }
+    else{
+    document.getElementById("number").removeAttribute("disabled");
+        document.getElementById("number").removeAttribute("disabled");
+        document.getElementById("numberaddition").removeAttribute("disabled");
+        document.getElementById("roadtype").removeAttribute("disabled");
+        document.getElementById("roadname").removeAttribute("disabled");
+        document.getElementById("additionaladdress").removeAttribute("disabled");
+        document.getElementById("postalcode").removeAttribute("disabled");
+        document.getElementById("cityOptions").removeAttribute("disabled");
+    }
 
+    buttonEnabler()
 }

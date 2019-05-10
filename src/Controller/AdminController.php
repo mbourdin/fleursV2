@@ -3,8 +3,11 @@ namespace App\Controller;
 use App\Entity\Offer;
 use App\Entity\Product;
 use App\Entity\ProductType;
+use App\Entity\Sale;
 use App\Form\ProductForm;
 use App\Form\ProductTypeForm;
+use DateTimeImmutable;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -339,6 +342,20 @@ class AdminController extends Controller
         $dao = $this->getDoctrine()->getRepository(Offer::class);
         $result = $dao->findAll();
         return $this->render('offer/list.html.twig', array('offers' => $result));
+    }
+
+    /**
+     * @Route("/sale/list")
+     * @param int $day
+     * @throws \Exception
+     */
+    public function getSales()
+    {   $dao=$this->getDoctrine()->getRepository(Sale::class);
+        $now=new DateTimeImmutable();
+        //$sales=$dao->findBy(["date"=>$now]);
+
+        $sales=$dao->findAll();
+        return $this->render("sale/list.html.twig",["sales"=>$sales]);
     }
 
 }

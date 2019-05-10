@@ -177,4 +177,15 @@ class Address {
         $this->numberaddition = $numberaddition;
     }
 
+    public function __toString()
+    {   $str=
+        $this->number." "
+        .$this->numberaddition." "
+        .$this->roadtype." "
+        .$this->roadname." "
+        .$this->postalcode;
+        return $str;
+
+    }
+
 }

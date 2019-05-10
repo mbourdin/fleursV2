@@ -4,11 +4,14 @@ use App\Entity\Address;
 use App\Entity\Product;
 use App\Entity\Sale;
 use App\Entity\Offer;
+use App\Entity\Person;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Service;
+use \DateTime;
+use \DateTimeImmutable;
 /**
  * @Route("/user/sale")
  */
@@ -32,12 +35,13 @@ class SaleController extends Controller
     public function editSaleAction(Request $request)
     {   $sale=$this->getUserSale($request);
         if($sale!=null)
-        {
-            return $this->render("/sale/sale.html.twig",["sale"=>$sale,]);
+        {   $now=new \DateTimeImmutable();
+            $max=$now->modify("+20 day");
+            return $this->render("/sale/sale.html.twig",["sale"=>$sale,"minDate"=>$now->format("Y-m-d"),"maxDate"=>$max->format("Y-m-d")]);
         }
         else
         {   $this->addFlash("error","pas de commande non validée trouvée");
-            return $this->render("default/home.html.twig");
+            return $this->redirect("/");
 
         }
 
@@ -207,43 +211,60 @@ class SaleController extends Controller
      */
     public function validateAction(Request $request)
     {   $sale=$this->getUserSale($request);
-        $useownaddress=$request->request->get("useownaddress");
-        $usepreviousaddress=$request->request->get("usepreviousaddress");
-        if($useownaddress!="true" && $usepreviousaddress!="true") {
-            $address = new Address;
-            $address->setNumber($request->request->get("number"));
-            $address->setRoadname($request->request->get("roadname"));
-            $address->setRoadtype($request->request->get("roadtype"));
-            $address->setAdditionaladdress($request->request->get("additionaladress"));
-            $address->setPostalcode($request->request->get("postalcode"));
-            $address->setCityId($request->request->get("inseeid"));
+        $addressChoice=$request->request->get("addressChoice");
+        $this->addFlash("error",$addressChoice."");
+        switch($addressChoice)
+        {
+            case "own":   //own
+                $this->addFlash("error","own");
+                $address=$sale->getPerson()->getAddress();
+                if($address==null)
+                {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
+                    return $this->redirect("/user/sale/edit");
+
+                }
+                break;
+            case "used":   //used
+                $this->addFlash("error","used");
+                $addressId=$request->request->get("addressId");
+                $address=$this->getDoctrine()->getRepository(Address::class)->find($addressId);
+                if($address==null)
+                {   $this->addFlash("error","vous n'avez pas choisi une adresse correcte");
+                    return $this->redirect("/user/sale/edit");
+                }
+                break;
+            case "new":   //new
+               $this->addFlash("error","new");
+                $address = new Address;
+                $address->setNumber($request->request->get("number"));
+                $address->setRoadname($request->request->get("roadname"));
+                $address->setRoadtype($request->request->get("roadtype"));
+                $address->setAdditionaladdress($request->request->get("additionaladress"));
+                $address->setPostalcode($request->request->get("postalcode"));
+                $address->setCityId($request->request->get("inseeid"));
 
 
-            $em=$this->getDoctrine()->getManager();
-            $em->persist($address);
-        }
-        elseif($useownaddress=="true") {
-            $address=$sale->getPerson()->getAddress();
-            if($address==null)
-            {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
-                return $this->redirect("/user/sale/validate");
-
-            }
-        }
-        else
-        {   $addressId=$request->request->get("addressId");
-            $address=$this->getDoctrine()->getRepository(Address::class)->find($addressId);
-            if($address==null)
-            {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
-                return $this->redirect("/user/sale/validate");
-
-            }
-
+                $em=$this->getDoctrine()->getManager();
+                $em->persist($address);
+                $em->flush();
+                $user=$request->getSession()->get("user");
+                $user=$this->getDoctrine()->getRepository(Person::class)->find($user->getId());
+                $user->addAddress($address);
+                $em->merge($user);
+                break;
+            default :
+                throw new \InvalidArgumentException("choix d'addresse invalide");
         }
         $sale->setContact($request->request->get("contact"));
         $sale->setAddress($address);
         $sale->setValidated(true);
         $sale->setRecipient($request->request->get("recipient"));
+        $date=new DateTime($request->request->get("date"));
+        $now=new DateTime();
+        if($date<$now->modify("+1 day"))
+        {   throw new \InvalidArgumentException("date de livraison passée ou trop proche");
+        }
+        $sale->setDate($date);
         $this->saveUserSale($sale);
         $this->addFlash("success","commande validée");
         return $this->redirect("/");

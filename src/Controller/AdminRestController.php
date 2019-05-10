@@ -5,12 +5,30 @@ namespace App\Controller;
 use App\Entity\Person;
 use App\Entity\ProductType;
 use App\Entity\Product;
+use App\Entity\Sale;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use DateTimeImmutable;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 class AdminRestController extends Controller
-{   // L'admin ne doit PAS pouvoir modifier ses droits
+{   private $serializer;
+    /**
+     * AdminRestController constructor.
+     */
+    public function __construct()
+    {   $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $this->serializer = new Serializer($normalizers, $encoders);
+    }
+
+
+
+    // L'admin ne doit PAS pouvoir modifier ses droits
     private function isMyself(Person $user,Request $request)
     {   $sessionUser=$request->getSession()->get("user");
         return $sessionUser->equals($user);
@@ -124,5 +142,18 @@ class AdminRestController extends Controller
         $em->merge($product);
         $em->flush();
         return new Response();
+    }
+    /**
+     * @Rest\Get("/admin/sales/list/{day}")
+     * @param int day difference en jours avec la date actuelle.
+     */
+    public function getSales(int $day)
+    {   $dao=$this->getDoctrine()->getRepository(Sale::class);
+        $now=new DateTimeImmutable();
+        $sales=$dao->findBy(["date"=>$now->modify("+".$day." day" )]);
+        $json_sales=$this->serializer->serialize($sales,"json");
+        $response =new Response($json_sales);
+        return $response;
+
     }
 }

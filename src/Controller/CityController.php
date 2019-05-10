@@ -33,8 +33,7 @@ class CityController extends Controller
     }
 
 
-    // Section City
-    private function getCityFromApi(int $inseeid): City
+    private static function getCityFromApi(int $inseeid): City
     {   $city=new City();
         $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
         $json=json_decode($response);

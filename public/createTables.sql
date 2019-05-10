@@ -5,15 +5,15 @@ create table if not exists address
     roadtype          varchar(20) null,
     roadname          varchar(60) null,
     additionaladdress varchar(60) null,
-    postalcolde       varchar(6)  null,
-    city              int         null,
+    postalcode        varchar(6)  null,
+    city_id           int         null,
     numberaddition    varchar(10) null,
     constraint address_id_uindex
         unique (id)
 );
 
 create index if not exists address_city_id_fk
-    on address (city);
+    on address (city_id);
 
 alter table address
     add primary key (id);
@@ -101,6 +101,17 @@ create table if not exists person
 
 alter table person
     add primary key (id);
+
+create table if not exists persons_addresses
+(
+    person_id  int not null,
+    address_id int not null,
+    primary key (person_id, address_id),
+    constraint persons_addresses_address_id_fk
+        foreign key (address_id) references address (id),
+    constraint persons_addresses_person_id_fk
+        foreign key (person_id) references person (id)
+);
 
 create table if not exists product_type
 (

@@ -75,7 +75,7 @@ class Person extends FOSUser implements UserInterface
     private $banned;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Address", inversedBy="persons")
+     * @ORM\ManyToMany(targetEntity="Address")
      * @ORM\JoinTable(name="persons_addresses")
      */
     private $addresses;
@@ -273,4 +273,21 @@ class Person extends FOSUser implements UserInterface
     public function removeAddress(Address $address)
     {   $this->addresses->removeElement($address);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param mixed $addresses
+     */
+    public function setAddresses($addresses): void
+    {
+        $this->addresses = $addresses;
+    }
+
 }
