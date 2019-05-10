@@ -1,10 +1,12 @@
 <?php
 namespace App\Entity;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use FOS\UserBundle\Model\User as FOSUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\Address;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
@@ -36,6 +38,7 @@ class Person extends FOSUser implements UserInterface
         $this->setEmailCanonical(null);
         $this->deleted=false;
         $this->banned=false;
+        $this->addresses=new ArrayCollection();
     }
     /**
      *
@@ -70,6 +73,12 @@ class Person extends FOSUser implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $banned;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Address", inversedBy="persons")
+     * @ORM\JoinTable(name="persons_addresses")
+     */
+    private $addresses;
 
     /**
      * @return mixed
@@ -256,5 +265,12 @@ class Person extends FOSUser implements UserInterface
     public function equals(Person $person)
     {
         return $person->id==$this->id;
+    }
+    public function addAddress(Address $address)
+    {   if(! $this->addresses->contains($address))
+        $this->addresses->add($address);
+    }
+    public function removeAddress(Address $address)
+    {   $this->addresses->removeElement($address);
     }
 }

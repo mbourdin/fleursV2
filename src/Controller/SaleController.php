@@ -208,7 +208,8 @@ class SaleController extends Controller
     public function validateAction(Request $request)
     {   $sale=$this->getUserSale($request);
         $useownaddress=$request->request->get("useownaddress");
-        if($useownaddress!="true") {
+        $usepreviousaddress=$request->request->get("usepreviousaddress");
+        if($useownaddress!="true" && $usepreviousaddress!="true") {
             $address = new Address;
             $address->setNumber($request->request->get("number"));
             $address->setRoadname($request->request->get("roadname"));
@@ -221,13 +222,23 @@ class SaleController extends Controller
             $em=$this->getDoctrine()->getManager();
             $em->persist($address);
         }
-        else{
+        elseif($useownaddress=="true") {
             $address=$sale->getPerson()->getAddress();
             if($address==null)
             {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
                 return $this->redirect("/user/sale/validate");
 
             }
+        }
+        else
+        {   $addressId=$request->request->get("addressId");
+            $address=$this->getDoctrine()->getRepository(Address::class)->find($addressId);
+            if($address==null)
+            {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
+                return $this->redirect("/user/sale/validate");
+
+            }
+
         }
         $sale->setContact($request->request->get("contact"));
         $sale->setAddress($address);

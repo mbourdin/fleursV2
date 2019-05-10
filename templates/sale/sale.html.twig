@@ -5,6 +5,7 @@
 
 
 {% block body %}
+    <button onclick="getOwnAddress()" class="btn btn-primary">OWN ADDRESS</button>
     <h1>Gestion de la Commande</h1>
 
     {% set address= app.session.get("user").address %}

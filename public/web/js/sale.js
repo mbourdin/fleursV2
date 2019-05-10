@@ -1,3 +1,5 @@
+baseurl=window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/";
+
 function upQte(id)
 {   console.log(id);
     document.forms[id].submit();
@@ -89,4 +91,33 @@ function clearCityList()
     $('#cityOptions').children('option:not(:first)').remove();
 
 }
+function getOwnAddress()
+{    $.ajax({
+    url: baseurl+"user/address/getOwn",
+    type: 'get',
+    dataType: 'json',
+    contentType: 'application/json',
 
+    success: onSuccessOwnAddress,
+    error: onError
+});
+
+}
+function onSuccessOwnAddress(result)
+{   setAddress(result);
+
+}
+
+function setAddress(address)
+{
+    document.getElementById("number").value=address.number;
+    document.getElementById("numberaddition").value=address.numberaddition;
+    document.getElementById("roadtype").value=address.roadtype;
+    document.getElementById("roadname").value=address.roadname;
+    document.getElementById("additionaladdress").value=address.additionaladdress;
+    document.getElementById("postalcode").value=address.postalcode;
+    requestCities();
+    document.getElementById("cityOptions").value=address.cityId;
+
+
+}
