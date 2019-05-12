@@ -39,6 +39,7 @@ class Person extends FOSUser implements UserInterface
         $this->deleted=false;
         $this->banned=false;
         $this->addresses=new ArrayCollection();
+        $this->setRoles(["user"]);
     }
     /**
      *
@@ -154,6 +155,33 @@ class Person extends FOSUser implements UserInterface
     public function setRights($rights): void
     {
         $this->rights = $rights;
+        $this->setRolesInt($rights);
+    }
+    private function setRolesInt(int $rights)
+    {   if($rights%2==1)
+        {
+            $this->addRole("user");
+        }
+        else
+        {
+            $this->removeRole("user");
+        }
+        if($rights/2%2==1)
+        {
+            $this->addRole("admin");
+        }
+        else
+        {
+            $this->removeRole("admin");
+        }
+        if($rights/4%2==1)
+        {
+            $this->addRole("accAdmin");
+        }
+        else
+        {
+            $this->removeRole("accAdmin");
+        }
     }
 
     /**

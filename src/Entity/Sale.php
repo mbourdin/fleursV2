@@ -189,7 +189,7 @@ class Sale
     /**
      * @return mixed
      */
-    public function getProducts(): Collection
+    public function getProducts()
     {
         return $this->products;
     }
@@ -205,7 +205,7 @@ class Sale
     /**
      * @return mixed
      */
-    public function getOffers(): Collection
+    public function getOffers()
     {
         return $this->offers;
     }
@@ -221,7 +221,7 @@ class Sale
     /**
      * @return mixed
      */
-    public function getServices(): Collection
+    public function getServices()
     {
         return $this->services;
     }
@@ -444,7 +444,7 @@ class Sale
         }
         return $str;
     }
-    public function getPrice():int
+    public function price():int
     {   //todo remplacer par le vrai code une fois les prix des articles en vente définis
         $result= 0;
 
@@ -477,7 +477,7 @@ class Sale
     {
         $this->validated = $validated;
     }
-    public function isEmpty():bool
+    public function empty():bool
     {
         return ($this->products->isEmpty()
             && $this->offers->isEmpty()

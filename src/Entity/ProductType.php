@@ -35,10 +35,6 @@ class ProductType
      */
     private $photopath;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Product", mappedBy="productTypes")
-     */
-    private $products;
 
     /**
      *  @Vich\UploadableField(mapping="productTypes_images",fileNameProperty="photopath")
@@ -50,7 +46,6 @@ class ProductType
      */
     public function __construct()
     {   $this->active=true;
-        $this->products =new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,23 +90,6 @@ class ProductType
 
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
-    /**
-     * @param mixed $products
-     */
-    public function setProducts($products): void
-    {
-        $this->products = $products;
-    }
-
     /**
      * @return File
      */
@@ -127,16 +105,6 @@ class ProductType
     {
         $this->imagefile = $imagefile;
     }
-    public function addProduct(Product $product)
-    {
-        if(! $this->products->contains($product))
-            $this->products->add($product);
-            $product->addType($this);
-    }
-    public function removeProduct(Product $product)
-    {
-        $this->products->removeElement($product);
-        $product->removeType($this);
-    }
+
 
 }

@@ -80,7 +80,7 @@ Gestion du panier
             <th></th>
             <th></th>
             <th></th>
-            <th>{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
+            <th>{% if sale!=null %}{{ sale.price() }}{% endif %}</th>
             <th>
                 <a href="/user/panier/save"><button class="btn btn-success">COMMANDER</button></a>
                 <br>

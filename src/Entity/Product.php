@@ -46,7 +46,7 @@ class Product
      */
     private $price;
     /**
-     * @ORM\ManyToMany(targetEntity="ProductType", inversedBy="products")
+     * @ORM\ManyToMany(targetEntity="ProductType")
      * @ORM\JoinTable(name="products_types")
      */
     private $productTypes;

@@ -155,6 +155,11 @@
                 {% else %}
                     <a class="py-2 text-muted " href="/login"><img class="iconImageUser" src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}" alt=""></a>
                 {% endif %}
+                {% if app.session.get("adminRights")==true %}
+                    <a class="py-2 text-muted" href="/admin/dashboard">
+                        <span class="badge badge-pill badge-success">Espace administrateur</span>
+                    </a>
+                {% endif %}
             </nav>
         </div>
     {% endblock %}

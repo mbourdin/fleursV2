@@ -5,29 +5,83 @@ use App\Entity\Sale;
 use App\Entity\Product;
 use App\Entity\Service;
 use App\Entity\Offer;
+use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 class PanierController extends Controller
-{
+{   private $serializer;
+    /**
+     * PanierController constructor.
+     */
+    public function __construct()
+    {   $encoders = [new JsonEncoder()];
+        $normalizer=new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = [$normalizer];
+        $this->serializer = new Serializer($normalizers, $encoders);
+    }
+
+    private function getSale(Request $request)
+    {   //version cooke mais fonctionne mal
+//
+//        $cookie = $request->cookies->get("bucket");
+//        if ($cookie == null) {
+//            $sale = new Sale();
+//        } else {
+//
+//
+//        $sale = $this->serializer->deserialize($cookie, Sale::class, "json");
+//        $sale->setProducts(new ArrayCollection($sale->getProducts()));
+//        $sale->setServices(new ArrayCollection($sale->getServices()));
+//        $sale->setOffers(new ArrayCollection($sale->getOffers()));
+//        }
+
+        //version session
+        $sale=$request->getSession()->get("sale");
+        if($sale==null) {
+            return new Sale();
+        }
+
+        //
+        return $sale;
+
+    }
+    private function savePanier(Sale $sale,Request $request)
+    {
+        //    version cookie mais fonctionne mal
+//        $response=new Response();
+//        $sale->setProducts($sale->getProducts()->toArray());
+//        $sale->setServices($sale->getServices()->toArray());
+//        $sale->setOffers($sale->getOffers()->toArray());
+//        $serialSale=$this->serializer->serialize($sale,"json");
+//        $cookie=new Cookie("bucket",$serialSale);
+//        $response->headers->setCookie($cookie);
+//        $response->send();
+//        $sale->setProducts(new ArrayCollection($sale->getProducts()));
+//        $sale->setServices(new ArrayCollection($sale->getServices()));
+//        $sale->setOffers(new ArrayCollection($sale->getOffers()));
+
+        //version session
+        $request->getSession()->set("sale",$sale);
+    }
     /**
      * @Route("/panier/show",name="panier")
      */
     public function panierShowAction(Request $request)
-    {   $cookie=$request->cookies->get("bucket");
-        if ($cookie==null) {
+    {   $sale=$this->getSale($request);
+        if ($sale==null) {
             $sale = new Sale();
-            $serialSale=serialize($sale);
-            $cookie=new Cookie("bucket",$serialSale);
-            $response=new Response();
-            $response->headers->setCookie($cookie);
-            $response->send();
-        }
-        else {
-            $sale = unserialize($cookie);
+            $this->savePanier($sale,$request);
         }
         return $this->render("/panier/panier.html.twig",["sale"=>$sale]);
     }
@@ -35,7 +89,7 @@ class PanierController extends Controller
      * @Route("/user/panier/save",name="savePanier")
      */
     public function savePanierAction(Request $request)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
 
         if($sale->isEmpty())
         {
@@ -75,46 +129,47 @@ class PanierController extends Controller
      * @Route("/panier/addProduct/{id}/{quantity}"))
      */
     public function addProduct(Request $request,int $id,int $quantity)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         $productDao=$this->getDoctrine()->getRepository(Product::class);
         $product=$productDao->find($id);
         $sale->addProduct($product,$quantity);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
+
     /**
      * @Route("/panier/addService/{id}/{quantity}"))
      */
     public function addService(Request $request,int $id,int $quantity)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         $serviceDao=$this->getDoctrine()->getRepository(Service::class);
         $service=$serviceDao->find($id);
         $sale->addService($service,$quantity);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
     /**
      * @Route("/panier/addOffer/{id}/{quantity}"))
      */
     public function addOffer(Request $request,int $id,int $quantity)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         $offerDao=$this->getDoctrine()->getRepository(Offer::class);
         $offer=$offerDao->find($id);
         $sale->addOffer($offer,$quantity);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
     /**
      * @Route("/panier/rmProduct/{id}"))
      */
     public function rmProduct(Request $request,int $id)
-{   $sale=$this->sanitizeSale($request);
+{   $sale=$this->getSale($request);
     foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
         if ($productContent->getProduct()->getId()==$id)
         {   $tmp=$productContent->getQuantity()-1;
             if($tmp<=0) return $this->delProduct($request,$id);
             $productContent->setQuantity($tmp);
-            $this->sendCookie($sale);
+            $this->savePanier($sale,$request);
             return $this->redirect("/panier/show");
         }
     }
@@ -124,13 +179,13 @@ class PanierController extends Controller
      * @Route("/panier/rmService/{id}"))
      */
     public function rmService(Request $request,int $id)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
             if ($serviceContent->getService()->getId()==$id)
             {   $tmp=$serviceContent->getQuantity()-1;
                 if($tmp<=0) return $this->delService($request,$id);
                 $serviceContent->setQuantity($tmp);
-                $this->sendCookie($sale);
+                $this->savePanier($sale,$request);
                 return $this->redirect("/panier/show");
             }
         }
@@ -140,13 +195,13 @@ class PanierController extends Controller
      * @Route("/panier/rmOffer/{id}"))
      */
     public function rmOffer(Request $request,int $id)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
             if ($offerContent->getOffer()->getId()==$id)
             {   $tmp=$offerContent->getQuantity()-1;
                 if($tmp<=0) return $this->delOffer($request,$id);
                 $offerContent->setQuantity($tmp);
-                $this->sendCookie($sale);
+                $this->savePanier($sale,$request);
                 return $this->redirect("/panier/show");
             }
         }
@@ -169,90 +224,54 @@ class PanierController extends Controller
             default :
                 throw new RuntimeException('invalid class value in updateQuantity function');
         }
-        $sale=$this->sanitizeSale($request);
+        $sale=$this->getSale($request);
         $object=$dao->find($id);
         $sale->updateQuantity($object,$quantity);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
     /**
      * @Route("/panier/delProduct/{id}"))
      */
     public function delProduct(Request $request,int $id)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         $productDao=$this->getDoctrine()->getRepository(Product::class);
         $product=$productDao->find($id);
         $sale->removeProduct($product);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
     /**
      * @Route("/panier/delService/{id}"))
      */
     public function delService(Request $request,int $id)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         $serviceDao=$this->getDoctrine()->getRepository(Service::class);
         $service=$serviceDao->find($id);
         $sale->removeService($service);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
     /**
      * @Route("/panier/delOffer/{id}"))
      */
     public function delOffer(Request $request,int $id)
-    {   $sale=$this->sanitizeSale($request);
+    {   $sale=$this->getSale($request);
         $offerDao=$this->getDoctrine()->getRepository(Offer::class);
         $offer=$offerDao->find($id);
         $sale->removeOffer($offer);
-        $this->sendCookie($sale);
+        $this->savePanier($sale,$request);
         return $this->redirect("/panier/show");
     }
 
-    private function sanitizeSale(Request $request) : Sale
-    {
-        $productDao=$this->getDoctrine()->getRepository(Product::class);
-        $serviceDao=$this->getDoctrine()->getRepository(Service::class);
-        $offerDao=$this->getDoctrine()->getRepository(Offer::class);
-        $cookie=$request->cookies->get("bucket");
-        if($cookie==null)
-        {
-            $sale=new Sale();
-        }
-        else{
-            $sale=unserialize($cookie);
-            if(!$sale instanceof Sale){throw new \RuntimeException("class invalide");}
-            //On empeche l'utilisateur de modifier la BDD en rechargeant les éléments
-            $sale->setId(null);
-            foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
-                $productContent->setProduct($productDao->find($productContent->getProduct()->getId()));
-            }
-            foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
-                $serviceContent->setService($serviceDao->find($serviceContent->getService()->getId()));
-            }
-            foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
-                $offerContent->setOffer($offerDao->find($offerContent->getOffer()->getId()));
-            }
-        }
 
 
-
-        return $sale;
-    }
-    private function sendCookie($sale)
-    {   $response=new Response();
-        $serialSale=serialize($sale);
-        $cookie=new Cookie("bucket",$serialSale);
-        $response->headers->setCookie($cookie);
-        $response->send();
-
-    }
     /**
      * @Route("/panier/clear")+
      *
      */
-    public function clearPanier()
-    {   $this->sendCookie(new Sale());
+    public function clearPanier(Request $request)
+    {   $this->savePanier(new Sale(),$request);
         return $this->redirect("/panier/show");
     }
 }
