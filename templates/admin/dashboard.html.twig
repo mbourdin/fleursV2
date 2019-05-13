@@ -7,13 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {% block title %}<title>Document</title>{% endblock %}
     {% block stylesheets %}
-        <link rel="stylesheet" href={{ '/web/css/dashboard.css' }}>
+        <link rel="stylesheet" href="{{ asset('web/css/styleGeneral.css') }}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
               crossorigin="anonymous">
 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('web/css/style.css') }}">
+
     {% endblock %}
 </head>
 <body>
@@ -49,7 +49,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ '/admin/user/list' }}>
+                        <a class="nav-link" href={{ '/acc/user/list' }}>
                             {#                        <a class="nav-link" href={{ '/admin' }}>#}
                             <span data-feather="user"></span>
                             Utilisateurs
@@ -81,6 +81,13 @@
                             {#                        <a class="nav-link" href={{ '/admin' }}>#}
                             <span data-feather="package"></span>
                             Offres
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ '/admin/sale/list' }}>
+                            {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                            <span data-feather="package"></span>
+                            Liste des Commandes
                         </a>
                     </li>
                 </ul>

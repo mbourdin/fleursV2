@@ -5,23 +5,27 @@
 
 
 {% block body %}
-
+<div class="bg-gray">
     <h1>Gestion de la Commande</h1>
 
     {% set address= app.session.get("user").address %}
     <form method="post" action="/user/sale/validate" id="form">
         <div class="container">
+            {% if hasOwnAddress %}
             <div class="col">
                 <label for="radioOwn">Utiliser ma propre adresse</label>
                 <input type="radio" onclick="getOwnAddress()" name="addressChoice" value="own" id="radioOwn">
-                <input type="text" readonly id="ownAddress">
+                <input type="text" readonly id="ownAddress" class="col-lg-9">
             </div>
+            {% endif %}
+            {% if hasPreviousAddresses %}
             <div class="col">
                 <label for="radioUsed">Utiliser une adresse connue</label>
                 <input type="radio" onclick="getUsedAddresses()" name="addressChoice" value="used" id="radioUsed">
-                <select onchange="setSelectedAddress()" id="addressSelector">
+                <select onchange="setSelectedAddress()" id="addressSelector" class="col-lg-9">
                     <option value=-1></option>
                 </select></div>
+            {% endif %}
             <div class="col">
                 <label for="radioNew">Nouvelle adresse</label>
                 <input type="radio" onclick="disableform(false)" name="addressChoice" value="new" id="radioNew" checked>
@@ -31,7 +35,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
-                    <label for="recipient">Nom du destinataire</label><input type="text" name="recipient" required
+                    <label for="recipient">Nom du destinataire </label><input type="text" name="recipient" required
                                                                              id="recipient" onchange="buttonEnabler()">
                 </div>
                 <div class="col-md-5">
@@ -57,7 +61,7 @@
         </div>
         <div onchange="buttonEnabler()">{{ include('address/form.html.twig') }}</div>
     </form>
-    <table class="table">
+    <table class="table table-responsive table-bordered w-auto">
         <tr>
             <th>article</th>
             <th>id_article</th>
@@ -158,7 +162,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th id="totalprice">{% if sale!=null %}{{ sale.getPrice() }}{% endif %}</th>
+                <th id="totalprice">{% if sale!=null %}{{ sale.price() }}{% endif %}</th>
                 <th>
                     <button class="btn btn-success" onclick="submitform()" id="submitbutton" disabled="disabled">VALIDER
                         COMMANDER
@@ -175,7 +179,7 @@
             </tr>
         {% endif %}
     </table>
-
+</div>
 {% endblock %}
 
 {% block javascripts %}

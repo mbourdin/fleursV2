@@ -37,7 +37,9 @@ class SaleController extends Controller
         if($sale!=null)
         {   $now=new \DateTimeImmutable();
             $max=$now->modify("+20 day");
-            return $this->render("/sale/sale.html.twig",["sale"=>$sale,"minDate"=>$now->format("Y-m-d"),"maxDate"=>$max->format("Y-m-d")]);
+            $user=$request->getSession()->get("user");
+            $user=$this->getDoctrine()->getRepository(Person::class)->find($user->getId());
+            return $this->render("/sale/sale.html.twig",["sale"=>$sale,"minDate"=>$now->format("Y-m-d"),"maxDate"=>$max->format("Y-m-d"),"hasOwnAddress"=>$user->getAddress()!=null,"hasPreviousAddresses"=>count($user->getAddresses())!=0]);
         }
         else
         {   $this->addFlash("error","pas de commande non validée trouvée");

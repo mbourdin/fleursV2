@@ -315,15 +315,7 @@ class AdminController extends Controller
         return $this->render('admin/dashboard.html.twig');
     }
 
-    /**
-     * @Route("/user/list")
-     */
-    public function userListAction()
-    {
-        $dao = $this->getDoctrine()->getRepository(Person::class);
-        $result = $dao->findAll();
-        return $this->render('user/list.html.twig', array('users' => $result));
-    }
+
     /**
      * @Route("/service/list")
      */

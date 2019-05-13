@@ -1,4 +1,4 @@
-<table class="table table-bordered w-auto table-responsive">
+<table class="table table-bordered">
     <tr>
         <th>id</th>
         <th>nom</th>
@@ -16,7 +16,7 @@
         <td> {{ product.price }}</td>
         <td> {{ product.active }}</td>
         <td>
-            <img class="logo" src="{{ asset('images/products/'~ product.photopath) }}" alt="nomProduit:{{  product.name }}" class="productimage">
+            <img class="logo" src="{{ asset('images/products/'~ product.photopath) }}" alt="nomProduit:{{  product.name }}">
         </td>
         <td><a  href="/admin/product/edit/{{   product.id }}"><button>edit</button></a></td>
     </tr>

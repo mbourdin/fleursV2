@@ -91,7 +91,7 @@ class PanierController extends Controller
     public function savePanierAction(Request $request)
     {   $sale=$this->getSale($request);
 
-        if($sale->isEmpty())
+        if($sale->empty())
         {
             $this->addFlash("failure","impossible de commander : panier vide");
             return $this->redirect("/panier/show");

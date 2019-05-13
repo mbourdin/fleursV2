@@ -7,6 +7,8 @@
         {% block title %}
             {% if title is defined %}
             {{ title }}
+                {% else %}
+                Base!
             {% endif %}
         {% endblock %}
 
@@ -140,7 +142,7 @@
                 <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-cv-vert-96.png' }}" alt=""> Emploi</a>
                 <a class="p-2 text-muted"  href="/panier/show"> <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}"  alt=""></a>
                 {% if app.session.get("connected") %}
-                    <a class="p-2 text-muted"  href="/profile>Health">
+                    <a class="p-2 text-muted"  href="/profile">
                         <img class="iconImageUser"
                                 {% if app.session.get("user").photopath!=null %}
                                     src="{{ '/images/persons/' ~ app.session.get('user').photopath }}"

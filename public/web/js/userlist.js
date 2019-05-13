@@ -10,7 +10,7 @@ function ban(id)
     console.log(baseurl);
 
     $.ajax({
-        url : baseurl+"admin/ban/"+id,
+        url : baseurl+"acc/ban/"+id,
         type : "PUT"
     });
 
@@ -18,7 +18,7 @@ function ban(id)
 function unban(id)
 {
     $.ajax({
-        url : baseurl+"admin/unban/"+id,
+        url : baseurl+"acc/unban/"+id,
         type : "PUT"
     });
 }
@@ -31,21 +31,21 @@ function submitdelete(id) {
 function deleteuser(id)
 {
     $.ajax({
-        url : baseurl+"admin/delete/"+id,
+        url : baseurl+"acc/delete/"+id,
         type : "PUT"
     });
 }
 function undelete(id)
 {
     $.ajax({
-        url : baseurl+"admin/undelete/"+id,
+        url : baseurl+"acc/undelete/"+id,
         type : "PUT"
     });
 }
 function submitrights(id)
 {   rights=document.getElementById("rights"+id).value;
     $.ajax({
-        url : baseurl+"admin/setUserRights/"+id+"/"+rights,
+        url : baseurl+"acc/setUserRights/"+id+"/"+rights,
         type : "PUT"
     });
 }

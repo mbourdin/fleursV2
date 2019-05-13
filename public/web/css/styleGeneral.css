@@ -202,6 +202,33 @@ span{
     margin-top: -5px;
 }
 */
+.filldiv{
+    height: 100%;
+    width: 100%;
+}
+.logo{
+    max-height: 40px;
+    max-width: 40px;
+}
+.bg-gray
+{
+    background-color: #DDD;
+}
+.bg-black{
+    background-color: black;
+}
+.largeur30{
+    width: 30px;
+}
+
+.largeur150
+{
+    width: 150px;
+}
+.hauteur50
+{
+    min-height: 100px;
+}
 #roadname,#additionaladdress
 {
     width: 100%;
