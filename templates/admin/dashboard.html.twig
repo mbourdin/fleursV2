@@ -19,16 +19,16 @@
 <body>
 {% block navbar %}
     <nav class="row navbar {#fixed-top#}flex-md-nowrap text-nowrap p-0">
-        <a class="col-3" href="#"><h1>UNIFLOR <span data-feather="menu"></span></h1></a>
+        <li class="col-2">
+            <img src="{{ asset('web/images/site/LogoVecBlanc_UNIFLOR.png') }}" class="img-fluid rounded mx-auto d-block" height="200px" width="200px" alt="image arrondie centrée">
+        </li>
         <h1 class="navbar-nav text-center col">Gestion Back-Office</h1>
         <ul class="navbar-nav col-2">
             <li class="nav-item text-nowrap">
-                <a class="nav-link text-right" href="/logout">Sign out</a>
-            </li>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link text-right" href="/">retour site</a>
+                <a class="btn btn-primary" href="/">retour site</a>
             </li>
         </ul>
+        <span class="col-1"> </span>
 
     </nav>
 {% endblock %}
@@ -39,14 +39,12 @@
         <nav class="col-2 sidebar">
             <div >
                 <ul class="nav flex-column">
+
                     <li class="nav-item">
-                        <img src="{{ asset('web/images/site/LogoVecBlanc_UNIFLOR.png') }}" class="img-fluid rounded mx-auto d-block" height="200px" width="200px" alt="image arrondie centrée">
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href={{ '/admin/dashboard' }}>
-                            <span data-feather="home"></span>
-                            Dashboard<span class="sr-only">(current)</span>
-                        </a>
+                        <span class="active">
+                            <h3 data-feather="home">
+                            Tableau de Bord</h3>
+                        </span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ '/acc/user/list' }}>
@@ -55,40 +53,58 @@
                             Utilisateurs
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href={{ '/admin/productType/list' }}>
-                            {#                        <a class="nav-link" href={{ '/admin' }}>#}
-                            <span data-feather="shopping-cart"></span>
-                            Types Produits
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href={{ '/admin/productType/add' }}>
-                            {#                        <a class="nav-link" href={{ '/admin' }}>#}
-                            <span data-feather="shopping-cart"></span>
-                            Nouveau Type Produits
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href={{ '/admin/service/list' }}>
-                            {#                        <a class="nav-link" href={{ '/admin' }}>#}
-                            <span data-feather="settings"></span>
-                            Services
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href={{ '/admin/offer/list' }}>
-                            {#                        <a class="nav-link" href={{ '/admin' }}>#}
-                            <span data-feather="package"></span>
-                            Offres
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href={{ '/admin/sale/list' }}>
                             {#                        <a class="nav-link" href={{ '/admin' }}>#}
                             <span data-feather="package"></span>
                             Liste des Commandes
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-light dropdown-toggle text-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Services
+                            </button>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href={{ '/admin/service/list' }}>
+                                    {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                                    <span data-feather="settings"></span>
+                                    Liste
+                                </a>
+                                <a class="dropdown-item" href={{ '/admin/service/new' }}>
+                                    {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                                    <span data-feather="settings"></span>
+                                    Nouveau
+                                </a>
+                            </div>
+                            <!-- Dropdown menu links -->
+
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="btn-group dropright">
+                            <button type="button" class="btn btn-light dropdown-toggle text-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Offres
+                            </button>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                <a class="dropdown-item" href={{ '/admin/offer/list' }}>
+                                    {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                                    <span data-feather="package"></span>
+                                    Liste
+                                </a>
+                                <a class="dropdown-item" href={{ '/admin/offer/new' }}>
+                                    {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                                    <span data-feather="shopping-cart"></span>
+                                    Nouvelle
+                                </a>
+                            </div>
+                            <!-- Dropdown menu links -->
+
+                        </div>
                     </li>
                     <li class="nav-item">
                         <div class="btn-group dropright">
@@ -107,6 +123,17 @@
                                     {#                        <a class="nav-link" href={{ '/admin' }}>#}
                                     <span data-feather="shopping-cart"></span>
                                     Nouveau
+                                </a>
+
+                                <a class="dropdown-item" href={{ '/admin/productType/list' }}>
+                                    {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                                    <span data-feather="shopping-cart"></span>
+                                    Types Produits
+                                </a>
+                                <a class="dropdown-item" href={{ '/admin/productType/add' }}>
+                                    {#                        <a class="nav-link" href={{ '/admin' }}>#}
+                                    <span data-feather="shopping-cart"></span>
+                                    Nouveau Type
                                 </a>
                             </div>
                             <!-- Dropdown menu links -->
