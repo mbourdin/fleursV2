@@ -16,7 +16,7 @@
         <tr>
             <td>{{ offer.id }}</td>
             <td>{{ offer.name }}</td>
-            <td>{{ offer.price }}</td>
+            <td>{{ offer.price() }}</td>
             <td>{{ offer.description }}</td>
             <td>{{ offer.active ? 'Yes' : 'No' }}</td>
             <td>{{ offer.start ? offer.start|date('Y-m-d H:i:s') : '' }}</td>

@@ -4,7 +4,7 @@
 namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use \RuntimeException;
+use UnexpectedValueException;
 
 /**
 * @ORM\Entity(repositoryClass="App\Repository\OfferRepository")
@@ -44,7 +44,7 @@ class Offer
     private $discount;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OfferProductContent",mappedBy="offer",cascade={"persist"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\OfferProductContent",mappedBy="offer",cascade={"persist","merge"},fetch="LAZY")
      * @ORM\JoinTable(name="offer_product_content")
      */
     private $products;
@@ -176,14 +176,58 @@ class Offer
     {
         $this->discount = $discount;
     }
-    public function getPrice()
-    {   $sum=0;
-//        foreach ($this->products->getIterator() as $i => $productContent) {
-//        $sum+=$productContent->getProduct()->getPrice();
-//        }
-
-        $result=($sum*(100-$this->discount))/100;
-        return $result;
+    public function price()
+    {   return $this->sum()-$this->intDiscount();
+    }
+    private function sum()
+    {    $sum=0;
+        foreach ($this->products->getIterator() as $i => $productContent) {
+            $sum+=$productContent->getProduct()->getPrice();
+        }
+        return $sum;
 
     }
+    public function intDiscount()
+    {   return ($this->sum()*$this->discount)/100;
+
+    }
+    public function addProduct(Product $product, int $quantity)
+    {
+        if ($quantity <= 0) throw new UnexpectedValueException("quantité négative");
+        foreach ($this->products->getIterator() as $i => $productContent) {
+            if ($product->equals($productContent->getProduct())) {
+                $productContent->setQuantity($quantity);
+                return true;
+            }
+        }
+        $newProduct = new OfferProductContent();
+        $newProduct->setProduct($product);
+        $newProduct->setOffer($this);
+        $newProduct->setQuantity($quantity);
+        $this->products->add($newProduct);
+
+        return true;
+    }
+
+    public function removeProduct(Product $product)
+    {
+        $this->products->removeElement($product);
+    }
+    /**
+     * @return mixed
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products): void
+    {
+        $this->products = $products;
+    }
+
+
 }

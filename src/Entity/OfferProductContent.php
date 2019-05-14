@@ -24,10 +24,12 @@ class OfferProductContent
     private $product;
     /**
      * @var Offer|string
-     * @ORM\ManyToOne(targetEntity="Offer", cascade={"persist"},inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Offer", cascade={"persist","merge"},inversedBy="products")
      * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $offer;
+
+
     public function getQuantity(): ?string
     {
         return $this->quantity;
@@ -37,15 +39,7 @@ class OfferProductContent
         $this->quantity = $quantity;
         return $this;
     }
-    public function getPriceReal(): ?int
-    {
-        return $this->priceReal;
-    }
-    public function setPriceReal(?int $priceReal): self
-    {
-        $this->priceReal = $priceReal;
-        return $this;
-    }
+
     /**
      * @return Product|string
      */

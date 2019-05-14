@@ -49,7 +49,6 @@ alter table message_admin
 create table if not exists offer
 (
     id          int auto_increment,
-    photopath   varchar(255)         null,
     name        varchar(30)          null,
     description text                 null,
     active      tinyint(1) default 1 not null,
@@ -113,6 +112,36 @@ create table if not exists persons_addresses
         foreign key (person_id) references person (id)
 );
 
+create table if not exists product
+(
+    id          int auto_increment,
+    photopath   varchar(255) null,
+    price       int          null,
+    description text         null,
+    name        varchar(30)  null,
+    active      tinyint(1)   null,
+    constraint Product_id_uindex
+        unique (id)
+);
+
+alter table product
+    add primary key (id);
+
+create table if not exists offer_product_content
+(
+    offer_id   int           not null,
+    product_id int           not null,
+    quantity   int default 1 not null,
+    id         int auto_increment
+        primary key,
+    constraint offer_product_content_pk
+        unique (offer_id, product_id),
+    constraint offer_product_content_offer_id_fk
+        foreign key (offer_id) references offer (id),
+    constraint offer_product_content_product_id_fk
+        foreign key (product_id) references product (id)
+);
+
 create table if not exists product_type
 (
     id        int auto_increment,
@@ -125,36 +154,6 @@ create table if not exists product_type
 
 alter table product_type
     add primary key (id);
-
-create table if not exists product
-(
-    id              int auto_increment,
-    photopath       varchar(255) null,
-    price           int          null,
-    description     text         null,
-    name            varchar(30)  null,
-    active          tinyint(1)   null,
-    product_type_id int          null,
-    constraint Product_id_uindex
-        unique (id),
-    constraint product_product_type_id_fk
-        foreign key (product_type_id) references product_type (id)
-);
-
-alter table product
-    add primary key (id);
-
-create table if not exists offer_product_content
-(
-    offer_id   int           not null,
-    product_id int           not null,
-    quantity   int default 1 not null,
-    primary key (offer_id, product_id),
-    constraint offerProductContent_offer_id_fk
-        foreign key (offer_id) references offer (id),
-    constraint offerProductContent_product_id_fk
-        foreign key (product_id) references product (id)
-);
 
 create table if not exists products_types
 (

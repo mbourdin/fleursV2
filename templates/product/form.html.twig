@@ -1,6 +1,6 @@
 {% extends 'admin/dashboard.html.twig' %}
 {% block title %}
-    creation produit
+    <title>creation produit</title>
 {% endblock %}
 {% block body %}
     <h1 class="centered">création produit</h1>
@@ -22,9 +22,9 @@
             <button onclick="remove({{ product.id }})">dissocier</button>
         </div>
         <h3>Liste des types associes</h3>
-        <ul>
+        <ul id='typeList'>
             {% for productType in product.productTypes %}
-                {{productType.name }}
+                <li id="typeId{{ productType.id }}">{{productType.name }}</li>
             {% endfor %}
         </ul>
     {% endif %}

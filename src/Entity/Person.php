@@ -7,6 +7,7 @@ use FOS\UserBundle\Model\User as FOSUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Address;
+use UnexpectedValueException;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
@@ -152,8 +153,11 @@ class Person extends FOSUser implements UserInterface
     /**
      * @param mixed $rights
      */
-    public function setRights($rights): void
-    {
+    public function setRights(int $rights=1): void
+    {   if($rights<0 || $rights>7)
+        {
+            throw new UnexpectedValueException("valeur invalide dans Person::SetRights");
+        }
         $this->rights = $rights;
         $this->setRolesInt($rights);
     }

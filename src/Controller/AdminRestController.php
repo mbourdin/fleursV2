@@ -15,15 +15,22 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+use App\Entity\Offer;
 class AdminRestController extends Controller
 {   private $serializer;
     /**
      * AdminRestController constructor.
      */
     public function __construct()
-    {   $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+    {   $normalizer=new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = [$normalizer];
+        $encoders = [new JsonEncoder()];
         $this->serializer = new Serializer($normalizers, $encoders);
+
     }
 
 
@@ -41,7 +48,7 @@ class AdminRestController extends Controller
         $em=$this->getDoctrine()->getManager();
         $em->persist($product);
         $em->flush();
-        return new Response();
+        return new Response($this->serializer->serialize($type,"json"));
     }
     /**
      * @Rest\Put("/admin/product/dissociateType/{productId}/{typeId}")
@@ -55,7 +62,7 @@ class AdminRestController extends Controller
         $em=$this->getDoctrine()->getManager();
         $em->merge($product);
         $em->flush();
-        return new Response();
+        return new Response($typeId);
     }
     /**
      * @Rest\Get("/admin/sales/list/{day}")
@@ -70,4 +77,33 @@ class AdminRestController extends Controller
         return $response;
 
     }
+    /**
+     * @Rest\Put("/admin/offer/associateProduct/{offerId}/{productId}/{quantity}")
+     */
+    public function associateOfferProduct(int $productId,int $offerId,int $quantity)
+    {   $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $offerDao=$this->getDoctrine()->getRepository(Offer::class);
+        $product=$productDao->find($productId);
+        $offer=$offerDao->find($offerId);
+        $offer->addProduct($product,$quantity);
+        $em=$this->getDoctrine()->getManager();
+        $em->merge($offer);
+        $em->flush();
+        return new Response($this->serializer->serialize($offer,"json"));
+    }
+    /**
+     * @Rest\Put("/admin/offer/dissociateProduct/{offerId}/{productId}")
+     */
+    public function dissociateOfferProduct(int $offerId,int $productId)
+    {   $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $offerDao=$this->getDoctrine()->getRepository(Offer::class);
+        $offer=$offerDao->find($offerId);
+        $product=$productDao->find($productId);
+        $offer->removeProduct($product);
+        $em=$this->getDoctrine()->getManager();
+        $em->merge($offer);
+        $em->flush();
+        return new Response($product->getId());
+    }
+
 }

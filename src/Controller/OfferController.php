@@ -8,8 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 /**
- * @Route("/offer")
+ * @Route("/admin/offer")
  */
 class OfferController extends Controller
 {
@@ -63,9 +64,12 @@ class OfferController extends Controller
             $entityManager->flush();
             return $this->redirectToRoute('offer_index');
         }
+        $products=$this->getDoctrine()->getRepository(Product::class)->findAll();
         return $this->render('offer/edit.html.twig', [
             'offer' => $offer,
             'form' => $form->createView(),
+            'edit'=>true,
+            'products'=>$products
         ]);
     }
     /**
