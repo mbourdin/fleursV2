@@ -21,7 +21,7 @@
         </div>
         <ul id="productList">
             {% for content in offer.products %}
-            <li id="productId{{ content.product.id }}">content.product.id</li>
+            <li id="productId{{ content.product.id }}">{{content.quantity ~" "~ content.product.name }}</li>
             {% endfor %}
         </ul>
     {% endif %}

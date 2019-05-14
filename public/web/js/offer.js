@@ -26,7 +26,7 @@ function onSuccessAssociate(result) {
     line=document.getElementById("productId"+product.id);
     if(line===null)
     {   line=document.createElement("LI");
-        var textnode=document.createTextNode(product.name);
+        var textnode=document.createTextNode(document.getElementById("productNumber").value+" "+product.name);
         line.setAttribute("id","typeId"+product.id);
         line.appendChild(textnode);
         list.appendChild(line);

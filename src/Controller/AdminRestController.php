@@ -89,7 +89,7 @@ class AdminRestController extends Controller
         $em=$this->getDoctrine()->getManager();
         $em->merge($offer);
         $em->flush();
-        return new Response($this->serializer->serialize($offer,"json"));
+        return new Response($this->serializer->serialize($product,"json"));
     }
     /**
      * @Rest\Put("/admin/offer/dissociateProduct/{offerId}/{productId}")
