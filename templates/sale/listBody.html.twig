@@ -1,0 +1,27 @@
+    <table class="table table-responsive w-auto table-bordered" id="salesTable">
+        <tr>
+            <th>id</th>
+            <th>onlinepay</th>
+            <th>payée</th>
+            <th>date</th>
+            <th>personne</th>
+            <th>validée</th>
+            <th>destinataire</th>
+            <th>contact</th>
+            <th>adresse</th>
+        </tr>
+        {% for sale in sales %}
+            <tr>
+                <td>{{ sale.id }}</td>
+                <td>{{ sale.onlinepay }}</td>
+                <td>{{ sale.paid }}</td>
+                <td>{{ sale.date|date }}</td>
+                <td>{{ sale.person.id ~sale.person.firstname ~sale.person.name }}</td>
+                <td>{{ sale.validated }}</td>
+                <td>{{ sale.recipient }}</td>
+                <td>{{ sale.contact }}</td>
+                <td>{{ sale.address }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>

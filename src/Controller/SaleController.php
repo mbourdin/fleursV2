@@ -12,11 +12,32 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Service;
 use \DateTime;
 use \DateTimeImmutable;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 /**
  * @Route("/user/sale")
  */
 class SaleController extends Controller
-{
+{    private $serializer;
+    /**
+     * AdminRestController constructor.
+     */
+    public function __construct()
+    {   $normalizer=new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = [$normalizer];
+        $encoders = [new JsonEncoder()];
+        $this->serializer = new Serializer($normalizers, $encoders);
+
+    }
+
+
     private function getUserSale(Request $request):?Sale
     {   $user=$request->getSession()->get("user");
         $saleDao=$this->getDoctrine()->getRepository(Sale::class);
@@ -315,5 +336,14 @@ class SaleController extends Controller
         $sale->updateQuantity($object,$quantity);
         $this->saveUserSale($sale);
         return $this->redirect("/user/sale/edit");
+    }
+    /**
+     * @Rest\Get("/list")
+     */
+    public function listUserSales(Request $request)
+    {   $dao=$this->getDoctrine()->getRepository(Sale::class);
+        $user=$request->getSession()->get("user");
+        $sales=$dao->findBy(["person"=>$user]);
+        return $this->render("sale/listClientView.html.twig",["sales"=>$sales]);
     }
 }
