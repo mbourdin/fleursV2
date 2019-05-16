@@ -29,9 +29,37 @@
         </tr>
         </tbody>
     </table>
-
+<!-- DETAIL DES PROJDUITS -->
+    <table class="table table-bordered w-auto bg-gray">
+        <th>id</th>
+        <th>nom</th>
+        <th>photo</th>
+        <th>quantité</th>
+        <th> </th>
+        {% for content in service.products %}
+            <tr>
+                 <td>
+                     {{ content.product.id }}
+                    </td>
+                <td>
+                    {{ content.product.name }}
+                </td>
+                <td>
+                    <img class="logo" src={{ asset('images/products/'~ content.product.photopath) }}>
+                </td>
+                <td>
+                    {{ content.quantity }}
+                </td>
+                <td>
+                    <a href="/product/show/{{ content.product.id }}">detail</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <!-- BOUTONS ADMIN -->
+    {% if app.session.get("adminRights") %}
     <a href="{{ path('service_index') }}">back to list</a>
 
     <a href="{{ path('service_edit', {'id': service.id}) }}">edit</a>
-
+    {% endif %}
 {% endblock %}

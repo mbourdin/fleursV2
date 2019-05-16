@@ -4,6 +4,7 @@ INSERT INTO fleuriste.address (id, number, roadtype, roadname, additionaladdress
 INSERT INTO fleuriste.address (id, number, roadtype, roadname, additionaladdress, postalcode, city_id, numberaddition) VALUES (4, 21, 'avenue', 'des hetres', '', '91170', 91687, null);
 INSERT INTO fleuriste.address (id, number, roadtype, roadname, additionaladdress, postalcode, city_id, numberaddition) VALUES (5, 21, 'avenue', 'des hetres', '', '91170', 0, null);
 INSERT INTO fleuriste.offer (id, name, description, active, start, end, discount) VALUES (3, 'TestOffer', 'ggg', 1, '2019-05-03 00:00:00', '2019-06-01 00:00:00', 25);
+INSERT INTO fleuriste.offer_product_content (offer_id, product_id, quantity, id) VALUES (3, 23, 10, 1);
 INSERT INTO fleuriste.person (id, name, firstName, birthday, email, password, photopath, banned, deleted, enabled, confirmation_token, password_requested_at, creationdate, rights, address_id, username, username_canonical, email_canonical, salt, plain_password, last_login, roles) VALUES (1, null, null, null, 'bourdin.maurice@gmail.com', '$2y$13$lxjHAdEfOvQgJAVhEjGEXusjRKTExXTTCMYeAwdIIT8bEclXfGXIi', null, 0, 0, 1, null, null, null, 4, 1, 'mbourdin', 'mbourdin', 'bourdin.maurice@gmail.com', null, null, '2019-05-15 20:04:10', 'a:1:{i:0;s:14:"ROLE_ACC_ADMIN";}');
 INSERT INTO fleuriste.person (id, name, firstName, birthday, email, password, photopath, banned, deleted, enabled, confirmation_token, password_requested_at, creationdate, rights, address_id, username, username_canonical, email_canonical, salt, plain_password, last_login, roles) VALUES (2, 'bourdin', 'maurice', '1983-12-14', 'maurice@bourdin.biz', null, 'Koala.jpg', 0, 0, 1, null, null, null, 6, null, 'mbourdin2', 'mbourdin2', 'maurice@bourdin.biz', null, null, '2019-05-15 20:58:23', 'a:2:{i:0;s:10:"ROLE_ADMIN";i:1;s:14:"ROLE_ACC_ADMIN";}');
 INSERT INTO fleuriste.persons_addresses (person_id, address_id) VALUES (1, 5);
@@ -31,6 +32,6 @@ INSERT INTO fleuriste.products_types (product_id, product_type_id) VALUES (29, 2
 INSERT INTO fleuriste.products_types (product_id, product_type_id) VALUES (30, 2);
 INSERT INTO fleuriste.products_types (product_id, product_type_id) VALUES (31, 2);
 INSERT INTO fleuriste.products_types (product_id, product_type_id) VALUES (32, 2);
-INSERT INTO fleuriste.service (id, photopath, price, description, name, active) VALUES (1, null, 600, 'TEST', 'TestService', 0);
+INSERT INTO fleuriste.service (id, photopath, price, description, name, active) VALUES (1, null, 600, 'TEST', 'TestService', 1);
 INSERT INTO fleuriste.service_product_content (service_id, product_id, quantity, id) VALUES (1, 23, 2, 3);
 INSERT INTO fleuriste.service_product_content (service_id, product_id, quantity, id) VALUES (1, 28, 2, 5);

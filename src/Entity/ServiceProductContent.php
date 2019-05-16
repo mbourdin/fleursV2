@@ -31,7 +31,7 @@ class ServiceProductContent
     private $product;
     /**
      * @var Service|string
-     * @ORM\ManyToOne(targetEntity="Service")
+     * @ORM\ManyToOne(targetEntity="Service",inversedBy="products")
      * @ORM\JoinColumn(nullable=true)
      */
     private $service;

@@ -12,7 +12,6 @@
             <th>prix</th>
             <th>actif</th>
             <th>chemin vers photo</th>
-            <th>typeId</th>
             <th></th>
         </tr>
 
@@ -23,7 +22,6 @@
             <td> {{ product.price }}</td>
             <td> {{ product.active }}</td>
             <td> {{ product.photopath }}</td>
-            <td>{% if product.producttype %}{{ product.producttype.id }}{% endif %}</td>
             <td><a  href="/admin/product/edit/{{   product.id }}"><button>edit</button></a></td>
         </tr>
 

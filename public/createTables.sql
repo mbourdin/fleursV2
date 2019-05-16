@@ -1,4 +1,4 @@
-create table if not exists address
+create table address
 (
     id                int auto_increment,
     number            int         null,
@@ -12,13 +12,13 @@ create table if not exists address
         unique (id)
 );
 
-create index if not exists address_city_id_fk
+create index address_city_id_fk
     on address (city_id);
 
 alter table address
     add primary key (id);
 
-create table if not exists city
+create table city
 (
     id      int auto_increment,
     inseeid varchar(6)           null,
@@ -33,7 +33,7 @@ create table if not exists city
 alter table city
     add primary key (id);
 
-create table if not exists message_admin
+create table message_admin
 (
     id     int auto_increment,
     text   text        null,
@@ -46,7 +46,7 @@ create table if not exists message_admin
 alter table message_admin
     add primary key (id);
 
-create table if not exists offer
+create table offer
 (
     id          int auto_increment,
     name        varchar(30)          null,
@@ -62,7 +62,7 @@ create table if not exists offer
 alter table offer
     add primary key (id);
 
-create table if not exists person
+create table person
 (
     id                    int auto_increment,
     name                  varchar(30)          null,
@@ -74,7 +74,7 @@ create table if not exists person
     banned                tinyint(1) default 0 not null,
     deleted               tinyint(1) default 0 not null,
     enabled               tinyint(1) default 0 not null,
-    confirmation_token    varchar(32)          null,
+    confirmation_token    varchar(255)         null,
     password_requested_at timestamp            null,
     creationdate          timestamp            null,
     rights                int        default 1 not null,
@@ -101,7 +101,7 @@ create table if not exists person
 alter table person
     add primary key (id);
 
-create table if not exists persons_addresses
+create table persons_addresses
 (
     person_id  int not null,
     address_id int not null,
@@ -112,7 +112,7 @@ create table if not exists persons_addresses
         foreign key (person_id) references person (id)
 );
 
-create table if not exists product
+create table product
 (
     id          int auto_increment,
     photopath   varchar(255) null,
@@ -127,7 +127,7 @@ create table if not exists product
 alter table product
     add primary key (id);
 
-create table if not exists offer_product_content
+create table offer_product_content
 (
     offer_id   int           not null,
     product_id int           not null,
@@ -142,7 +142,7 @@ create table if not exists offer_product_content
         foreign key (product_id) references product (id)
 );
 
-create table if not exists product_type
+create table product_type
 (
     id        int auto_increment,
     name      varchar(30)          null,
@@ -155,7 +155,7 @@ create table if not exists product_type
 alter table product_type
     add primary key (id);
 
-create table if not exists products_types
+create table products_types
 (
     product_id      int not null,
     product_type_id int not null,
@@ -166,7 +166,7 @@ create table if not exists products_types
         foreign key (product_type_id) references product_type (id)
 );
 
-create table if not exists sale
+create table sale
 (
     id         int auto_increment,
     onlinepay  tinyint(1) default 1                 not null,
@@ -189,7 +189,7 @@ create table if not exists sale
 alter table sale
     add primary key (id);
 
-create table if not exists sale_offer_content
+create table sale_offer_content
 (
     sale_id         int not null,
     offer_id        int not null,
@@ -209,7 +209,7 @@ create table if not exists sale_offer_content
 alter table sale_offer_content
     add primary key (id);
 
-create table if not exists sale_product_content
+create table sale_product_content
 (
     sale_id         int           not null,
     product_id      int           not null,
@@ -225,7 +225,7 @@ create table if not exists sale_product_content
         foreign key (sale_id) references sale (id)
 );
 
-create table if not exists service
+create table service
 (
     id          int auto_increment,
     photopath   varchar(255) null,
@@ -240,7 +240,7 @@ create table if not exists service
 alter table service
     add primary key (id);
 
-create table if not exists sale_service_content
+create table sale_service_content
 (
     sale_id         int           not null,
     service_id      int           not null,
@@ -260,7 +260,7 @@ create table if not exists sale_service_content
 alter table sale_service_content
     add primary key (id);
 
-create table if not exists service_product_content
+create table service_product_content
 (
     service_id int           not null,
     product_id int           not null,

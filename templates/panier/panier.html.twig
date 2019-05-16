@@ -21,14 +21,14 @@ Gestion du panier
         {% set i=0 %}
         {% for productContent in sale.products %}
             {% set i=1-i %}
-            <tr>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.product.name }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ productContent.product.id }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('product',{{ productContent.product.id }})" id="productinput" value="{{ productContent.quantity }}"
+            <tr {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ productContent.product.name }}</td>
+                <td > {{ productContent.product.id }}</td>
+                <td ><input onblur="updateProductQuantity('product',{{ productContent.product.id }})" id="productinput" value="{{ productContent.quantity }}"
                            type="text"></td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ productContent.pricewhenbought * productContent.quantity }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ productContent.pricewhenbought/100.0 }}</td>
+                <td >{{ productContent.pricewhenbought * productContent.quantity/100.0 }}</td>
+                <td >
                     <a href="/panier/rmProduct/{{ productContent.product.id }}"><button  class="btn btn-success ">-</button></a>
                     <a href="/panier/addProduct/{{ productContent.product.id }}"><button class="btn  btn-success">+</button></a>
                     <a href="/panier/delProduct/{{ productContent.product.id }}"><button class="btn  btn-danger">X</button></a>
@@ -42,14 +42,14 @@ Gestion du panier
         </tr>
         {% for serviceContent in sale.services %}
             {% set i=1-i %}
-            <tr>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.service.name }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ serviceContent.service.id }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('service',{{ serviceContent.service.id }})" id="serviceinput" value="{{ serviceContent.quantity }}"
+            <tr {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ serviceContent.service.name }}</td>
+                <td > {{ serviceContent.service.id }}</td>
+                <td ><input onblur="updateProductQuantity('service',{{ serviceContent.service.id }})" id="serviceinput" value="{{ serviceContent.quantity }}"
                            type="text"></td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ serviceContent.pricewhenbought/100.0 }}</td>
+                <td >{{ serviceContent.pricewhenbought * serviceContent.quantity/100.0 }}</td>
+                <td >
                     <a href="/panier/rmService/{{ serviceContent.service.id }}"><button class="btn btn-success">-</button></a>
                     <a href="/panier/addService/{{ serviceContent.service.id }}"><button class="btn btn-success">+</button></a>
                     <a href="/panier/delService/{{ serviceContent.service.id }}"><button class="btn  btn-danger">X</button></a>
@@ -61,14 +61,14 @@ Gestion du panier
         </tr>
         {% for offerContent in sale.offers %}
             {% set i=1-i %}
-            <tr>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.offer.name }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}> {{ offerContent.offer.id }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})" id="offerinput" value="{{ offerContent.quantity }}">
+            <tr {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ offerContent.offer.name }}</td>
+                <td > {{ offerContent.offer.id }}</td>
+                <td ><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})" id="offerinput" value="{{ offerContent.quantity }}">
                 </td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
-                <td {% if i%2==0 %}class="bg-info"{%  else %}class="bg-secondary"{% endif %}>
+                <td >{{ offerContent.pricewhenbought/100.0 }}</td>
+                <td >{{ offerContent.pricewhenbought * offerContent.quantity/100.0 }}</td>
+                <td >
                     <a href="/panier/rmOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">-</button></a>
                     <a href="/panier/addOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">+</button></a>
                     <a href="/panier/delOffer/{{ offerContent.offer.id }}"><button class="btn  btn-danger">X</button></a>
@@ -80,7 +80,7 @@ Gestion du panier
             <th></th>
             <th></th>
             <th></th>
-            <th>{% if sale!=null %}{{ sale.price() }}{% endif %}</th>
+            <th>{% if sale!=null %}{{ sale.price()/100.0 }}{% endif %}</th>
             <th>
                 <a href="/user/panier/save"><button class="btn btn-success">COMMANDER</button></a>
                 <br>
