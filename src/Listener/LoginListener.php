@@ -3,6 +3,8 @@
 
 namespace App\Listener;
 
+use App\Entity\Person;
+use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use App\Utility\OnEventActions;
@@ -10,14 +12,17 @@ use Doctrine\ORM\EntityManager;
 use App\Repository\PersonRepository;
 class LoginListener
 {   protected $userManager;
+    private $em;
 
-    public function __construct(UserManagerInterface $userManager){
+    public function __construct(UserManagerInterface $userManager,EntityManagerInterface $em){
         $this->userManager = $userManager;
+        $this->em=$em;
     }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {   $login = $event->getAuthenticationToken()->getUser();
-        $user=$this->userManager->findUserByUsername($login);
+        $id=$this->userManager->findUserByUsername($login)->getId();
+        $user=$this->em->getRepository(Person::class)->find($id);
         $session=$event->getRequest()->getSession();
         OnEventActions::setPermissions($session,$user);//le warning ici n'est pas grave
         // c'est simpelemnt l'IDE qui ne détermine pas que $user est forcément de la classe

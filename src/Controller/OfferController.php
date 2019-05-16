@@ -24,7 +24,7 @@ class OfferController extends Controller
         ]);
     }
     /**
-     * @Route("/new", name="offer_new", methods={"GET","POST"})
+     * @Route("/add", name="offer_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -72,25 +72,7 @@ class OfferController extends Controller
             'products'=>$products
         ]);
     }
-    /**
-     * @Route("/delete/{id}", name="offer_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Offer $offer): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$offer->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($offer);
-            $entityManager->flush();
-        }
-        return $this->redirectToRoute('offer_index');
-    }
 
-    /**
-     * @Route("/list")
-     */
-    public function list()
-    {
-        $dao=$this->getDoctrine()->getRepository(Offer::class);
-        return $this->render("offer/listClientView.html.twig",["offers"=>$dao->findAll()]);
-    }
+
+
 }

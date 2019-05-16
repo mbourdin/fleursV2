@@ -19,13 +19,13 @@ class OfferProductContent
     /**
      * @var Product|string
      * @ORM\ManyToOne(targetEntity="Product", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $product;
     /**
      * @var Offer|string
      * @ORM\ManyToOne(targetEntity="Offer", cascade={"persist","merge"},inversedBy="products")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $offer;
 
@@ -68,4 +68,21 @@ class OfferProductContent
     {
         $this->offer = $offer;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
 }

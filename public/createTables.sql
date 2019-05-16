@@ -265,10 +265,17 @@ create table if not exists service_product_content
     service_id int           not null,
     product_id int           not null,
     quantity   int default 1 not null,
-    primary key (service_id, product_id),
-    constraint ServiceProductContent_product_id_fk
+    id         int auto_increment,
+    constraint service_product_content_id_uindex
+        unique (id),
+    constraint service_product_content_pk
+        unique (service_id, product_id),
+    constraint service_product_content_product_id_fk
         foreign key (product_id) references product (id),
-    constraint ServiceProductContent_service_id_fk
+    constraint service_product_content_service_id_fk
         foreign key (service_id) references service (id)
 );
+
+alter table service_product_content
+    add primary key (id);
 

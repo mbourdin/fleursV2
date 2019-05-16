@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Entity\Product;
 use App\Entity\Service;
 use App\Form\ServiceForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -7,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 /**
- * @Route("/service")
+ * @Route("/admin/service")
  */
 class ServiceController extends Controller
 {
@@ -21,7 +22,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/new", name="service_new", methods={"GET","POST"})
+     * @Route("/add", name="service_add", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -61,23 +62,14 @@ class ServiceController extends Controller
                 'id' => $service->getId(),
             ]);
         }
+        $products=$this->getDoctrine()->getRepository(Product::class)->findAll();
         return $this->render('service/edit.html.twig', [
             'service' => $service,
             'form' => $form->createView(),
+            'products'=>$products,
         ]);
     }
-    /**
-     * @Route("/delete/{id}", name="service_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Service $service): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$service->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($service);
-            $entityManager->flush();
-        }
-        return $this->redirectToRoute('service_index');
-    }
+
     /**
      * @Route("/list")
      */

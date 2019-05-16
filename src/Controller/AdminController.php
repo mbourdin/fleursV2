@@ -127,45 +127,6 @@ class AdminController extends Controller
         return $this->render('product/form.html.twig', array('form' => $formView,"edit"=>true,"productTypes"=>$productTypes,"product"=>$product));
 
     }
-//      Cette fonction n'est pas utile à l'application
-//    /**
-//     * @Route("/product/delete/{id}")
-//     */
-//
-//    public function DeleteProductAction(Request $request,$id){
-//        // on crée un produit
-//        $posts=$this->getDoctrine()->getRepository("App:Product");
-//        $product=$posts->find($id);
-//
-//        // ensuite on récupère le formulaire
-//        $form = $this->createForm(ProductForm::class, $product);
-//
-//        $form->add('submit', SubmitType::class, [
-//            'label' => 'supprimer',
-//            'attr' => ['class' => 'btn btn-default pull-right'],
-//        ]);
-//        $form->handleRequest($request);
-//
-//        //si le formulaire a été soumi
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            //on enregistre le produit dans la bdd
-//
-//            $reg = $this->getDoctrine()->getManager();
-//
-//            $reg->remove($product);
-//            $reg->flush();
-//
-//
-//            return new Response('Produit effacée');
-//        }
-//        //on va générer le Html
-//        $formView= $form->createView();
-//
-//        // on rend la vue
-//        return $this->render('product/ProductAffiche.html.twig', array('form' => $formView));
-//
-//    }
-
     //SECTION TYPE PRODUIT
     /**
      * @param Request $request
@@ -269,44 +230,7 @@ class AdminController extends Controller
 
     }
 
-//      Cette fonction n'est pas utilie à l'application
-//
-//    /**
-//     * @Route("/admin/productType/delete/{id}")
-//     */
-//
-//    public function DeleteProductTypeAction(Request $request,$id){
-//        // on crée un produit
-//        $posts=$this->getDoctrine()->getRepository(Producttype::class);
-//        $productType=$posts->find($id);
-//
-//        // ensuite on récupère le formulaire
-//        $form = $this->createForm(ProductTypeForm::class, $productType);
-//        $form->add('submit', SubmitType::class, [
-//            'label' => 'supprimer',
-//            'attr' => ['class' => 'btn btn-default pull-right'],
-//        ]);
-//        $form->handleRequest($request);
-//
-//        //si le formulaire a été soumi
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            //on enregistre le produit dans la bdd
-//
-//            $reg = $this->getDoctrine()->getManager();
-//
-//            $reg->remove($productType);
-//            $reg->flush();
-//
-//
-//            return new Response('Produit effacée');
-//        }
-//        //on va générer le Html
-//        $formView= $form->createView();
-//
-//        // on rend la vue
-//        return $this->render('product/typeList.html.twig', array('form' => $formView));
-//
-//    }
+
     /**
      * @Route("/dashboard")
      */
@@ -316,6 +240,14 @@ class AdminController extends Controller
     }
 
 
+    /**
+     * @Route("/product//list")
+     */
+
+    public function productListAction(){
+        $products=$this->getDoctrine()->getRepository(Product::class)->findAll();
+        return $this->render("product/List.html.twig",["products"=>$products]);
+    }
     /**
      * @Route("/service/list")
      */

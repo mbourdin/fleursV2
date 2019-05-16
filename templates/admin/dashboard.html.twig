@@ -17,6 +17,17 @@
     {% endblock %}
 </head>
 <body>
+{% block flashmsg %}
+    <!--affiche les messages flash presents en session-->
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}
 {% block navbar %}
     <nav class="row navbar {#fixed-top#}flex-md-nowrap text-nowrap p-0">
         <li class="col-2">
@@ -73,7 +84,7 @@
                                     <span data-feather="settings"></span>
                                     Liste
                                 </a>
-                                <a class="dropdown-item" href={{ '/admin/service/new' }}>
+                                <a class="dropdown-item" href={{ '/admin/service/add' }}>
                                     {#                        <a class="nav-link" href={{ '/admin' }}>#}
                                     <span data-feather="settings"></span>
                                     Nouveau
@@ -96,7 +107,7 @@
                                     <span data-feather="package"></span>
                                     Liste
                                 </a>
-                                <a class="dropdown-item" href={{ '/admin/offer/new' }}>
+                                <a class="dropdown-item" href={{ '/admin/offer/add' }}>
                                     {#                        <a class="nav-link" href={{ '/admin' }}>#}
                                     <span data-feather="shopping-cart"></span>
                                     Nouvelle
@@ -146,8 +157,10 @@
         </nav>
     <main role="main" class="col-10">
         <div class="container">
+
         {% block body %}
 
+            <h1 class="text-center">Bienvenue {{ app.session.get("user").username }} sur l'espace administrateur</h1>
         {% endblock %}
         </div>
     </main>

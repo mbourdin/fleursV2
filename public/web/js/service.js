@@ -1,18 +1,18 @@
 list=document.getElementById("productList");
 baseurl=window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/";
-function associate(offerId,productId)
+function associate(serviceId,productId)
 {   let quantity=document.getElementById("productNumber").value;
     $.ajax({
-        url : baseurl+"admin/offer/associateProduct/"+offerId+"/"+productId+"/"+quantity,
+        url : baseurl+"admin/service/associateProduct/"+serviceId+"/"+productId+"/"+quantity,
         type : "PUT",
         success : onSuccessAssociate
     });
 }
 
-function dissociate(offerId,productId)
+function dissociate(serviceId,productId)
 {
     $.ajax({
-        url : baseurl+"admin/offer/dissociateProduct/"+offerId+"/"+productId,
+        url : baseurl+"admin/service/dissociateProduct/"+serviceId+"/"+productId,
         type : "PUT",
         success : onSuccessDissociate
     });
@@ -28,18 +28,18 @@ function onSuccessAssociate(result) {
         line = document.createElement("LI");
         var textnode = document.createTextNode(document.getElementById("productNumber").value + " " + content.product.name);
     }line.setAttribute("id","productId"+content.product.id);
-        line.appendChild(textnode);
-        list.appendChild(line);
+    line.appendChild(textnode);
+    list.appendChild(line);
 
 
 }
-function add(offerId)
+function add(serviceId)
 {
     productId=document.getElementById("products").value;
-    associate(offerId,productId);
+    associate(serviceId,productId);
 }
-function remove(offerId)
+function remove(serviceId)
 {   productId=document.getElementById("products").value;
-    dissociate(offerId,productId);
+    dissociate(serviceId,productId);
 
 }

@@ -28,18 +28,25 @@ class SearchController extends Controller
         return $offers;
     }
     /**
-     * @Route("/activeProductsList")
+     * @Route("/products")
      */
     public function showActiveProducts()
     {   $list=$this->searchProducts("");
-        return $this->render("product/list.html.twig",["products"=>$list]);
+        return $this->render("product/ListClientView.html.twig",["products"=>$list]);
     }
     /**
-     * @Route("/activeOffersList")
+     * @Route("/offers")
      */
     public function showActiveOffers()
-    {   $list=$this->searchProducts("");
-        return $this->render("offer/list.html.twig",["offers"=>$list]);
+    {   $list=$this->searchOffers("");
+        return $this->render("offer/listClientView.html.twig",["offers"=>$list]);
+    }
+    /**
+     * @Route("/services")
+     */
+    public function showActiveServices()
+    {   $list=$this->searchServices("");
+        return $this->render("service/listClientView.html.twig",["services"=>$list]);
     }
 
     /**
@@ -81,23 +88,18 @@ class SearchController extends Controller
      * @Route("/search/combo")
      */
     public function comboAction(Request $request)
-    {   if($request->getSession()->get("admin")==true)
-        {   $view="admin";
-        }
-        else
-        {
-            $view="client";
-        }
+    {
         $name=$request->request->get("name");
         $products=$this->searchProducts($name);
         $services=$this->searchServices($name);
         $offers=$this->searchOffers($name);
-        if($view=="admin"){
+        if($request->getSession()->get("adminRights")==true){
+            //vue admin
             return $this->render("/searchResult.html.twig",["offers"=>$offers,"services"=>$services,"products"=>$products]);
         }
         else
-        {
-            return $this->render("/searchResult.html.twig",["offers"=>$offers,"services"=>$services,"products"=>$products]);
+        {   //vue client
+            return $this->render("/searchResultClientView.html.twig",["offers"=>$offers,"services"=>$services,"products"=>$products]);
         }
     }
 

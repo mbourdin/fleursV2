@@ -318,7 +318,7 @@ class Sale
         $newOffer->setOffer($offer);
         $newOffer->setSale($this);
         $newOffer->setQuantity($quantity);
-        $newOffer->setPricewhenbought($offer->getPrice());
+        $newOffer->setPricewhenbought($offer->price());
         $this->offers->add($newOffer);
 
 

@@ -1,6 +1,3 @@
-{% trans_default_domain 'FOSUserBundle' %}
-{% extends 'base.html.twig' %}
-
 {% block body %}
     <style>
         body {
@@ -124,10 +121,8 @@
     <div class="row">
         <div class="col-md-4">
             <div class="profile-img">
-                <img src="/images/persons/{{ user.photopath }}">
+                <img src="/images/persons/{{ app.session.get("photo") }}">
                 <div class="file btn btn-lg btn-success">
-                    Change Photo
-                    <input type="file" name="File"/>
                 </div>
             </div>
         </div>
@@ -151,7 +146,7 @@
                            aria-controls="profile" aria-selected="false">Localité</a>
                     </li>
                 </ul>
-                <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+                <p>{{ 'email' }}: {{ user.email }}</p>
                 <p>{{ 'Prénom' }}: {{ user.firstname }}</p>
                 <p>{{ user.address }}</p>
                 <p>{{ 'Date de naissance' }}: {{ user.birthday|date('d-m-Y') }}</p>
@@ -160,10 +155,12 @@
         </div>
         <div class="col-md-2">
             {#<input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>#}
-            <a class="profile-edit-btn" href="{{ path('fos_user_profile_edit') }}">Editer profile
+            <a class="profile-edit-btn" href="/Profile/edit">Editer profile
             </a>
+            {% if app.session.get("userRights") %}
             <br><br>
             <a class="btn btn-outline-primary btn-sm" href="/user/sale/list">Historique des commandes</a>
+            {% endif %}
         </div>
     </div>
 

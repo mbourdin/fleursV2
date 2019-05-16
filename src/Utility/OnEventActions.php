@@ -15,6 +15,7 @@ class OnEventActions
         $session->set("accAdminRights", $accAdminRights);
         $session->set("user",$user);
         $session->set("connected",true);
+        $session->set("photo",$user->getPhotopath());
     }
     static function logout(SessionInterface $session)
     {

@@ -28,7 +28,7 @@
                 <td>{{ user.firstName }}</td>
                 <td>{% if user.birthday!=null %}{{ user.birthday|date }}{% endif %}</td>
                 <td>{{ user.email }}</td>
-                <td><img src="{{ asset('images/persons/' ~ user.photopath )}}">
+                <td><img src="{{ asset('images/persons/' ~ user.photopath )}}" class="logo">
 
                 </td>
                 <td>

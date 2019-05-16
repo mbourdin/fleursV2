@@ -1,24 +1,14 @@
 <?php
 namespace App\Controller;
+use App\Entity\Person;
 use App\Entity\Product;
 use App\Entity\Sale;
-use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\Event\FormEvent;
-use FOS\UserBundle\Event\GetResponseUserEvent;
-use FOS\UserBundle\Form\Factory\FactoryInterface;
-use FOS\UserBundle\FOSUserEvents;
-use FOS\UserBundle\Model\UserManagerInterface;
+use App\Form\ProfileForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Utility\OnEventActions;
-use FOS\UserBundle\Form\Type\RegistrationFormType;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 class MainController extends Controller
 {
     /**
@@ -44,7 +34,44 @@ class MainController extends Controller
         OnEventActions::logout($request->getSession());
         return $this->redirect("/");
     }
+    /**
+     * @route ("/Profile")
+     */
+    public function profileAction(Request $request)
+    {   $user=$request->getSession()->get("user");
+        return $this->render("bundles/FOSUserBundle/Profile/show.html.twig",["user"=>$user]);
 
+    }
+
+    /**
+     * @Route("/Profile/edit")
+     */
+    public function profileEditAction(Request $request)
+    {   $user=$request->getSession()->get("user");
+        $user=$this->getDoctrine()->getRepository(Person::class)->find($user->getId());
+        $form=$this->createForm(ProfileForm::class,$user);
+        $form->add('submit', SubmitType::class, [
+            'label' => 'sauvegarder',
+            'attr' => ['class' => 'btn btn-primary pull-right'],
+        ]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            //on enregistre le produit dans la bdd
+
+            $reg = $this->getDoctrine()->getManager();
+
+            $reg->persist($user);
+            $reg->flush();
+            $request->getSession()->set("photo",$user->getPhotopath());
+            $this->addFlash("success","profile modifé : ".$user->getUsername());
+            return $this->redirect("/Profile");
+        }
+        //on va générer le Html
+        $formView= $form->createView();
+
+        // on rend la vue
+        return $this->render('bundles/FOSUserBundle/Profile/edit.html.twig', array('form' => $formView,"user"=>$user));
+    }
 //    /**
 //     * @Route ("/inscription",name="inscription")
 //     */

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *@Vich\Uploadable()
  */
 #J'ai fait étendre UserInterface à mon entité person.
-class Person extends FOSUser implements UserInterface
+class Person extends FOSUser
 {
     /**
      * @ORM\Id()
@@ -58,7 +58,7 @@ class Person extends FOSUser implements UserInterface
     private $rights;
 
     /**
-     *  @Vich\UploadableField(mapping="products_images",fileNameProperty="photopath")
+     *  @Vich\UploadableField(mapping="persons_images",fileNameProperty="photopath")
      * @var File
      */
     protected $imagefile;
@@ -321,6 +321,11 @@ class Person extends FOSUser implements UserInterface
     public function setAddresses($addresses): void
     {
         $this->addresses = $addresses;
+    }
+
+    public function eraseCredentials()
+    {
+        $this->password=null;
     }
 
 }

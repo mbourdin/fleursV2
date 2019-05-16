@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,6 +39,11 @@ class Service
      */
     private $active;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ServiceProductContent",mappedBy="service",cascade={"persist","merge"},fetch="LAZY")
+     * @ORM\JoinTable(name="service_product_content")
+     */
+    private $products;
 
     public function getId(): ?int
     {
@@ -109,4 +115,21 @@ class Service
         ."/name/".$this->name;
         return $str;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products): void
+    {
+        $this->products = $products;
+    }
+
 }

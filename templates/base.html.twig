@@ -32,12 +32,24 @@
                     </a></div>
                 <div class="col-4 d-flex justify-content-end align-items-center">
 
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control col-9" placeholder="Rechercher..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-success" type="button"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
+
+                        <form action="/search/combo" method="post" id="search" >
+                            <div class="input-group">
+
+                            <input type="text"  placeholder="Rechercher..." aria-label="Recipient's username" aria-describedby="basic-addon2" name="name">
+                        <button class="btn btn-outline-success form-control" type="button" onclick="submitsearchform()"><i class="fas fa-search" ></i></button>
+                            </div>
+                        </form>
+                    {% if app.session.get("adminRights") or app.session.get("AccAdminRights")  %}
+                        <a class="btn btn-primary btn-sm" href="/admin/dashboard">administrer</a>
+                    {% endif %}
+
+
+
+
+
+
+
                 </div>
                 <div class="col-xl">
 
@@ -58,110 +70,46 @@
                 </div>
             </div>
 
-
-
-
-            {# <form class="form-inline">
-                 <input class="form-control mr-sm-2" type="search" placeholder="Rechercher ..." aria-label="Search">
-                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-             </form>          #}    {#  <span class="navbar-text navbarNetwork">
-                    <img class="logoHeader" src="{{ '/web/images/site/iconFacebook.png' }}" alt="">
-                    <img class="logoHeader" src="{{ '/web/images/site/icons8-twitter-vert-96.png' }}" alt="">
-                    <img class="logoHeader" src="{{ '/web/images/site/icons8-instagram-vert-96.png' }}" alt="">
-                    <img class="logoHeader" src="{{ '/web/images/site/icons8-pinterest-filled-96.png' }}" alt="">
-                </span>#}
-
-
-
-
-
         </header>
-        {#     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top py-1 ">
-                 <div class="container d-flex flex-column flex-md-row justify-content-between">
-                     <a class="py-2" href="#">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                              class="d-block mx-auto">
-                             <circle cx="12" cy="12" r="10"></circle>
-                             <line x1="14.31" y1="8" x2="20.05" y2="17.94"></line>
-                             <line x1="9.69" y1="8" x2="21.17" y2="8"></line>
-                             <line x1="7.38" y1="12" x2="13.12" y2="2.06"></line>
-                             <line x1="9.69" y1="16" x2="3.95" y2="6.06"></line>
-                             <line x1="14.31" y1="16" x2="2.83" y2="16"></line>
-                             <line x1="16.62" y1="12" x2="10.88" y2="21.94"></line>
-                         </svg>
-                     </a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/icons8-accueil-vert-96.png' }}" alt=""> Accueil</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/icons8-plante-en-pot-vert-96.png' }}" alt="">Plantes
-                         & orchidées</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/icons8-bouquet-de-fleurs-vert-96.png' }}" alt="">Fleurs
-                         coupées</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/tombeFleurieREP.png' }}" alt="">R.E.P</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/renouveler_l_abonnement_vert-96.png' }}" alt="">Offres</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/icons8-code-barre-vert-96.png' }}" alt="">Promotions</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/icons8-donner-un-cadeau-filled-50.png' }}" alt="">Idées
-                         cadeaux</a>
-                     <a class="py-2 d-none d-md-inline-block " href="#">
-                         <img class="iconImage" src="{{ '/web/images/site/icons8-cv-vert-96.png' }}" alt="">Emploi</a>
-                     <a class="py-2 d-none d-md-inline-block " href="/panier/show">
-                         <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}" alt=""></a>
-                     {% if app.session.get("connected") %}
-                         <a class="py-2 d-none d-md-inline-block " href="/profile">
-                             <img class="iconImageUser"
-                                     {% if app.session.get("user").photopath!=null %}
-                                         src="{{ '/images/persons/' ~ app.session.get('user').photopath }}"
-                                     {% else %}
-                                         src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
-                                     {% endif %}
-                                  alt="">{{ app.session.get("user").username }}
-                         </a>
-                         <a class="py-2 d-none d-md-inline-block " href="/logout"><button class="btn btn-success">logout</button></a>
-                     {% else %}
-                         <a class="py-2 d-none d-md-inline-block " href="/login"><img class="iconImageUser"
-                                                                                      src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
-                                                                                      alt=""></a>
-                     {% endif %}
-                 </div>
-             </nav>#}
+
         <div class="nav-scroller py-1 mb-2 bg-light sticky-top py-1">
             <nav class="nav d-flex justify-content-between">
-                <a class="p-2 text-muted" href="/"><img class="iconImage" src="{{ '/web/images/site/icons8-accueil-vert-96.png' }}" alt=""> Accueil</a>
-                <a class="p-2 text-muted" href="/orchid"><img class="iconImage" src="{{ '/web/images/site/icons8-plante-en-pot-vert-96.png' }}" alt=""> Plantes & orchidées</a>
-                <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-bouquet-de-fleurs-vert-96.png' }}" alt=""> Fleurs coupées</a>
-                <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/tombeFleurieREP.png' }}" alt="">R.E.P</a>
-                <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/renouveler_l_abonnement_vert-96.png' }}" alt=""> Offres</a>
-                <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-code-barre-vert-96.png' }}" alt=""> Promotions</a>
-                <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-donner-un-cadeau-filled-50.png' }}" alt=""> Idées cadeaux</a>
-                <a class="p-2 text-muted" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-cv-vert-96.png' }}" alt=""> Emploi</a>
-                <a class="p-2 text-muted"  href="/panier/show"> <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}"  alt=""></a>
-                {% if app.session.get("connected") %}
-                    <a class="p-2 text-muted"  href="/profile">
+                <a class="btn btn-light" href="/"><img class="iconImage" src="{{ '/web/images/site/icons8-accueil-vert-96.png' }}" alt=""> Accueil</a>
+                <div class="dropdown">
+                    <a class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="iconImage" src="{{ '/web/images/site/icons8-plante-en-pot-vert-96.png' }}" alt="">Nos produits
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#"> <img src='/images/products/plante.jpg' class="iconImage" alt="">Plantes</a>
+                        <a class="dropdown-item" href="/orchid"><img class="iconImage" src="{{'/images/products/Orchidee-dans-un-pot.jpg' }}" alt="">orchidés</a>
+                        <a class="dropdown-item" href="/products"><img class="iconImage" src="{{'/images/products/roses.jpg' }}" alt="">fleurs coupés</a>
+                        <a class="dropdown-item" href="/services"><img class="iconImage" src="{{'/images/products/service.png' }}" alt="">service</a>
+                        <a class="dropdown-item" href="#"><img class="iconImage" src="{{'/images/products/tombe.jpg' }}" alt="">R.E.P</a>
+                    </div>
+                </div>
+
+                <a class="btn btn-light" href="#"><img class="iconImage" src="{{ '/web/images/site/renouveler_l_abonnement_vert-96.png' }}" alt=""> Offres</a>
+                <a class="btn btn-light" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-code-barre-vert-96.png' }}" alt=""> Promotions</a>
+                <a class="btn btn-light" href="#"><img class="iconImage" src="{{ '/web/images/site/icons8-donner-un-cadeau-filled-50.png' }}" alt=""> Idées cadeaux</a>
+                <a class="btn btn-light" href="/test/test_form"><img class="iconImage" src="{{ '/web/images/site/icons8-cv-vert-96.png' }}" alt=""> Emploi</a>
+                <a class="btn btn-light"  href="/panier/show"> <img class="iconImageKart" src="{{ '/web/images/site/icons8-caddie-vert-96.png' }}"  alt=""></a>
+                {% if app.session.get("connected")==true %}
+                    <a class="btn btn-light"  href="/Profile">
                         <img class="iconImageUser"
-                                {% if app.session.get("user").photopath!=null %}
-                                    src="{{ '/images/persons/' ~ app.session.get('user').photopath }}"
+                                {% if app.session.get("photo") %}
+                                    src="{{ '/images/persons/' ~ app.session.get('photo') }}"
                                 {% else %}
                                     src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}"
                                 {% endif %}
                              alt="">{{ app.session.get("user").username }}
                     </a>
-                    <a class="py-2 text-muted" href="/logout">
+                    <a class="btn btn-light" href="/logout">
                         <span class="badge badge-pill badge-success">logout</span>
                     </a>
                 {% else %}
-                    <a class="py-2 text-muted " href="/login"><img class="iconImageUser" src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}" alt=""></a>
+                    <a class="btn btn-light " href="/login"><img class="iconImageUser" src="{{ '/web/images/site/icons8-utilisateur-sexe-neutre-filled-vert-96.png' }}" alt=""></a>
                 {% endif %}
-                {% if app.session.get("adminRights")==true %}
-                    <a class="py-2 text-muted" href="/admin/dashboard">
-                        <span class="badge badge-pill badge-success">Espace administrateur</span>
-                    </a>
-                {% endif %}
+
             </nav>
         </div>
     {% endblock %}
@@ -181,6 +129,7 @@
     {% block body %}
 
     {% endblock %}
+
     {% block footer %}
 
 
@@ -188,10 +137,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col align-self-center">
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3" hidden>
                             <input type="text" class="form-control" placeholder="SUIVEZ-NOUS" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         </div>
-                        <div class="input-group-append">
+                        <div class="input-group-append" hidden>
                             <button class="btn btn-outline-secondary" type="button">Button</button>
                         </div>
                     </div>
@@ -247,6 +196,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
+    <script type="application/javascript" src="{{ asset('web/js/main.js') }}"></script>
 {% endblock %}
 </body>
 </html>

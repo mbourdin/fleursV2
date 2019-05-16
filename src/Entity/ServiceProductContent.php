@@ -8,7 +8,7 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ServiceRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ServiceProductContentRepository")
  */
 class ServiceProductContent
 {
@@ -20,21 +20,22 @@ class ServiceProductContent
      */
     private $id;
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer")
      */
     private $quantity;
     /**
      * @var Product|string
      * @ORM\ManyToOne(targetEntity="Product", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $product;
     /**
      * @var Service|string
      * @ORM\ManyToOne(targetEntity="Service")
-     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE" )
+     * @ORM\JoinColumn(nullable=true)
      */
     private $service;
+
     /**
      * @return mixed
      */
@@ -42,6 +43,7 @@ class ServiceProductContent
     {
         return $this->id;
     }
+
     /**
      * @param mixed $id
      */
@@ -49,6 +51,7 @@ class ServiceProductContent
     {
         $this->id = $id;
     }
+
     /**
      * @return mixed
      */
@@ -56,6 +59,7 @@ class ServiceProductContent
     {
         return $this->quantity;
     }
+
     /**
      * @param mixed $quantity
      */
@@ -63,6 +67,7 @@ class ServiceProductContent
     {
         $this->quantity = $quantity;
     }
+
     /**
      * @return Product|string
      */
@@ -70,6 +75,7 @@ class ServiceProductContent
     {
         return $this->product;
     }
+
     /**
      * @param Product|string $product
      */
@@ -77,6 +83,7 @@ class ServiceProductContent
     {
         $this->product = $product;
     }
+
     /**
      * @return Service|string
      */
@@ -84,6 +91,7 @@ class ServiceProductContent
     {
         return $this->service;
     }
+
     /**
      * @param Service|string $service
      */
@@ -91,4 +99,9 @@ class ServiceProductContent
     {
         $this->service = $service;
     }
+    /**
+     * @return mixed
+     */
+
+
 }

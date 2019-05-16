@@ -42,6 +42,10 @@ class ProductType
      */
     protected $imagefile;
     /**
+     * @ORM\ManyToMany(targetEntity="Product",mappedBy="productTypes")
+     */
+    private $products;
+    /**
      * Producttype constructor.
      */
     public function __construct()
@@ -104,6 +108,22 @@ class ProductType
     public function setImagefile(?File $imagefile): void
     {
         $this->imagefile = $imagefile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products): void
+    {
+        $this->products = $products;
     }
 
 
