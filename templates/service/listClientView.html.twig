@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Service index{% endblock %}
-
+{% block stylesheets %} {{ parent()}}
+    <link rel="stylesheet" href="{{ '/web/css/home.css' }}">
+{% endblock %}
 {% block body %}
     {{ include('service/listBodyClientView.html.twig') }}
 {% endblock %}

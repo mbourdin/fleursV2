@@ -21,7 +21,7 @@ function clearCityList()
 }
 function changeDepartement()
 {
-    departement=document.getElementById("departement").value;
+
     departementChanged=true;
 
 }
@@ -51,7 +51,7 @@ function onSuccessCityList(result){
 function onError(result) {console.log("error");
 }
 function requestCities()
-{   if(departementChanged) {
+{    departement=document.getElementById("departement").value;
     clearCityList();
     //TODO requete vers la liste des villes (api la poste ou equivalent)
     // puis traitement pour inclure cette liste dans le options
@@ -64,5 +64,10 @@ function requestCities()
         success: onSuccessCityList,
         error: onError
     });
-    }
+
+}
+
+function addActive()
+{
+
 }

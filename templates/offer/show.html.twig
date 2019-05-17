@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Offer</h1>
 
-    <table class="table">
+    <table class="table table-bordered bg-gray w-auto">
         <tbody>
         <tr>
             <th>Id</th>
@@ -16,8 +16,8 @@
             <td>{{ offer.name }}</td>
         </tr>
         <tr>
-            <th>Price</th>
-            <td>{{ offer.price }}</td>
+            <th>Prix</th>
+            <td>{{ offer.price/100.0~"€" }}</td>
         </tr>
         <tr>
             <th>Description</th>
@@ -36,15 +36,40 @@
             <td>{{ offer.end ? offer.end|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
         <tr>
-            <th>Discount</th>
-            <td>{{ offer.discount }}</td>
+            <th>Reduction</th>
+            <td>{{ offer.discount~"%" }}</td>
         </tr>
         </tbody>
+    </table>
+    <h1>Détail des Offres</h1>
+    <table class="table table-bordered w-auto bg-gray">
+        <th>id</th>
+        <th>nom</th>
+        <th>photo</th>
+        <th>quantité</th>
+        <th> </th>
+        {% for content in offer.products %}
+            <tr>
+                <td>
+                    {{ content.product.id }}
+                </td>
+                <td>
+                    {{ content.product.name }}
+                </td>
+                <td>
+                    <img class="logo" src={{ asset('images/products/'~ content.product.photopath) }}>
+                </td>
+                <td>
+                    {{ content.quantity }}
+                </td>
+                <td>
+                    <a href="/product/show/{{ content.product.id }}">detail</a>
+                </td>
+            </tr>
+        {% endfor %}
     </table>
 
     <a href="{{ path('offer_index') }}">back to list</a>
 
     <a href="{{ path('offer_edit', {'id': offer.id}) }}">edit</a>
-
-    {{ include('offer/_delete_form.html.twig') }}
 {% endblock %}

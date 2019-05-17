@@ -5,8 +5,8 @@
 {% block body %}
     <h1>Service</h1>
 
-    <table class="table">
-        <tbody>
+    <table class="table table-bordered w-auto bg-gray">
+
         <tr>
             <th>Id</th>
             <td>{{ service.id }}</td>
@@ -21,15 +21,15 @@
         </tr>
         <tr>
             <th>Price</th>
-            <td>{{ service.price }}</td>
+            <td>{{ service.price/100.0 ~ "€" }}</td>
         </tr>
         <tr>
             <th>Active</th>
             <td>{{ service.active ? 'Yes' : 'No' }}</td>
         </tr>
-        </tbody>
     </table>
 <!-- DETAIL DES PROJDUITS -->
+    <h1>Détail des Produits</h1>
     <table class="table table-bordered w-auto bg-gray">
         <th>id</th>
         <th>nom</th>
@@ -51,15 +51,16 @@
                     {{ content.quantity }}
                 </td>
                 <td>
-                    <a href="/product/show/{{ content.product.id }}">detail</a>
+                    <a href="/product/read/{{ content.product.id }}">detail</a>
                 </td>
             </tr>
         {% endfor %}
     </table>
+
     <!-- BOUTONS ADMIN -->
     {% if app.session.get("adminRights") %}
-    <a href="{{ path('service_index') }}">back to list</a>
+    <a class="btn btn-secondary" href="{{ path('service_index') }}">back to list</a>
 
-    <a href="{{ path('service_edit', {'id': service.id}) }}">edit</a>
+    <a class="btn btn-secondary" href="/admin/service/edit/{{ service.id }}">edit</a>
     {% endif %}
 {% endblock %}

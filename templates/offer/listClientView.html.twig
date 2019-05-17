@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Offer Liste des Offres {% endblock %}
-
+{% block stylesheets %} {{ parent()}}
+    <link rel="stylesheet" href="{{ '/web/css/home.css' }}">
+{% endblock %}
 {% block body %}
     <h1>Les offres</h1>
 

@@ -5,12 +5,12 @@
     </tr>
     <tr>
         <td>
-            <select id="departement" onblur="changeDepartement()">
+            <select id="departement" onchange="requestCities()">
                 <option value=null>choisir un departement</option>
             </select>
         </td>
         <td>
-            <select id="cityOptions" onfocusin="requestCities()" name="inseeid">
+            <select id="cityOptions" name="inseeid">
                 <option value="-1">choisir une ville</option>
             </select>
         </td>

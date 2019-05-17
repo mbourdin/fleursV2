@@ -217,6 +217,10 @@ span{
 .bg-black{
     background-color: black;
 }
+.sanspuce
+{
+    list-style: none;
+}
 .largeur30{
     width: 30px;
 }

@@ -1,42 +1,49 @@
 <?php
 namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\City;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 class CityController extends Controller
-{
+{   private $serializer;
+    /**
+     * AdminRestController constructor.
+     */
+    public function __construct()
+    {   $normalizer=new ObjectNormalizer();
+        $normalizer->setCircularReferenceLimit(1);
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getId();
+        });
+        $normalizers = [$normalizer];
+        $encoders = [new JsonEncoder()];
+        $this->serializer = new Serializer($normalizers, $encoders);
+
+    }
+
     /**
      * @Route("/admin/city", name="city")
      */
     public function cityAction(Request $request)
     {   $dao=$this->getDoctrine()->getRepository(City::class);
-        $city =new City();
 
         $cities =$dao->findAll();
-        /*
-        $form=$this->get('form.factory')->create(CityType::class,$city,['action_origin_is_admin'=>true]);
-        //Si POST
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
-            $entityManager=$this->getDoctrine()->getManager();
-            $entityManager->persist($city);
-            $entityManager->flush();
-            return $this->redirect("/");
 
-        }
-        */
-        //Si GET
         return $this->render("admin/city.html.twig",["cities"=>$cities]);
     }
 
 
-    private static function getCityFromApi(int $inseeid): City
+    private function getCityFromApi(int $inseeid): City
     {   $city=new City();
         $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
         $json=json_decode($response);
+
         if ($json==null){
             return null;
         }
@@ -51,7 +58,7 @@ class CityController extends Controller
 
     }
     /**
-     * @Route("/admin/city/addActive", name="cityaddactive")
+     * @Rest\Post("/admin/city/addActive", name="cityaddactive")
      */
     public function addActiveAction(Request $request)
     {   $id=$request->request->get("inseeid");
@@ -61,7 +68,6 @@ class CityController extends Controller
         {   $city=$this->getCityFromApi($id);
             $city->setActive(true);
             $this->saveCity($city);
-            $this->addFlash("success","ville ajoutée active");
         }
         elseif (!$city->getActive())
         {   $city->setActive(true);
@@ -72,8 +78,8 @@ class CityController extends Controller
         {
             $this->addFlash("error","cette ville est déja présente et active");
         }
-
-        return $this->redirect("/admin/city");
+        $json_city=$this->serializer->serialize($city,"json");
+        return new Response($json_city);
     }
 
 

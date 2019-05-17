@@ -13,7 +13,7 @@
         <td> {{   product.id }}</td>
         <td> {{  product.name }}</td>
         <td> {{  product.description }}</td>
-        <td> {{ product.price }}</td>
+        <td> {{ product.price/100.0~"€" }}</td>
         <td> {{ product.active }}</td>
         <td>
             <img class="logo" src="{{ asset('images/products/'~ product.photopath) }}" alt="nomProduit:{{  product.name }}">

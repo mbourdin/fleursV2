@@ -1,35 +1,39 @@
-<table class="table">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Active</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Discount</th>
-        <th>actions</th>
-    </tr>
-    </thead>
-    {% for offer in offers %}
-        <tr>
-            <td>{{ offer.id }}</td>
-            <td>{{ offer.name }}</td>
-            <td>{{ offer.price }}</td>
-            <td>{{ offer.description }}</td>
-            <td>{{ offer.active ? 'Yes' : 'No' }}</td>
-            <td>{{ offer.start ? offer.start|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ offer.end ? offer.end|date('Y-m-d H:i:s') : '' }}</td>
-            <td>{{ offer.discount }}</td>
-            <td>
-                <a href="{{ path('offer_show', {'id': offer.id}) }}">show</a>
-                <a href="{{ path('offer_edit', {'id': offer.id}) }}">edit</a>
-            </td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="9">no offer found</td>
-        </tr>
-    {% endfor %}
-</table>
+<h1>Offers index</h1>
+
+
+<div class="container">
+    <div class="row">
+        {%  for offer in offers %}
+            <div class="card" style="width: 16rem;">
+                <table>
+                    {% for content in offer.products %}
+                        <tr>
+                            <td>{{ content.quantity }}</td>
+                            <td><img src="{{ asset('images/products/'~ content.product.photopath) }}" class="rounded mx-auto d-block" alt="..."width="150" height="150"></td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="card-body">
+                    <h3 class="card-title text-center">{{  offer.name }}</h3>
+                    <p class="card-text text-center">{{ "-"~ offer.discount ~ "% : "~offer.price/100.0~"€" }}</p>
+
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <a href="/offer/read/{{ offer.id }}" class="btn btn-success">détail</a>
+                        </div>
+                        <div class="col-4">
+                            <a href="/panier/addoffer/{{ offer.id }}" class="btn btn-warning">Ajout</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="text-center">{{ offer.description }}</div>
+            </div>
+
+        {% endfor%}
+    </div>
+
+
+
+</div>

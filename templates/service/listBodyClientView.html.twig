@@ -1,33 +1,39 @@
 <h1>Service index</h1>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Active</th>
-        <th>actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for service in services %}
-        <tr>
-            <td>{{ service.id }}</td>
-            <td>{{ service.name }}</td>
-            <td>{{ service.description }}</td>
-            <td>{{ service.price }}</td>
-            <td>{{ service.active ? 'Yes' : 'No' }}</td>
-            <td>
-                <a href="{{ path('service_show', {'id': service.id}) }}">show</a>
-                <a href="{{ path('service_edit', {'id': service.id}) }}">edit</a>
-            </td>
-        </tr>
-    {% else %}
-        <tr>
-            <td colspan="6">no records found</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+
+<div class="container">
+    <div class="row">
+        {%  for service in services %}
+            <div class="card" style="width: 16rem;">
+                <table>
+                {% for content in service.products %}
+                <tr>
+                    <td>{{ content.quantity }}</td>
+                    <td><img src="{{ asset('images/products/'~ content.product.photopath) }}" class="rounded mx-auto d-block" alt="..."width="150" height="150"></td>
+
+                </tr>
+                    {% endfor %}
+                </table>
+                <div class="card-body">
+                    <h3 class="card-title text-center">{{  service.name }}</h3>
+                    <p class="card-text text-center">{{ service.price/100.0~"€" }}</p>
+
+                    <div class="row justify-content-center">
+                        <div class="col-4">
+                            <a href="/service/read/{{ service.id }}" class="btn btn-success">détail</a>
+                        </div>
+                        <div class="col-4">
+                            <a href="/panier/addService/{{ service.id }}" class="btn btn-warning">Ajout</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="text-center">{{ service.description }}</div>
+            </div>
+
+        {% endfor%}
+    </div>
+
+
+
+</div>

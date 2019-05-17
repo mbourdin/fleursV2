@@ -19,7 +19,7 @@
             <td> {{   product.id }}</td>
             <td> {{  product.name }}</td>
             <td> {{  product.description }}</td>
-            <td> {{ product.price }}</td>
+            <td> {{ product.price/100.0 ~"€" }}</td>
             <td> {{ product.active }}</td>
             <td> {{ product.photopath }}</td>
             <td><a  href="/admin/product/edit/{{   product.id }}"><button>edit</button></a></td>

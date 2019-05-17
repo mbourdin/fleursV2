@@ -7,13 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-/**
- * @Route("/admin/service")
- */
+
 class ServiceController extends Controller
 {
     /**
-     * @Route("/", name="service_index", methods={"GET"})
+     * @Route("/admin/service/list", name="service_index", methods={"GET"})
      */
     public function index(): Response
     {   $dao=$this->getDoctrine()->getRepository(Service::class);
@@ -22,7 +20,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/add", name="service_add", methods={"GET","POST"})
+     * @Route("/admin/service/add", name="service_add", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -41,7 +39,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/show/{id}", name="service_show", methods={"GET"})
+     * @Route("/service/show/{id}", name="service_show", methods={"GET"})
      */
     public function show(Service $service): Response
     {
@@ -50,7 +48,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/edit/{id}", name="service_edit", methods={"GET","POST"})
+     * @Route("/admin/service/edit/{id}", name="service_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Service $service): Response
     {
@@ -71,7 +69,7 @@ class ServiceController extends Controller
     }
 
     /**
-     * @Route("/list")
+     * @Route("/service/list")
      */
     public function list()
     {

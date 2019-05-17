@@ -22,7 +22,7 @@
             <label for="productNumber">nombre</label><input type="number" id="productNumber">
         </div>
         <span>liste des produits associes</span>
-        <ul id="productList">
+        <ul id="productList" class="sanspuce">
             {% for content in service.products %}
                 <li id="productId{{ content.product.id }}">{{ content.quantity ~" "~ content.product.name }}</li>
             {% endfor %}

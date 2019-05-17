@@ -325,7 +325,6 @@ class Person extends FOSUser
 
     public function eraseCredentials()
     {
-        $this->password=null;
     }
 
 }
