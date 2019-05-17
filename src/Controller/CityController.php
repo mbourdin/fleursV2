@@ -9,6 +9,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use RuntimeException;
 
 class CityController extends Controller
 {   private $serializer;
@@ -39,7 +40,7 @@ class CityController extends Controller
     }
 
 
-    private function getCityFromApi(int $inseeid): City
+    private function getCityFromApi(string $inseeid): City
     {   $city=new City();
         $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
         $json=json_decode($response);
@@ -61,7 +62,7 @@ class CityController extends Controller
      * @Rest\Post("/admin/city/addActive", name="cityaddactive")
      */
     public function addActiveAction(Request $request)
-    {   $id=$request->request->get("inseeid");
+    {   $id=$request->request->get("inseeId");
         $dao=$this->getDoctrine()->getRepository(City::class);
         $city=$dao->findOneBy(["inseeid"=>$id]);
         if($city==null)
@@ -84,40 +85,39 @@ class CityController extends Controller
 
 
     /**
-     * @Route("/admin/city/activate/{id}", name="cityactivate")
+     * @Rest\Put("/admin/city/activate/{id}")
      */
     public function activateAction(int $id)
     {   $dao=$this->getDoctrine()->getRepository(City::class);
         $city=$dao->find($id);
         if($city!=null)
         {   $city->setActive(true);
-            $this->addFlash("success","ville  activée");
             $this->saveCity($city);
         }
-        else{
-            $this->addFlash("error","ville inexistante dans la base");
+        else
+        {
+            throw new RuntimeException("erreur dans CityController->activateAction(): ville non trouvée dans la base");
         }
-        return $this->redirect("/admin/city");
+        return new Response($id);
     }
     /**
-     * @Route("/admin/city/deactivate/{id}", name="citydeactivate")
+     * @Rest\Put("/admin/city/deactivate/{id}")
      */
     public function deactivateAction(int $id)
     {   $dao=$this->getDoctrine()->getRepository(City::class);
         $city=$dao->find($id);
         if($city!=null)
         {   $city->setActive(false);
-            $this->addFlash("success","ville  désactivée");
             $this->saveCity($city);
         }
         else
         {
-            $this->addFlash("error","ville inexistante dans la base");
+            throw new RuntimeException("erreur dans CityController->deactivateAction(): ville non trouvée dans la base");
         }
-        return $this->redirect("/admin/city");
+        return new Response($id);
     }
     /**
-     * @Route("/admin/city/delete/{id}")
+     * @Rest\Delete("/admin/city/delete/{id}")
      */
     public function deleteAction(int $id)
     {   $dao=$this->getDoctrine()->getRepository(City::class);
@@ -126,13 +126,12 @@ class CityController extends Controller
         {   $em=$this->getDoctrine()->getManager();
             $em->remove($city);
             $em->flush();
-            $this->addFlash("success","ville  supprimée");
         }
         else
         {
-            $this->addFlash("error","ville inexistante dans la base");
+            throw new RuntimeException("erreur dans CityController->deleteAction(): ville non trouvée dans la base");
         }
-        return $this->redirect("/admin/city");
+        return new Response($id);
     }
 
 }

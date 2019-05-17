@@ -18,7 +18,7 @@
 
             <h1 class="centered">Liste des Villes</h1>
             <br>
-            <table class="table table-responsive w-auto">
+            <table class="table table-responsive w-auto" id="cityTable">
                 <tr>
                     <th >id</th>
                     <th >nom</th>
@@ -28,21 +28,15 @@
                 </tr>
 
                 {% for city in cities %}
-                    <tr>
+                    <tr id="ligne{{ city.id }}">
                         <td>{{ city.id }}</td>
                         <td>{{ city.name }}</td>
                         <td>{{ city.inseeid }}</td>
-                        <td>{{ city.activeString }}</td>
+                        <td id="active{{ city.id }}">{{ city.activeString }}</td>
                         <td>
-                            <a href="/admin/city/activate/{{ city.id }}">
-                                <button class="btn btn-success">activer</button>
-                            </a>
-                            <a href="/admin/city/deactivate/{{ city.id }}">
-                            <button class="btn btn-secondary" >desactiver</button>
-                            </a>
-                            <a href="/admin/city/delete/{{ city.id }}">
-                                <button class="btn btn-danger" >supprimer</button>
-                            </a>
+                            <button class="btn btn-success" onclick="enable({{ city.id }})">activer</button>
+                            <button class="btn btn-secondary"  onclick="disable({{ city.id }})">desactiver</button>
+                            <button class="btn btn-danger" onclick="deleteCity({{ city.id }})">supprimer</button>
                         </td>
                     </tr>
                 {% endfor %}

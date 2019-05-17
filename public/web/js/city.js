@@ -1,6 +1,5 @@
-let departement;
-let departementChanged=false;
-let port=":8000";
+var baseurl=window.location.protocol+"//"+window.location.hostname+":"+window.location.port+"/";
+var cityTable=document.getElementById("cityTable");
 //chargement de la liste des departements
 $(document).ready(
     function () {
@@ -19,15 +18,8 @@ function clearCityList()
     $('#cityOptions').children('option:not(:first)').remove();
 
 }
-function changeDepartement()
-{
-
-    departementChanged=true;
-
-}
 function onSuccessDepList(result)
 {   //TODO parse la liste pour la rajouter aux options
-    changeDepartement();
     for(dep of result)
     {
         opt=new Option(dep.code+" "+dep.nom,dep.code)
@@ -68,6 +60,99 @@ function requestCities()
 }
 
 function addActive()
-{
+{   id=document.getElementById("cityOptions").value;
+    $.ajax({
+        url: baseurl+"admin/city/addActive",
+        type: "POST",
+        data : {"inseeId": id},
+        success: onSuccessAdd,
+        error: onError
+    });
+}
+function onSuccessAdd(result)
+{   addline(result);
+    console.log("successAdd");
+}
+function addline(result)
+{   city=JSON.parse(result);
+    var active="inactive"
+    if(city.active)
+    {
+        active="active";
+    }
+    var tr=cityTable.insertRow();
+    tr.setAttribute("id","ligne"+city.id);
+    td1=tr.insertCell();
+    var txt = document.createTextNode(city.id);
+    td1.appendChild(txt);
+    td2= tr.insertCell();
+    txt = document.createTextNode(city.name);
+    td2.appendChild(txt);
+    td3= tr.insertCell();
+    txt = document.createTextNode(city.inseeid);
+    td3.appendChild(txt);
+    td4= tr.insertCell();
+    td4.setAttribute("id","active"+city.id);
+    txt = document.createTextNode(active);
+    td4.appendChild(txt);
+    td5= tr.insertCell();
+    var btn = document.createElement('input');
+    btn.type = "button";
+    btn.className = "btn btn-success";
+    btn.value = "activer";
+    btn.addEventListener("click",function(){enable(city.id);});
+    td5.appendChild(btn);
+    var btn2 = document.createElement('input');
+    btn2.type = "button";
+    btn2.value = "desactiver";
+    btn2.className = "btn btn-secondary";
+    btn2.addEventListener("click",function (){disable(city.id);});
+    td5.appendChild(btn2);
+    var btn3 = document.createElement('input');
+    btn3.type = "button";
+    btn3.value = "supprimer";
+    btn3.className = "btn btn-danger";
+    btn3.addEventListener("click",function(){deleteCity(city.id);});
+    td5.appendChild(btn3);
+
+}
+function enable(id) {
+    //console.log("enable("+id+")");
+    $.ajax({
+        url: baseurl+"admin/city/activate/"+id,
+        type: "PUT",
+        success: onSuccessEnable,
+        error: onError
+    });
+}
+function onSuccessEnable(result)
+{   td=document.getElementById("active"+result);
+    td.textContent="active"
+
+}
+function disable(id){
+    $.ajax({
+        url: baseurl+"admin/city/deactivate/"+id,
+        type: "PUT",
+        success: onSuccessDisable,
+        error: onError
+    });
+    console.log("disable("+id+")");
+}
+function onSuccessDisable(result)
+{   td=document.getElementById("active"+result);
+    td.textContent="inactive"
+}
+function deleteCity(id) {
+    $.ajax({
+        url: baseurl+"admin/city/delete/"+id,
+        type: "DELETE",
+        success: onSuccessDelete,
+        error: onError
+    });
+    //console.log("delete("+id+")");
+}
+function onSuccessDelete(result)
+{   document.getElementById("ligne"+result).remove();
 
 }
