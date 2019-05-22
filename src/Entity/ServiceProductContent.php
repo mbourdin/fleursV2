@@ -25,13 +25,13 @@ class ServiceProductContent
     private $quantity;
     /**
      * @var Product|string
-     * @ORM\ManyToOne(targetEntity="Product", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Product",cascade={"merge"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $product;
     /**
      * @var Service|string
-     * @ORM\ManyToOne(targetEntity="Service",inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Service",inversedBy="products",cascade={"merge"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $service;

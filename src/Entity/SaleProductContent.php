@@ -17,13 +17,13 @@ class SaleProductContent
     private $id;
 
     /**
- * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"persist"})
+ * @ORM\ManyToOne(targetEntity="App\Entity\Product",cascade={"merge"})
  * @ORM\JoinColumn(name="product_id", referencedColumnName="id",)
 
  */
     private $product;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="products"))
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="products",cascade={"merge"})
      * @ORM\JoinColumn(name="sale_id", referencedColumnName="id")
      */
     private $sale;
@@ -126,6 +126,11 @@ class SaleProductContent
     public function setPricewhenbought($pricewhenbought): void
     {
         $this->pricewhenbought = $pricewhenbought;
+    }
+    //Cette fonction ne doit etre utilisée que pour la valeur de retour du controleur Sale lors de l'effacement
+    public function forceSetToZero()
+    {
+        $this->quantity=0;
     }
 
 }

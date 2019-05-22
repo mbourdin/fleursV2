@@ -16,11 +16,11 @@ class SaleServiceContent
      */
     private $id;
     /**
- * @ORM\ManyToOne(targetEntity="App\Entity\Service",cascade={"persist"})
+ * @ORM\ManyToOne(targetEntity="App\Entity\Service",cascade={"merge"})
  */
     private $service;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="services")))
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sale",inversedBy="services",cascade={"merge"})
      */
     private $sale;
     /**
@@ -108,4 +108,26 @@ class SaleServiceContent
     {   $str="/servicecontent/".$this->service->toString()."/quantity/".$this->quantity;
         return $str;
     }
+    //Cette fonction ne doit etre utilisée que pour la valeur de retour du controleur Sale lors de l'effacement
+    public function forceSetToZero()
+    {
+        $this->quantity=0;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
 }

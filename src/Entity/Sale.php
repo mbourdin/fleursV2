@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SaleRepository")
@@ -36,23 +35,23 @@ class Sale
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Person", fetch="LAZY",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Person", fetch="LAZY")
      */
     private $person;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist","merge"},fetch="LAZY")
      * @ORM\JoinTable(name="sale_product_content")
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist","merge"},fetch="LAZY")
      * @ORM\JoinTable(name="sale_offer_content")
      */
     private $offers;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist","merge"},fetch="LAZY")
      * @ORM\JoinTable(name="sale_service_content")
      */
     private $services;
@@ -74,6 +73,11 @@ class Sale
      */
     private $address;
 
+    private $priceTmp;
+    public function getPriceTmp()
+    {
+        return $this->priceTmp;
+    }
 
     /**
      * Sale constructor.
@@ -236,7 +240,7 @@ class Sale
 
     //ajoute des services, des produits ou des offres à la commande
     //cette fonction fait appel aux 3 sous-fonctions ci-dessous
-    //renvoie vrai si ajout réussi
+    //renvoie l'objet ajouté
 
     public function add($object, $quantity)
     {
@@ -263,7 +267,7 @@ class Sale
                 $oldQuantity = $productContent->getQuantity();
                 $newQuantity = $oldQuantity + $quantity;
                 $productContent->setQuantity($newQuantity);
-                return true;
+                return $productContent;
             }
         }
         $newProduct = new SaleProductContent();
@@ -273,10 +277,10 @@ class Sale
         $newProduct->setPricewhenbought($product->getPrice());
         $this->products->add($newProduct);
 
-        return true;
+        return $newProduct;
     }
 
-//ajoute $quantity de $service au panier, renvoie vrai en cas de succes
+//ajoute $quantity de $service au panier
     public function addService(Service $service, int $quantity)
     {
 
@@ -287,7 +291,7 @@ class Sale
                 $oldQuantity = $serviceContent->getQuantity();
                 $newQuantity = $oldQuantity + $quantity;
                 $serviceContent->setQuantity($newQuantity);
-                return true;
+                return $serviceContent;
             }
         }
         $newService = new SaleServiceContent();
@@ -297,10 +301,10 @@ class Sale
         $newService->setPricewhenbought($service->getPrice());
         $this->services->add($newService);
 
-        return true;
+        return $newService;
     }
 
-    //ajoute $quantity de $offre au panier, renvoie vrai en cas de succes
+    //ajoute $quantity de $offre au panier
 
     public function addOffer(Offer $offer, int $quantity)
     {
@@ -311,7 +315,7 @@ class Sale
                 $oldQuantity = $offerContent->getQuantity();
                 $newQuantity = $oldQuantity + $quantity;
                 $offerContent->setQuantity($newQuantity);
-                return true;
+                return $offerContent;
             }
         }
         $newOffer = new SaleOfferContent();
@@ -322,7 +326,7 @@ class Sale
         $this->offers->add($newOffer);
 
 
-        return true;
+        return $newOffer;
     }
     //supprime un produit/service /une offre du panier
     //cette fonction appelle les 3 fonctions ci-dessous
@@ -398,7 +402,7 @@ class Sale
         foreach ($this->products->getIterator() as $i => $productContent) {
             if ($product->equals($productContent->getProduct())) {
                 $productContent->setQuantity($quantity);
-                return $product;
+                return $productContent;
             }
         }
         return null;
@@ -409,7 +413,7 @@ class Sale
         foreach ($this->services->getIterator() as $i => $serviceContent) {
             if ($service->equals($serviceContent->getService())) {
                 $serviceContent->setQuantity($quantity);
-                return $service;
+                return $serviceContent;
             }
         }
         return null;
@@ -420,7 +424,7 @@ class Sale
         foreach ($this->offers->getIterator() as $i => $offerContent) {
             if ($offer->equals($offerContent->getOffer())) {
                 $offerContent->setQuantity($quantity);
-                return $offer;
+                return $offerContent;
             }
         }
         return null;
@@ -458,7 +462,7 @@ class Sale
         foreach ($this->offers->getIterator() as $i => $offerContent) {
             $result +=$offerContent->getPricewhenbought()*$offerContent->getQuantity();
         }
-
+        $this->priceTmp=$result;
         return $result;
     }
 

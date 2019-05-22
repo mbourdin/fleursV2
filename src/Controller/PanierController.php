@@ -101,7 +101,7 @@ class PanierController extends Controller
         $sale->setPerson($person);
         $sale->setValidated(false);
         $em=$this->getDoctrine()->getManager();
-        $em->persist($sale);
+        $em->merge($sale);
         $em->flush();
         $this->addFlash("success","panier sauvegardé");
         return $this->redirect("/user/sale/edit");

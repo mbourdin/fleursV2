@@ -8,10 +8,10 @@ use App\Entity\Person;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Service;
 use \DateTime;
-use \DateTimeImmutable;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Serializer;
 class SaleController extends Controller
 {    private $serializer;
     /**
-     * AdminRestController constructor.
+     * SaleController constructor.
      */
     public function __construct()
     {   $normalizer=new ObjectNormalizer();
@@ -69,44 +69,50 @@ class SaleController extends Controller
         }
 
     }
-
+    // Toutes les réponses rest auront le même format : [id,prix_unitaire,quantité]
     /**
-     * @Route("/addProduct/{id}")
+     * @Rest\Put("/addProduct/{id}")
      */
     public function addToProductAction(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
         $productDao=$this->getDoctrine()->getRepository(Product::class);
         $product=$productDao->find($id);
-        $sale->addProduct($product,1);
+        $content=$sale->addProduct($product,1);
+        $sale->price();
+        $jsonContent=$this->serializer->serialize($content,"json");
         $this->saveUserSale($sale);
-        return $this->redirect("/user/sale/edit");
+        return new Response($jsonContent);
     }
     /**
-     * @Route("/addOffer/{id}")
+     * @Rest\Put("/addOffer/{id}")
      */
     public function addToOfferAction(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
         $offerDao=$this->getDoctrine()->getRepository(Offer::class);
         $offer=$offerDao->find($id);
-        $sale->addOffer($offer,1);
+        $content=$sale->addOffer($offer,1);
+        $sale->price();
         $this->saveUserSale($sale);
-        return $this->redirect("/user/sale/edit");
+        $jsonContent=$this->serializer->serialize($content,"json");
+        return new Response($jsonContent);
     }
 
     /**
-     * @Route("/addService/{id}")
+     * @Rest\Put("/addService/{id}")
      */
     public function addToServiceAction(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
         $serviceDao=$this->getDoctrine()->getRepository(Service::class);
         $service=$serviceDao->find($id);
-        $sale->addService($service,1);
+        $content=$sale->addService($service,1);
+        $sale->price();
         $this->saveUserSale($sale);
-        return $this->redirect("/user/sale/edit");
+        $jsonContent=$this->serializer->serialize($content,"json");
+        return new Response($jsonContent);
     }
 
     /**
-     * @Route("/rmProduct/{id}"))
+     * @Rest\Put("/rmProduct/{id}"))
      */
     public function rmProduct(Request $request,int $id)
     {
@@ -116,14 +122,17 @@ class SaleController extends Controller
                 $tmp = $productContent->getQuantity() - 1;
                 if ($tmp <= 0) return $this->delProduct($request, $id);
                 $productContent->setQuantity($tmp);
+                $sale->price();
                 $this->saveUserSale($sale);
-                return $this->redirect("/user/sale/edit");
+                $jsonContent=$this->serializer->serialize($productContent,"json");
+                return new Response($jsonContent);
             }
         }
-        return $this->redirect("/user/sale/edit");
+        return new Response(null);
+
     }
     /**
-     * @Route("/rmService/{id}"))
+     * @Rest\Put("/rmService/{id}"))
      */
     public function rmService(Request $request,int $id)
     {
@@ -133,15 +142,17 @@ class SaleController extends Controller
                 $tmp = $serviceContent->getQuantity() - 1;
                 if ($tmp <= 0) return $this->delService($request, $id);
                 $serviceContent->setQuantity($tmp);
+                $sale->price();
                 $this->saveUserSale($sale);
-                return $this->redirect("/user/sale/edit");
+                $jsonContent=$this->serializer->serialize($serviceContent,"json");
+                return new Response($jsonContent);
             }
         }
-        return $this->redirect("/user/sale/edit");
+        return new Response(null);
     }
 
     /**
-     * @Route("/rmOffer/{id}"))
+     * @Rest\Put("/rmOffer/{id}"))
      */
     public function rmOffer(Request $request,int $id)
     {
@@ -151,62 +162,72 @@ class SaleController extends Controller
                 $tmp = $offerContent->getQuantity() - 1;
                 if ($tmp <= 0) return $this->delOffer($request, $id);
                 $offerContent->setQuantity($tmp);
+                $sale->price();
                 $this->saveUserSale($sale);
-                return $this->redirect("/user/sale/edit");
+                $jsonContent=$this->serializer->serialize($offerContent,"json");
+                return new Response($jsonContent);
             }
         }
-        return $this->redirect("/user/sale/edit");
+        return new Response(null);
     }
     /**
-     * @Route("/delProduct/{id}"))
+     * @Rest\Delete("/delProduct/{id}"))
      */
     public function delProduct(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
         $productDao=$this->getDoctrine()->getRepository(Product::class);
         $product=$productDao->find($id);
         $em=$this->getDoctrine()->getManager();
+        $jsonContent=null;
         foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
             if($productContent->getProduct()->equals($product)) {
                 $em->remove($productContent);
+                $productContent->forceSetToZero();
+                $sale->price();
+                $jsonContent=$this->serializer->serialize($productContent,"json");
                 break;
             }
         }
         $sale->removeProduct($product);
-        if($sale->isEmpty())
+        if($sale->empty())
         {   $em->remove($sale);
             $em->flush();
         }
         else{
             $this->saveUserSale($sale);
         }
-        return $this->redirect("/user/sale/edit");
+        return new Response($jsonContent);
     }
     /**
-     * @Route("/delService/{id}"))
+     * @Rest\Delete("/delService/{id}"))
      */
     public function delService(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
         $serviceDao=$this->getDoctrine()->getRepository(Service::class);
         $service=$serviceDao->find($id);
         $em=$this->getDoctrine()->getManager();
+        $jsonContent=null;
         foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
             if($serviceContent->getService()->equals($service)) {
                 $em->remove($serviceContent);
+                $serviceContent->forceSetToZero();
+                $sale->price();
+                $jsonContent=$this->serializer->serialize($serviceContent,"json");
                 break;
             }
         }
         $sale->removeService($service);
-        if($sale->isEmpty())
+        if($sale->empty())
         {   $em->remove($sale);
             $em->flush();
         }
         else{
             $this->saveUserSale($sale);
         }
-        return $this->redirect("/user/sale/edit");
+        return new Response($jsonContent);
     }
     /**
-     * @Route("/delOffer/{id}"))
+     * @Rest\Delete("/delOffer/{id}"))
      */
     public function delOffer(Request $request,int $id)
     {   $sale=$this->getUserSale($request);
@@ -216,18 +237,21 @@ class SaleController extends Controller
         foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
             if($offerContent->getOffer()->equals($offer)) {
                 $em->remove($offerContent);
+                $offerContent->forceSetToZero();
+                $sale->price();
+                $jsonContent=$this->serializer->serialize($offerContent,"json");
                 break;
             }
         }
         $sale->removeOffer($offer);
-        if($sale->isEmpty())
+        if($sale->empty())
         {   $em->remove($sale);
             $em->flush();
         }
         else{
             $this->saveUserSale($sale);
         }
-        return $this->redirect("/user/sale/edit");
+        return new Response($jsonContent);
     }
     /**
      * @Route("/validate")
@@ -314,9 +338,9 @@ class SaleController extends Controller
     }
 
     /**
-     * @Route ("/updateQuantity/{class}/{id}")
+     * @Rest\Put ("/updateQuantity/{class}/{id}/{quantity}")
      */
-    public function updateQuantity(string $class,int $id,Request $request){
+    public function updateQuantity(string $class,int $id,Request $request,int $quantity){
         switch ($class) {
             case "product":
                 $dao=$this->getDoctrine()->getRepository(Product::class);
@@ -325,20 +349,21 @@ class SaleController extends Controller
                 $dao=$this->getDoctrine()->getRepository(Offer::class);
                 break;
             case "service":
-                $dao=$this->getDoctrine()->getRepository(Product::class);
+                $dao=$this->getDoctrine()->getRepository(Service::class);
                 break;
             default :
                 throw new RuntimeException('invalid class value in updateQuantity function');
         }
-        $quantity=$request->request->get("quantity");
         $sale=$this->getUserSale($request);
         $object=$dao->find($id);
-        $sale->updateQuantity($object,$quantity);
+        $content=$sale->updateQuantity($object,$quantity);
         $this->saveUserSale($sale);
-        return $this->redirect("/user/sale/edit");
+        $sale->price();
+        $jsonContent=$this->serializer->serialize($content,"json");
+        return new Response($jsonContent);
     }
     /**
-     * @Rest\Get("/list")
+     * @Route("/list")
      */
     public function listUserSales(Request $request)
     {   $dao=$this->getDoctrine()->getRepository(Sale::class);
@@ -346,4 +371,5 @@ class SaleController extends Controller
         $sales=$dao->findBy(["person"=>$user]);
         return $this->render("sale/listClientView.html.twig",["sales"=>$sales]);
     }
+
 }

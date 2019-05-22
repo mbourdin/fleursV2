@@ -74,34 +74,24 @@
             <tr>
                 <th>PRODUITS</th>
             </tr>
-            {% set i=0 %}
             {% for productContent in sale.products %}
-                {% set i=1-i %}
-                <tr>
+                <tr id="productLine{{ productContent.product.id }}">
                     <td>{{ productContent.product.name }}</td>
                     <td> {{ productContent.product.id }}</td>
-                    <td>
-                        <form method="post" action="/user/sale/updateQuantity/product/{{ productContent.product.id }}"
-                              id="productinputform{{ productContent.product.id }}">
-                            <input id="productinput{{ productContent.product.id }}"
+                    <td >
+                            <input id="productInput{{ productContent.product.id }}"
                                    value="{{ productContent.quantity }}"
-                                   type="text" name="quantity"
-                                   onchange="upQte('productinputform{{ productContent.product.id }}')">
-                        </form>
+                                   type="text"
+                                   name="quantity"
+                                   onchange="updateProductQuantity({{ productContent.product.id }})"
+                            >
                     </td>
-                    <td>{{ productContent.pricewhenbought }}</td>
-                    <td>{{ productContent.pricewhenbought * productContent.quantity }}</td>
+                    <td>{{ productContent.pricewhenbought/100.0 }}</td>
+                    <td id="productTotal{{ productContent.product.id }}">{{ productContent.pricewhenbought * productContent.quantity/100.0 }}</td>
                     <td>
-                        <a href="/user/sale/rmProduct/{{ productContent.product.id }}">
-                            <button class="btn btn-success ">-</button>
-                        </a>
-                        <a href="/user/sale/addProduct/{{ productContent.product.id }}">
-                            <button class="btn  btn-success">+</button>
-                        </a>
-                        <a href="/user/sale/delProduct/{{ productContent.product.id }}">
-                            <button class="btn  btn-danger">X</button>
-                        </a>
-
+                        <button class="btn btn-success " onclick="rmProduct({{ productContent.product.id }})">-</button>
+                            <button class="btn  btn-success" onclick="addProduct({{ productContent.product.id }})">+</button>
+                            <button class="btn  btn-danger" onclick="delProduct({{ productContent.product.id }})">X</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -111,23 +101,17 @@
             </tr>
             {% for serviceContent in sale.services %}
 
-                <tr>
+                <tr id="serviceLine{{ serviceContent.service.id }}">
                     <td>{{ serviceContent.service.name }}</td>
                     <td> {{ serviceContent.service.id }}</td>
-                    <td><input id="serviceinput{{ serviceContent.service.id }}" value="{{ serviceContent.quantity }}"
-                               type="text"></td>
-                    <td>{{ serviceContent.pricewhenbought }}</td>
-                    <td>{{ serviceContent.pricewhenbought * serviceContent.quantity }}</td>
+                    <td><input id="serviceInput{{ serviceContent.service.id }}" value="{{ serviceContent.quantity }}"
+                               type="text" onchange="updateServiceQuantity({{ serviceContent.service.id }})"></td>
+                    <td>{{ serviceContent.pricewhenbought/100.0 }}</td>
+                    <td id="serviceTotal{{ serviceContent.service.id }}">{{ serviceContent.pricewhenbought * serviceContent.quantity/100.0 }}</td>
                     <td>
-                        <a href="/user/sale/rmService/{{ serviceContent.service.id }}">
-                            <button class="btn btn-success">-</button>
-                        </a>
-                        <a href="/user/sale/addService/{{ serviceContent.service.id }}">
-                            <button class="btn btn-success">+</button>
-                        </a>
-                        <a href="/user/sale/delService/{{ serviceContent.service.id }}">
-                            <button class="btn  btn-danger">X</button>
-                        </a>
+                            <button class="btn btn-success" onclick="rmService({{ serviceContent.service.id }})">-</button>
+                            <button class="btn btn-success" onclick="addService({{ serviceContent.service.id }})">+</button>
+                            <button class="btn  btn-danger" onclick="delService({{ serviceContent.service.id }})">X</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -135,25 +119,18 @@
                 <th>OFFERS</th>
             </tr>
             {% for offerContent in sale.offers %}
-                {% set i=1-i %}
-                <tr>
+                <tr id="offerLine{{ offerContent.offer.id }}">
                     <td>{{ offerContent.offer.name }}</td>
                     <td> {{ offerContent.offer.id }}</td>
-                    <td><input onblur="updateProductQuantity('offer',{{ offerContent.offer.id }})"
-                               id="offerinput{{ offerContent.offer.id }}" value="{{ offerContent.quantity }}">
+                    <td><input onchange="updateOfferQuantity({{ offerContent.offer.id }})"
+                               id="offerInput{{ offerContent.offer.id }}" value="{{ offerContent.quantity }}">
                     </td>
-                    <td>{{ offerContent.pricewhenbought }}</td>
-                    <td>{{ offerContent.pricewhenbought * offerContent.quantity }}</td>
+                    <td id="offerUnitPrice{{ offerContent.offer.id }}">{{ offerContent.pricewhenbought/100.0 }}</td>
+                    <td id="offerTotal{{ offerContent.offer.id }}">{{ offerContent.pricewhenbought * offerContent.quantity/100.0 }}</td>
                     <td>
-                        <a href="/user/sale/rmOffer/{{ offerContent.offer.id }}">
-                            <button class="btn btn-success">-</button>
-                        </a>
-                        <a href="/user/sale/addOffer/{{ offerContent.offer.id }}">
-                            <button class="btn btn-success">+</button>
-                        </a>
-                        <a href="/user/sale/delOffer/{{ offerContent.offer.id }}">
-                            <button class="btn  btn-danger">X</button>
-                        </a>
+                            <button class="btn btn-success" onclick="rmOffer({{ offerContent.offer.id }})">-</button>
+                            <button class="btn btn-success" onclick="addOffer({{ offerContent.offer.id }})">+</button>
+                            <button class="btn  btn-danger" onclick="delOffer({{ offerContent.offer.id }})">X</button>
                     </td>
                 </tr>
             {% endfor %}
@@ -162,10 +139,10 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th id="totalprice">{% if sale!=null %}{{ sale.price() }}{% endif %}</th>
+                <th id="totalprice">{% if sale!=null %}{{ sale.price()/100.0 }}{% endif %}</th>
                 <th>
                     <button class="btn btn-success" onclick="submitform()" id="submitbutton" disabled="disabled">VALIDER
-                        COMMANDER
+                        COMMANDE
                     </button>
                     <br>
                     <a href="/user/sale/delete">

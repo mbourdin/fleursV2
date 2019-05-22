@@ -18,13 +18,13 @@ class OfferProductContent
     private $quantity;
     /**
      * @var Product|string
-     * @ORM\ManyToOne(targetEntity="Product", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Product",cascade={"merge"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $product;
     /**
      * @var Offer|string
-     * @ORM\ManyToOne(targetEntity="Offer", cascade={"persist","merge"},inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Offer",inversedBy="products",cascade={"merge"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $offer;

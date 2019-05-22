@@ -40,7 +40,7 @@ class Person extends FOSUser
         $this->deleted=false;
         $this->banned=false;
         $this->addresses=new ArrayCollection();
-        $this->setRoles(["ROLE_USER"]);
+        $this->setRoles(["ROLE_USER","ROLE_BUYER"]);
     }
     /**
      *
