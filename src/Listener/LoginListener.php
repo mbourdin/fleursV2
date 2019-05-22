@@ -10,6 +10,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use App\Utility\OnEventActions;
 use Doctrine\ORM\EntityManager;
 use App\Repository\PersonRepository;
+use Symfony\Component\HttpFoundation\Response;
 class LoginListener
 {   protected $userManager;
     private $em;
@@ -23,7 +24,23 @@ class LoginListener
     {   $login = $event->getAuthenticationToken()->getUser();
         $id=$this->userManager->findUserByUsername($login)->getId();
         $user=$this->em->getRepository(Person::class)->find($id);
+
         $session=$event->getRequest()->getSession();
+        if($user->getBanned())
+        {
+            OnEventActions::logout($session);
+            $event->getAuthenticationToken()->setAuthenticated(false);
+            $session->getBag("flashes")->add("error","your account is banned");
+            return null;
+
+        }
+        if($user->getDeleted())
+        {
+            OnEventActions::logout($session);
+            $event->getAuthenticationToken()->setAuthenticated(false);
+            $session->getBag("flashes")->add("error","Votre compte est marqué comme supprimé");
+            return null;
+        }
         OnEventActions::setPermissions($session,$user);//le warning ici n'est pas grave
         // c'est simpelemnt l'IDE qui ne détermine pas que $user est forcément de la classe
         // 2 fois dérivée Person.
