@@ -69,6 +69,7 @@ class CityController extends Controller
         {   $city=$this->getCityFromApi($id);
             $city->setActive(true);
             $this->saveCity($city);
+            $this->addFlash("success","ville ajoutée active");
         }
         elseif (!$city->getActive())
         {   $city->setActive(true);

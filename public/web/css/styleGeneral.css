@@ -217,6 +217,9 @@ span{
 .bg-black{
     background-color: black;
 }
+.offerPadding{
+    padding-top: 70px;
+}
 .sanspuce
 {
     list-style: none;

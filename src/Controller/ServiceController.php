@@ -39,7 +39,7 @@ class ServiceController extends Controller
         ]);
     }
     /**
-     * @Route("/service/show/{id}", name="service_show", methods={"GET"})
+     * @Route("/service/read/{id}", name="service_show", methods={"GET"})
      */
     public function show(Service $service): Response
     {

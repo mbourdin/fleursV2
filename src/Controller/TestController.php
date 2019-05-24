@@ -37,27 +37,7 @@ class TestController extends Controller
         if($sessionUser!=null){
             $user=$userDao->find($sessionUser->getId());
         }
-        else {$user=null;}
         $request->getSession()->set("user",$user);
-        $sale=$request->getSession()->get("sale");
-        if($sale==null)
-        {
-            $sale=new Entity\Sale();
-
-        }
-        $sale->setId(null);
-        $productDao=$this->getDoctrine()->getRepository(Entity\Product::class);
-        $product=$productDao->find(1);
-        $sale->add($product,3);
-        $serviceDao=$this->getDoctrine()->getRepository(Entity\Service::class);
-        $service=$serviceDao->find(1);
-        $sale->add($service,2);
-        $offerDao=$this->getDoctrine()->getRepository(Entity\Offer::class);
-        $offer=$offerDao->find(1);
-        $sale->add($offer,4);
-        //pour rappel la liste des parametres du constructeur de cookies :
-        //string nom, object contenu, int heure d'expiration,string path ,string domain,bool secure,bool httponly
-        $sessionUser=$request->getSession()->set("sale",$sale);
         return $this->render("/testing/test.html.twig");
     }
     /**

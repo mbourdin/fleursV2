@@ -101,7 +101,7 @@ function onSuccessCityList(result){
 
         //TODO parse la liste pour la rajouter aux options
         {   for(city of result)
-        {   opt=new Option(city.code+" "+city.nom,city.code);
+        {   opt=new Option(city.nom,city.code);
             opt.setAttribute("data-nom",city.nom);
         opt.id="insee"+city.code;
         $("#cityOptions").append(opt);
@@ -167,7 +167,6 @@ function addressToString(address)
 
 function onSuccessUsedAddresses(result)
 {   i=0;
-    var numberaddition;
     for(address of result)
     {
         opt=new Option(addressToString(address),i);
@@ -261,7 +260,7 @@ function onSuccessProduct(result) {
     //set quantity
     document.getElementById("productInput" + content.product.id).value = content.quantity;
     //set total product
-    document.getElementById("productTotal" + content.product.id).textContent = content.quantity * content.product.price / 100.0;
+    document.getElementById("productTotal" + content.product.id).textContent = (content.quantity * content.product.price / 100).toFixed(2);
 
     }
     updateTotal(content.sale.priceTmp);
@@ -301,7 +300,7 @@ function onSuccessService(result) {
         //set quantity
         document.getElementById("serviceInput" + content.service.id).value = content.quantity;
         //set total product
-        document.getElementById("serviceTotal" + content.service.id).textContent = content.quantity * content.service.price / 100.0;
+        document.getElementById("serviceTotal" + content.service.id).textContent = (content.quantity * content.service.price / 100).toFixed(2);
 
     }
     updateTotal(content.sale.priceTmp);
@@ -342,13 +341,16 @@ function onSuccessOffer(result) {
         //set quantity
         document.getElementById("offerInput" + content.offer.id).value = content.quantity;
         //set total product
-        document.getElementById("offerTotal" + content.offer.id).textContent = content.quantity * unitprice;
+        document.getElementById("offerTotal" + content.offer.id).textContent = (content.quantity * unitprice).toFixed(2);
 
     }
     updateTotal(content.sale.priceTmp);
 }
 function updateTotal(total)
-{   document.getElementById("totalprice").textContent=total/100.0;
-
+{   document.getElementById("totalprice").textContent=(total/100).toFixed(2);
+    if (total==0)
+    {
+        window.location.reload();
+    }
 }
 

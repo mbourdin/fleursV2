@@ -96,21 +96,21 @@ function addline(result)
     txt = document.createTextNode(active);
     td4.appendChild(txt);
     td5= tr.insertCell();
-    var btn = document.createElement('input');
-    btn.type = "button";
+    var btn = document.createElement('button');
+
     btn.className = "btn btn-success";
-    btn.value = "activer";
+    btn.textContent = "activer";
     btn.addEventListener("click",function(){enable(city.id);});
     td5.appendChild(btn);
-    var btn2 = document.createElement('input');
-    btn2.type = "button";
-    btn2.value = "desactiver";
+    var btn2 = document.createElement('button');
+
+    btn2.textContent = "desactiver";
     btn2.className = "btn btn-secondary";
     btn2.addEventListener("click",function (){disable(city.id);});
     td5.appendChild(btn2);
-    var btn3 = document.createElement('input');
-    btn3.type = "button";
-    btn3.value = "supprimer";
+    var btn3 = document.createElement('button');
+
+    btn3.textContent = "supprimer";
     btn3.className = "btn btn-danger";
     btn3.addEventListener("click",function(){deleteCity(city.id);});
     td5.appendChild(btn3);

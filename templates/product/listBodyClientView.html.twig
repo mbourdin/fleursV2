@@ -1,9 +1,8 @@
 <div class="container">
-    <h1><i class="fas fa-seedling"></i> Fleurs de saison</h1>
     <div class="row">
         {%  for product in products %}
             <div class="card" style="width: 16rem;">
-                <img src="{{ asset('images/products/'~ product.photopath) }}" class="rounded mx-auto d-block" alt="..."width="150" height="150">
+                <img src="{{ asset('images/products/'~ product.photopath) }}" class="rounded mx-auto d-block" alt="..." width="150" height="150">
                 <div class="card-body">
                     <h3 class="card-title text-center">{{  product.name }}</h3>
                     <p class="card-text text-center">{{ product.price/100.0~"€" }}</p>

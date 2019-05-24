@@ -4,18 +4,18 @@ use App\Entity\Offer;
 use App\Entity\Product;
 use App\Form\OfferForm;
 use App\Repository\OfferRepository;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-/**
- * @Route("/admin/offer")
- */
+
 class OfferController extends Controller
 {
     /**
-     * @Route("/", name="offer_index", methods={"GET"})
+     * @return Response
+     * @Route("/admin/offer", name="offer_index", methods={"GET"})
      */
     public function index(): Response
     {   $offerRepository=$this->getDoctrine()->getRepository(Offer::class);
@@ -24,7 +24,9 @@ class OfferController extends Controller
         ]);
     }
     /**
-     * @Route("/add", name="offer_new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
+     * @Route("/admin/offer/add", name="offer_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -43,7 +45,10 @@ class OfferController extends Controller
         ]);
     }
     /**
-     * @Route("/show/{id}", name="offer_show", methods={"GET"})
+     * @param Offer $offer
+     * @return Response
+     * @Route("/admin/offer/show/{id}", name="offer_show", methods={"GET"})
+     * @Route("/offer/read/{id}")
      */
     public function show(Offer $offer): Response
     {
@@ -51,8 +56,12 @@ class OfferController extends Controller
             'offer' => $offer,
         ]);
     }
+
     /**
-     * @Route("/edit/{id}", name="offer_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Offer $offer
+     * @return Response
+     * @Route("/admin/offer/edit/{id}", name="offer_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Offer $offer): Response
     {

@@ -1,19 +1,15 @@
-<h1>Service index</h1>
-
-
 <div class="container">
     <div class="row">
         {%  for service in services %}
             <div class="card" style="width: 16rem;">
-                <table>
+                <div class="container text-center">
                 {% for content in service.products %}
-                <tr>
-                    <td>{{ content.quantity }}</td>
-                    <td><img src="{{ asset('images/products/'~ content.product.photopath) }}" class="rounded mx-auto d-block" alt="..."width="150" height="150"></td>
-
-                </tr>
+                <div class="row">
+                    <div class="offerPadding">{{ content.quantity }}</div>
+                    <img src="{{ asset('images/products/'~ content.product.photopath) }}" class="rounded mx-auto d-block" alt="..." width="150" height="150">
+                </div>
                     {% endfor %}
-                </table>
+                </div>
                 <div class="card-body">
                     <h3 class="card-title text-center">{{  service.name }}</h3>
                     <p class="card-text text-center">{{ service.price/100.0~"€" }}</p>

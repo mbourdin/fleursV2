@@ -69,14 +69,12 @@ class ProductController extends Controller
 
     /**
      * @Route("/product/read/{id}")
+     * @Route("/admin/product/read/{id}")
      */
     public function readOneProductAction($id){
         $dao=$this->getDoctrine()->getRepository(Product::class);
         $product=$dao->find($id);
-
         return $this->render('product/detail.html.twig', array('product' =>$product));
-
-
     }
     /**
      * @Route("/admin/product/edit/{id}")

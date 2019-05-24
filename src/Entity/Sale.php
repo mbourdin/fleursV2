@@ -40,18 +40,18 @@ class Sale
     private $person;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist","merge"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleProductContent",mappedBy="sale",cascade={"persist","merge","remove"},fetch="LAZY")
      * @ORM\JoinTable(name="sale_product_content")
      */
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist","merge"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleOfferContent",mappedBy="sale",cascade={"persist","merge","remove"},fetch="LAZY")
      * @ORM\JoinTable(name="sale_offer_content")
      */
     private $offers;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist","merge"},fetch="LAZY")
+     * @ORM\OneToMany(targetEntity="App\Entity\SaleServiceContent",mappedBy="sale",cascade={"persist","merge","remove"},fetch="LAZY")
      * @ORM\JoinTable(name="sale_service_content")
      */
     private $services;
@@ -306,6 +306,11 @@ class Sale
 
     //ajoute $quantity de $offre au panier
 
+    /**
+     * @param Offer $offer
+     * @param int $quantity
+     * @return SaleOfferContent|mixed
+     */
     public function addOffer(Offer $offer, int $quantity)
     {
         if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");

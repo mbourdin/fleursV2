@@ -5,16 +5,16 @@ use App\Entity\Sale;
 use App\Entity\Product;
 use App\Entity\Service;
 use App\Entity\Offer;
-use Doctrine\Common\Collections\ArrayCollection;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use FOS\RestBundle\Controller\Annotations as Rest;
+
 class PanierController extends Controller
 {   private $serializer;
     /**
@@ -51,8 +51,12 @@ class PanierController extends Controller
         if($sale==null) {
             return new Sale();
         }
-
+        /*
+        $saleDao=$this->$this->getDoctrine()->getRepository(Sale::class);
+        $id=$sale->getId();
+        $sale=$saleDao->find($id);
         //
+        */
         return $sale;
 
     }
@@ -100,64 +104,102 @@ class PanierController extends Controller
         $person=$personDao->find($request->getSession()->get("user"));
         $sale->setPerson($person);
         $sale->setValidated(false);
+        $saleDao=$this->getDoctrine()->getRepository(Sale::class);
+        $criteria = array('person' => $person,'validated'=>false);
+        $oldSale=$saleDao->findOneBy($criteria);
         $em=$this->getDoctrine()->getManager();
+        if($oldSale!=null){
+            $em->remove($oldSale);
+            $em->flush();
+        }
         $em->merge($sale);
         $em->flush();
         $this->addFlash("success","panier sauvegardé");
+        $this->clearPanier($request);
         return $this->redirect("/user/sale/edit");
     }
 
     /**
-     * @Route("/panier/addProduct/{id}"))
+     * @Route("/panier/addProduct/{id}")
      */
     public function addToProduct(Request $request,int $id)
-    {  return $this->addProduct($request,$id,1);
+    {  $this->addProduct($request,$id);
+        return $this->redirect('/panier/show');
     }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @Rest\Put("/panier/rest/addProduct/{id}")
+     */
+    public function addToProductRest(Request $request,int $id)
+    {  $content=$this->addProduct($request,$id);
+        $jsonContent=$this->serializer->serialize($content,"json");
+        return new Response($jsonContent);
+    }
+
     /**
      * @Route("/panier/addService/{id}"))
      */
     public function addToService(Request $request,int $id)
-    {  return $this->addService($request,$id,1);
+    {  $this->addService($request,$id);
+        return $this->redirect("/panier/show");
+    }
+    /**
+     * @Rest\Put("/panier/rest/addService/{id}")
+     */
+    public function addToServiceRest(Request $request,int $id)
+    {  $content=$this->addService($request,$id);
+        $jsonContent=$this->serializer->serialize($content,"json");
+        return new Response($jsonContent);
     }
     /**
      * @Route("/panier/addOffer/{id}"))
      */
     public function addToOffer(Request $request,int $id)
-    {  return $this->addOffer($request,$id,1);
-    }
-    /**
-     * @Route("/panier/addProduct/{id}/{quantity}"))
-     */
-    public function addProduct(Request $request,int $id,int $quantity)
-    {   $sale=$this->getSale($request);
-        $productDao=$this->getDoctrine()->getRepository(Product::class);
-        $product=$productDao->find($id);
-        $sale->addProduct($product,$quantity);
-        $this->savePanier($sale,$request);
+    {   $this->addOffer($request,$id);
         return $this->redirect("/panier/show");
     }
 
     /**
-     * @Route("/panier/addService/{id}/{quantity}"))
+     * @param Request $request
+     * @param int $id
+     * @Rest\Put("/panier/rest/addOffer/{id}")
      */
-    public function addService(Request $request,int $id,int $quantity)
+    public function addToOfferRest(Request $request,int $id)
+    {  $content=$this->addOffer($request,$id);
+       $jsonContent=$this->serializer->serialize($content,"json");
+        return new Response($jsonContent);
+    }
+    private function addProduct(Request $request,int $id)
+    {   $sale=$this->getSale($request);
+        $productDao=$this->getDoctrine()->getRepository(Product::class);
+        $product=$productDao->find($id);
+        $content=$sale->addProduct($product,1);
+        $sale->price();
+        $this->savePanier($sale,$request);
+        return $content;
+    }
+
+
+    private function addService(Request $request,int $id)
     {   $sale=$this->getSale($request);
         $serviceDao=$this->getDoctrine()->getRepository(Service::class);
         $service=$serviceDao->find($id);
-        $sale->addService($service,$quantity);
+        $content=$sale->addService($service,1);
+        $sale->price();
         $this->savePanier($sale,$request);
-        return $this->redirect("/panier/show");
+        return $content;
     }
-    /**
-     * @Route("/panier/addOffer/{id}/{quantity}"))
-     */
-    public function addOffer(Request $request,int $id,int $quantity)
+
+    private function addOffer(Request $request,int $id)
     {   $sale=$this->getSale($request);
         $offerDao=$this->getDoctrine()->getRepository(Offer::class);
         $offer=$offerDao->find($id);
-        $sale->addOffer($offer,$quantity);
+        $content=$sale->addOffer($offer,1);
+        $sale->price();
         $this->savePanier($sale,$request);
-        return $this->redirect("/panier/show");
+        return $content;
     }
     /**
      * @Route("/panier/rmProduct/{id}"))
@@ -208,7 +250,7 @@ class PanierController extends Controller
         return $this->redirect("/panier/show");
     }
     /**
-     * @Route ("/panier/updateQuantity/{class}/{id}/{quantity}")
+     * @Rest\Put ("/panier/updateQuantity/{class}/{id}/{quantity}")
      */
     public function updateQuantity(string $class,int $id,int $quantity,Request $request){
         switch ($class) {
@@ -219,16 +261,19 @@ class PanierController extends Controller
                 $dao=$this->getDoctrine()->getRepository(Offer::class);
                 break;
             case "service":
-                $dao=$this->getDoctrine()->getRepository(Product::class);
+                $dao=$this->getDoctrine()->getRepository(Service::class);
                 break;
             default :
                 throw new RuntimeException('invalid class value in updateQuantity function');
+                break;
         }
         $sale=$this->getSale($request);
         $object=$dao->find($id);
-        $sale->updateQuantity($object,$quantity);
+        $content=$sale->updateQuantity($object,$quantity);
+        $sale->price();
+        $jsonContent=$this->serializer->serialize($content,"json");
         $this->savePanier($sale,$request);
-        return $this->redirect("/panier/show");
+        return new Response($jsonContent);
     }
     /**
      * @Route("/panier/delProduct/{id}"))
