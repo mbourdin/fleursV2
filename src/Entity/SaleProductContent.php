@@ -87,8 +87,9 @@ class SaleProductContent
      * @param mixed $quantity
      */
     public function setQuantity($quantity)
-    {   if($quantity<=0)throw new \UnexpectedValueException();
+    {   if($quantity<=0)throw new \UnexpectedValueException("quantité négative");
         $this->quantity = $quantity;
+        return $this;
     }
 
     /**

@@ -354,7 +354,7 @@ class Sale
         foreach ($this->products->getIterator() as $i => $productContent) {
             if ($product->equals($productContent->getProduct())) {
                 $this->products->removeElement($productContent);
-                return $product;
+                return $productContent;
             }
         }
         return null;
@@ -366,7 +366,7 @@ class Sale
         foreach ($this->services->getIterator() as $i => $serviceContent) {
             if ($service->equals($serviceContent->getService())) {
                 $this->services->removeElement($serviceContent);
-                return $service;
+                return $serviceContent;
             }
         }
         return null;
@@ -378,7 +378,7 @@ class Sale
         foreach ($this->offers->getIterator() as $i => $offerContent) {
             if ($offer->equals($offerContent->getOffer())) {
                 $this->offers->removeElement($offerContent);
-                return $offer;
+                return $offerContent;
             }
         }
         return null;

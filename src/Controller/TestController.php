@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 use App\Entity;
+use App\Entity\City;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,4 +48,13 @@ class TestController extends Controller
     {
         return $this->render("address/form.html.twig");
     }
+    /**
+     * @Route("/testAdminHack")
+     */
+    public function testAdminHackAction()
+    {   $dao=$this->getDoctrine()->getRepository(City::class);
+        $cities =$dao->findAll();
+        return $this->render('admin/city.html.twig',["cities"=>$cities]);
+    }
+
 }

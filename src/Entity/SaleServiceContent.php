@@ -102,6 +102,7 @@ class SaleServiceContent
     public function setQuantity($quantity)
     {   if($quantity<=0)throw new \UnexpectedValueException("quantité négative");
         $this->quantity = $quantity;
+        return $this;
     }
 
     public function toString()

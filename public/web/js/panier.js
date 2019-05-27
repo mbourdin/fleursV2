@@ -151,8 +151,4 @@ function onSuccessOffer(result) {
 }
 function updateTotal(total)
 {   document.getElementById("totalprice").textContent=(total/100).toFixed(2);
-    if (total==0)
-    {
-        window.location.reload();
-    }
 }

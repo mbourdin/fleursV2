@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller;
+
 use App\Entity\Person;
 use App\Entity\Sale;
 use App\Entity\Product;
@@ -16,13 +18,16 @@ use Symfony\Component\Serializer\Serializer;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 class PanierController extends Controller
-{   private $serializer;
+{
+    private $serializer;
+
     /**
      * PanierController constructor.
      */
     public function __construct()
-    {   $encoders = [new JsonEncoder()];
-        $normalizer=new ObjectNormalizer();
+    {
+        $encoders = [new JsonEncoder()];
+        $normalizer = new ObjectNormalizer();
         $normalizer->setCircularReferenceLimit(1);
         $normalizer->setCircularReferenceHandler(function ($object) {
             return $object->getId();
@@ -47,8 +52,8 @@ class PanierController extends Controller
 //        }
 
         //version session
-        $sale=$request->getSession()->get("sale");
-        if($sale==null) {
+        $sale = $request->getSession()->get("sale");
+        if ($sale == null) {
             return new Sale();
         }
         /*
@@ -60,7 +65,8 @@ class PanierController extends Controller
         return $sale;
 
     }
-    private function savePanier(Sale $sale,Request $request)
+
+    private function savePanier(Sale $sale, Request $request)
     {
         //    version cookie mais fonctionne mal
 //        $response=new Response();
@@ -76,45 +82,48 @@ class PanierController extends Controller
 //        $sale->setOffers(new ArrayCollection($sale->getOffers()));
 
         //version session
-        $request->getSession()->set("sale",$sale);
+        $request->getSession()->set("sale", $sale);
     }
+
     /**
      * @Route("/panier/show",name="panier")
      */
     public function panierShowAction(Request $request)
-    {   $sale=$this->getSale($request);
-        if ($sale==null) {
+    {
+        $sale = $this->getSale($request);
+        if ($sale == null) {
             $sale = new Sale();
-            $this->savePanier($sale,$request);
+            $this->savePanier($sale, $request);
         }
-        return $this->render("/panier/panier.html.twig",["sale"=>$sale]);
+        return $this->render("/panier/panier.html.twig", ["sale" => $sale]);
     }
+
     /**
      * @Route("/user/panier/save",name="savePanier")
      */
     public function savePanierAction(Request $request)
-    {   $sale=$this->getSale($request);
+    {
+        $sale = $this->getSale($request);
 
-        if($sale->empty())
-        {
-            $this->addFlash("failure","impossible de commander : panier vide");
+        if ($sale->empty()) {
+            $this->addFlash("failure", "impossible de commander : panier vide");
             return $this->redirect("/panier/show");
         }
-        $personDao=$this->getDoctrine()->getRepository(Person::class);
-        $person=$personDao->find($request->getSession()->get("user"));
+        $personDao = $this->getDoctrine()->getRepository(Person::class);
+        $person = $personDao->find($request->getSession()->get("user"));
         $sale->setPerson($person);
         $sale->setValidated(false);
-        $saleDao=$this->getDoctrine()->getRepository(Sale::class);
-        $criteria = array('person' => $person,'validated'=>false);
-        $oldSale=$saleDao->findOneBy($criteria);
-        $em=$this->getDoctrine()->getManager();
-        if($oldSale!=null){
+        $saleDao = $this->getDoctrine()->getRepository(Sale::class);
+        $criteria = array('person' => $person, 'validated' => false);
+        $oldSale = $saleDao->findOneBy($criteria);
+        $em = $this->getDoctrine()->getManager();
+        if ($oldSale != null) {
             $em->remove($oldSale);
             $em->flush();
         }
         $em->merge($sale);
         $em->flush();
-        $this->addFlash("success","panier sauvegardé");
+        $this->addFlash("success", "panier sauvegardé");
         $this->clearPanier($request);
         return $this->redirect("/user/sale/edit");
     }
@@ -122,8 +131,9 @@ class PanierController extends Controller
     /**
      * @Route("/panier/addProduct/{id}")
      */
-    public function addToProduct(Request $request,int $id)
-    {  $this->addProduct($request,$id);
+    public function addToProduct(Request $request, int $id)
+    {
+        $this->addProduct($request, $id);
         return $this->redirect('/panier/show');
     }
 
@@ -132,32 +142,38 @@ class PanierController extends Controller
      * @param int $id
      * @Rest\Put("/panier/rest/addProduct/{id}")
      */
-    public function addToProductRest(Request $request,int $id)
-    {  $content=$this->addProduct($request,$id);
-        $jsonContent=$this->serializer->serialize($content,"json");
+    public function addToProductRest(Request $request, int $id)
+    {
+        $content = $this->addProduct($request, $id);
+        $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
 
     /**
      * @Route("/panier/addService/{id}"))
      */
-    public function addToService(Request $request,int $id)
-    {  $this->addService($request,$id);
+    public function addToService(Request $request, int $id)
+    {
+        $this->addService($request, $id);
         return $this->redirect("/panier/show");
     }
+
     /**
      * @Rest\Put("/panier/rest/addService/{id}")
      */
-    public function addToServiceRest(Request $request,int $id)
-    {  $content=$this->addService($request,$id);
-        $jsonContent=$this->serializer->serialize($content,"json");
+    public function addToServiceRest(Request $request, int $id)
+    {
+        $content = $this->addService($request, $id);
+        $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
+
     /**
      * @Route("/panier/addOffer/{id}"))
      */
-    public function addToOffer(Request $request,int $id)
-    {   $this->addOffer($request,$id);
+    public function addToOffer(Request $request, int $id)
+    {
+        $this->addOffer($request, $id);
         return $this->redirect("/panier/show");
     }
 
@@ -166,149 +182,183 @@ class PanierController extends Controller
      * @param int $id
      * @Rest\Put("/panier/rest/addOffer/{id}")
      */
-    public function addToOfferRest(Request $request,int $id)
-    {  $content=$this->addOffer($request,$id);
-       $jsonContent=$this->serializer->serialize($content,"json");
+    public function addToOfferRest(Request $request, int $id)
+    {
+        $content = $this->addOffer($request, $id);
+        $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
-    private function addProduct(Request $request,int $id)
-    {   $sale=$this->getSale($request);
-        $productDao=$this->getDoctrine()->getRepository(Product::class);
-        $product=$productDao->find($id);
-        $content=$sale->addProduct($product,1);
+
+    private function addProduct(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        $productDao = $this->getDoctrine()->getRepository(Product::class);
+        $product = $productDao->find($id);
+        $content = $sale->addProduct($product, 1);
         $sale->price();
-        $this->savePanier($sale,$request);
+        $this->savePanier($sale, $request);
         return $content;
     }
 
 
-    private function addService(Request $request,int $id)
-    {   $sale=$this->getSale($request);
-        $serviceDao=$this->getDoctrine()->getRepository(Service::class);
-        $service=$serviceDao->find($id);
-        $content=$sale->addService($service,1);
+    private function addService(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        $serviceDao = $this->getDoctrine()->getRepository(Service::class);
+        $service = $serviceDao->find($id);
+        $content = $sale->addService($service, 1);
         $sale->price();
-        $this->savePanier($sale,$request);
+        $this->savePanier($sale, $request);
         return $content;
     }
 
-    private function addOffer(Request $request,int $id)
-    {   $sale=$this->getSale($request);
-        $offerDao=$this->getDoctrine()->getRepository(Offer::class);
-        $offer=$offerDao->find($id);
-        $content=$sale->addOffer($offer,1);
+    private function addOffer(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        $offerDao = $this->getDoctrine()->getRepository(Offer::class);
+        $offer = $offerDao->find($id);
+        $content = $sale->addOffer($offer, 1);
         $sale->price();
-        $this->savePanier($sale,$request);
+        $this->savePanier($sale, $request);
         return $content;
     }
+
     /**
-     * @Route("/panier/rmProduct/{id}"))
+     * @Rest\Put("/panier/rest/rmProduct/{id}"))
      */
-    public function rmProduct(Request $request,int $id)
-{   $sale=$this->getSale($request);
-    foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
-        if ($productContent->getProduct()->getId()==$id)
-        {   $tmp=$productContent->getQuantity()-1;
-            if($tmp<=0) return $this->delProduct($request,$id);
-            $productContent->setQuantity($tmp);
-            $this->savePanier($sale,$request);
-            return $this->redirect("/panier/show");
+    public function rmProduct(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        foreach ($sale->getProducts()->getIterator() as $i => $productContent) {
+            if ($productContent->getProduct()->getId() == $id) {
+                $tmp = $productContent->getQuantity() - 1;
+                if ($tmp <= 0) return $this->delProduct($request, $id);
+                $content = $productContent->setQuantity($tmp);
+                $sale->price();
+                $this->savePanier($sale, $request);
+                $jsonContent = $this->serializer->serialize($content, "json");
+                return new Response($jsonContent);
+            }
         }
+        return new Response(null);
     }
-    return $this->redirect("/panier/show");
-}
+
     /**
-     * @Route("/panier/rmService/{id}"))
+     * @Rest\Put("/panier/rest/rmService/{id}"))
      */
-    public function rmService(Request $request,int $id)
-    {   $sale=$this->getSale($request);
+    public function rmService(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
         foreach ($sale->getServices()->getIterator() as $i => $serviceContent) {
-            if ($serviceContent->getService()->getId()==$id)
-            {   $tmp=$serviceContent->getQuantity()-1;
-                if($tmp<=0) return $this->delService($request,$id);
-                $serviceContent->setQuantity($tmp);
-                $this->savePanier($sale,$request);
-                return $this->redirect("/panier/show");
+            if ($serviceContent->getService()->getId() == $id) {
+                $tmp = $serviceContent->getQuantity() - 1;
+                if ($tmp <= 0) return $this->delService($request, $id);
+                $content = $serviceContent->setQuantity($tmp);
+                $sale->price();
+                $this->savePanier($sale, $request);
+                $jsonContent = $this->serializer->serialize($content, "json");
+                return new Response($jsonContent);
             }
         }
-        return $this->redirect("/panier/show");
+        return new Response(null);
     }
+
     /**
-     * @Route("/panier/rmOffer/{id}"))
+     * @Rest\Put("/panier/rest/rmOffer/{id}"))
      */
-    public function rmOffer(Request $request,int $id)
-    {   $sale=$this->getSale($request);
+    public function rmOffer(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
         foreach ($sale->getOffers()->getIterator() as $i => $offerContent) {
-            if ($offerContent->getOffer()->getId()==$id)
-            {   $tmp=$offerContent->getQuantity()-1;
-                if($tmp<=0) return $this->delOffer($request,$id);
-                $offerContent->setQuantity($tmp);
-                $this->savePanier($sale,$request);
-                return $this->redirect("/panier/show");
+            if ($offerContent->getOffer()->getId() == $id) {
+                $tmp = $offerContent->getQuantity() - 1;
+                if ($tmp <= 0) return $this->delOffer($request, $id);
+                $content = $offerContent->setQuantity($tmp);
+                $sale->price();
+                $this->savePanier($sale, $request);
+                $jsonContent = $this->serializer->serialize($content, "json");
+                return new Response($jsonContent);
             }
         }
-        return $this->redirect("/panier/show");
+        return new Response(null);
     }
+
     /**
      * @Rest\Put ("/panier/updateQuantity/{class}/{id}/{quantity}")
      */
-    public function updateQuantity(string $class,int $id,int $quantity,Request $request){
+    public function updateQuantity(string $class, int $id, int $quantity, Request $request)
+    {
         switch ($class) {
             case "product":
-                $dao=$this->getDoctrine()->getRepository(Product::class);
+                $dao = $this->getDoctrine()->getRepository(Product::class);
                 break;
             case "offer":
-                $dao=$this->getDoctrine()->getRepository(Offer::class);
+                $dao = $this->getDoctrine()->getRepository(Offer::class);
                 break;
             case "service":
-                $dao=$this->getDoctrine()->getRepository(Service::class);
+                $dao = $this->getDoctrine()->getRepository(Service::class);
                 break;
             default :
                 throw new RuntimeException('invalid class value in updateQuantity function');
                 break;
         }
-        $sale=$this->getSale($request);
-        $object=$dao->find($id);
-        $content=$sale->updateQuantity($object,$quantity);
+        $sale = $this->getSale($request);
+        $object = $dao->find($id);
+        $content = $sale->updateQuantity($object, $quantity);
         $sale->price();
-        $jsonContent=$this->serializer->serialize($content,"json");
-        $this->savePanier($sale,$request);
+        $jsonContent = $this->serializer->serialize($content, "json");
+        $this->savePanier($sale, $request);
         return new Response($jsonContent);
     }
+
     /**
-     * @Route("/panier/delProduct/{id}"))
+     * @Rest\Delete("/panier/rest/delProduct/{id}"))
      */
-    public function delProduct(Request $request,int $id)
-    {   $sale=$this->getSale($request);
-        $productDao=$this->getDoctrine()->getRepository(Product::class);
-        $product=$productDao->find($id);
-        $sale->removeProduct($product);
-        $this->savePanier($sale,$request);
-        return $this->redirect("/panier/show");
-    }
-    /**
-     * @Route("/panier/delService/{id}"))
-     */
-    public function delService(Request $request,int $id)
-    {   $sale=$this->getSale($request);
-        $serviceDao=$this->getDoctrine()->getRepository(Service::class);
-        $service=$serviceDao->find($id);
-        $sale->removeService($service);
-        $this->savePanier($sale,$request);
-        return $this->redirect("/panier/show");
-    }
-    /**
-     * @Route("/panier/delOffer/{id}"))
-     */
-    public function delOffer(Request $request,int $id)
-    {   $sale=$this->getSale($request);
-        $offerDao=$this->getDoctrine()->getRepository(Offer::class);
-        $offer=$offerDao->find($id);
-        $sale->removeOffer($offer);
-        $this->savePanier($sale,$request);
-        return $this->redirect("/panier/show");
+    public function delProduct(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        $productDao = $this->getDoctrine()->getRepository(Product::class);
+        $product = $productDao->find($id);
+        $content = $sale->removeProduct($product);
+        $content->forceSetToZero();
+        $sale->price();
+        $this->savePanier($sale, $request);
+        $jsonContent = $this->serializer->serialize($content, "json");
+        return new Response($jsonContent);
     }
 
+    /**
+     * @Rest\Delete("/panier/rest/delService/{id}"))
+     */
+    public function delService(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        $serviceDao = $this->getDoctrine()->getRepository(Service::class);
+        $service = $serviceDao->find($id);
+
+        $content = $sale->removeService($service);
+        $content->forceSetToZero();
+        $sale->price();
+        $this->savePanier($sale, $request);
+        $jsonContent = $this->serializer->serialize($content, "json");
+        return new Response($jsonContent);
+    }
+
+    /**
+     * @Rest\Delete("/panier/rest/delOffer/{id}"))
+     */
+    public function delOffer(Request $request, int $id)
+    {
+        $sale = $this->getSale($request);
+        $offerDao = $this->getDoctrine()->getRepository(Offer::class);
+        $offer = $offerDao->find($id);
+        $content = $sale->removeOffer($offer);
+        $content->forceSetToZero();
+        $sale->price();
+        $this->savePanier($sale, $request);
+        $jsonContent = $this->serializer->serialize($content, "json");
+        return new Response($jsonContent);
+    }
 
 
     /**
@@ -316,7 +366,8 @@ class PanierController extends Controller
      *
      */
     public function clearPanier(Request $request)
-    {   $this->savePanier(new Sale(),$request);
+    {
+        $this->savePanier(new Sale(), $request);
         return $this->redirect("/panier/show");
     }
 }

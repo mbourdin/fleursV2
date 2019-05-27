@@ -86,9 +86,10 @@ class SaleOfferContent
     /**
      * @param mixed $quantity
      */
-    public function setQuantity(int $quantity): void
+    public function setQuantity(int $quantity)
     {   if ($quantity<=0) throw new \UnexpectedValueException("quantité négative");
         $this->quantity = $quantity;
+        return $this;
     }
     public function toString()
     {   $str="/offercontent/".$this->offer->toString()."/quantity/".$this->quantity;
