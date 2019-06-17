@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-md">
                     <label for="date">Choisissez la date de livraison</label>
-                    <input type="date" name="date" id="date" min="{{ minDate }}" max="{{ maxDate }}">
+                    <input type="date" name="date" id="date" min="{{ minDate }}" max="{{ maxDate }}" required>
                 </div>
 
             </div>
@@ -141,13 +141,11 @@
                 <th></th>
                 <th id="totalprice">{% if sale!=null %}{{ sale.price()/100.0 }}{% endif %}</th>
                 <th>
-                    <button class="btn btn-success" onclick="submitform()" id="submitbutton" disabled="disabled">VALIDER
+                    <button class="btn btn-success btn-block" onclick="submitform()" id="submitbutton" disabled="disabled">VALIDER
                         COMMANDE
                     </button>
                     <br>
-                    <a href="/user/sale/delete">
-                        <button class="btn  btn-danger">ANNULER COMMANDE</button>
-                    </a>
+                    <a href="/user/sale/delete" class="btn  btn-danger btn-block">ANNULER COMMANDE</a>
                 </th>
             </tr>
         {% else %}

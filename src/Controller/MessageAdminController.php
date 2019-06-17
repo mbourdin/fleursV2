@@ -81,49 +81,7 @@ class MessageAdminController extends Controller
         $msgAdmin=$msgAdminDao->find($id);
 
         return $this->render('admin/message.html.twig', array('msgAdmin' =>$msgAdmin));
-
-
     }
-
-
-//    A QUOI CA SERT?
-//    /**
-//     * @Route("/MessageAdmin/save/{id}")
-//     */
-//
-//    public function SaveMessageAdminAction(Request $request,$id){
-//        // on crée un produit
-//        $posts=$this->getDoctrine()->getRepository("App:MessageAdmin");
-//        $product=$posts->find($id);
-//
-//        // ensuite on récupère le formulaire
-//        $form = $this->createForm(MessageAdminForm::class, $product);
-//        $form->add('submit', SubmitType::class, [
-//            'label' => 'sauvegarder',
-//            'attr' => ['class' => 'btn btn-default pull-right'],
-//        ]);
-//        $form->handleRequest($request);
-//
-//        //si le formulaire a été soumi
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            //on enregistre le produit dans la bdd
-//
-//            $reg = $this->getDoctrine()->getManager();
-//
-//            $reg->persist($product);
-//            $reg->flush();
-//
-//
-//            return new Response('Message Ajoutée');
-//        }
-//        //on va générer le Html
-//        $formView= $form->createView();
-//
-//        // on rend la vue
-//        return $this->render('ProductAffiche.html.twig', array('form' => $formView));
-//
-//    }
-
     /**
      * @Route("/admin/message/setRead/{id}")
      */

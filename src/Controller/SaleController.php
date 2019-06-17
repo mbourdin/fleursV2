@@ -36,8 +36,28 @@ class SaleController extends Controller
         $this->serializer = new Serializer($normalizers, $encoders);
 
     }
-
-
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @Route("/show/{id}")
+     */
+    public function showAction(Request $request,int $id)
+    {   $sale=$this->getDoctrine()->getRepository(Sale::class)->find($id);
+        if($sale==null)
+        {   $this->addFlash("error","Id de commande inexistant");
+            return $this->redirect("/sale/list");
+        }
+        if($sale->getPerson()->getId()!=$request->getSession()->get("user")->getId())
+        {   $this->addFlash("error","Cette commande de vous appartient pas!");
+            return $this->redirect("/sale/list");
+        }
+        return $this->render("sale/show.html.twig",["sale"=>$sale,"title"=>"Detail de la commande".$sale->getId()]);
+    }
+    /**
+     * @param Request $request
+     * @return Sale|null
+     */
     private function getUserSale(Request $request):?Sale
     {   $user=$request->getSession()->get("user");
         $saleDao=$this->getDoctrine()->getRepository(Sale::class);
@@ -45,22 +65,30 @@ class SaleController extends Controller
         $sale=$saleDao->findOneBy($criteria);
         return $sale;
     }
+
+    /**
+     * @param Sale $sale
+     */
     private function saveUserSale(Sale $sale)
     {   $em=$this->getDoctrine()->getManager();
         $em->persist($sale);
         $em->flush();
     }
     /**
-    * @Route("/edit")
-    */
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Exception
+     * @Route("/edit")
+     */
     public function editSaleAction(Request $request)
     {   $sale=$this->getUserSale($request);
         if($sale!=null)
         {   $now=new \DateTimeImmutable();
+            $min=$now->modify("+2 day");
             $max=$now->modify("+20 day");
             $user=$request->getSession()->get("user");
             $user=$this->getDoctrine()->getRepository(Person::class)->find($user->getId());
-            return $this->render("/sale/sale.html.twig",["sale"=>$sale,"minDate"=>$now->format("Y-m-d"),"maxDate"=>$max->format("Y-m-d"),"hasOwnAddress"=>$user->getAddress()!=null,"hasPreviousAddresses"=>count($user->getAddresses())!=0]);
+            return $this->render("/sale/sale.html.twig",["sale"=>$sale,"minDate"=>$min->format("Y-m-d"),"maxDate"=>$max->format("Y-m-d"),"hasOwnAddress"=>$user->getAddress()!=null,"hasPreviousAddresses"=>count($user->getAddresses())!=0]);
         }
         else
         {   $this->addFlash("error","pas de commande non validée trouvée");
@@ -71,6 +99,9 @@ class SaleController extends Controller
     }
     // Toutes les réponses rest auront le même format : [id,prix_unitaire,quantité]
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/addProduct/{id}")
      */
     public function addToProductAction(Request $request,int $id)
@@ -84,6 +115,9 @@ class SaleController extends Controller
         return new Response($jsonContent);
     }
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/addOffer/{id}")
      */
     public function addToOfferAction(Request $request,int $id)
@@ -96,8 +130,10 @@ class SaleController extends Controller
         $jsonContent=$this->serializer->serialize($content,"json");
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/addService/{id}")
      */
     public function addToServiceAction(Request $request,int $id)
@@ -110,8 +146,10 @@ class SaleController extends Controller
         $jsonContent=$this->serializer->serialize($content,"json");
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/rmProduct/{id}"))
      */
     public function rmProduct(Request $request,int $id)
@@ -132,6 +170,9 @@ class SaleController extends Controller
 
     }
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/rmService/{id}"))
      */
     public function rmService(Request $request,int $id)
@@ -150,8 +191,10 @@ class SaleController extends Controller
         }
         return new Response(null);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/rmOffer/{id}"))
      */
     public function rmOffer(Request $request,int $id)
@@ -171,6 +214,9 @@ class SaleController extends Controller
         return new Response(null);
     }
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/delProduct/{id}"))
      */
     public function delProduct(Request $request,int $id)
@@ -199,6 +245,9 @@ class SaleController extends Controller
         return new Response($jsonContent);
     }
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/delService/{id}"))
      */
     public function delService(Request $request,int $id)
@@ -227,6 +276,9 @@ class SaleController extends Controller
         return new Response($jsonContent);
     }
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/delOffer/{id}"))
      */
     public function delOffer(Request $request,int $id)
@@ -254,6 +306,9 @@ class SaleController extends Controller
         return new Response($jsonContent);
     }
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Exception
      * @Route("/validate")
      */
     public function validateAction(Request $request)
@@ -263,16 +318,15 @@ class SaleController extends Controller
         switch($addressChoice)
         {
             case "own":   //own
-                $this->addFlash("error","own");
+                //$this->addFlash("error","own");
                 $address=$sale->getPerson()->getAddress();
                 if($address==null)
                 {   $this->addFlash("error","vous n'avez pas enregistré votre propre adresse");
                     return $this->redirect("/user/sale/edit");
-
                 }
                 break;
             case "used":   //used
-                $this->addFlash("error","used");
+                //$this->addFlash("error","used");
                 $addressId=$request->request->get("addressId");
                 $address=$this->getDoctrine()->getRepository(Address::class)->find($addressId);
                 if($address==null)
@@ -281,7 +335,7 @@ class SaleController extends Controller
                 }
                 break;
             case "new":   //new
-               $this->addFlash("error","new");
+               //$this->addFlash("error","new");
                 $address = new Address;
                 $address->setNumber($request->request->get("number"));
                 $address->setRoadname($request->request->get("roadname"));
@@ -289,8 +343,6 @@ class SaleController extends Controller
                 $address->setAdditionaladdress($request->request->get("additionaladress"));
                 $address->setPostalcode($request->request->get("postalcode"));
                 $address->setCityId($request->request->get("inseeid"));
-
-
                 $em=$this->getDoctrine()->getManager();
                 $em->persist($address);
                 $em->flush();
@@ -317,6 +369,8 @@ class SaleController extends Controller
         return $this->redirect("/");
     }
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/delete")
      */
     public function deleteAction(Request $request)
@@ -336,8 +390,12 @@ class SaleController extends Controller
         $this->addFlash("success","commande annulée");
         return $this->redirect("/");
     }
-
     /**
+     * @param string $class
+     * @param int $id
+     * @param Request $request
+     * @param int $quantity
+     * @return Response
      * @Rest\Put ("/updateQuantity/{class}/{id}/{quantity}")
      */
     public function updateQuantity(string $class,int $id,Request $request,int $quantity){
@@ -363,6 +421,8 @@ class SaleController extends Controller
         return new Response($jsonContent);
     }
     /**
+     * @param Request $request
+     * @return Response
      * @Route("/list")
      */
     public function listUserSales(Request $request)
@@ -371,5 +431,4 @@ class SaleController extends Controller
         $sales=$dao->findBy(["person"=>$user]);
         return $this->render("sale/listClientView.html.twig",["sales"=>$sales]);
     }
-
 }

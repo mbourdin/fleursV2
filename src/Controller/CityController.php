@@ -27,8 +27,9 @@ class CityController extends Controller
         $this->serializer = new Serializer($normalizers, $encoders);
 
     }
-
     /**
+     * @param Request $request
+     * @return Response
      * @Route("/admin/city", name="city")
      */
     public function cityAction(Request $request)
@@ -38,27 +39,17 @@ class CityController extends Controller
 
         return $this->render("admin/city.html.twig",["cities"=>$cities]);
     }
-
-
-    private function getCityFromApi(string $inseeid): City
-    {   $city=new City();
-        $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
-        $json=json_decode($response);
-
-        if ($json==null){
-            return null;
-        }
-        $city->setName($json->nom);
-        $city->setInseeid($inseeid);
-        return $city;
-    }
+     /**
+     * @param City $city
+     */
     private function saveCity(City $city)
     {   $em=$this->getDoctrine()->getManager();
         $em->persist($city);
         $em->flush();
-
     }
     /**
+     * @param Request $request
+     * @return Response
      * @Rest\Post("/admin/city/addActive", name="cityaddactive")
      */
     public function addActiveAction(Request $request)
@@ -66,26 +57,26 @@ class CityController extends Controller
         $dao=$this->getDoctrine()->getRepository(City::class);
         $city=$dao->findOneBy(["inseeid"=>$id]);
         if($city==null)
-        {   $city=$this->getCityFromApi($id);
+        {   $city=City::getFromApi($id);
             $city->setActive(true);
             $this->saveCity($city);
-            $this->addFlash("success","ville ajoutée active");
+//            $this->addFlash("success","ville ajoutée active");
         }
         elseif (!$city->getActive())
         {   $city->setActive(true);
             $this->saveCity($city);
-            $this->addFlash("success","ville ajoutée active");
+//            $this->addFlash("success","ville ajoutée active");
         }
         else
         {
-            $this->addFlash("error","cette ville est déja présente et active");
+//            $this->addFlash("error","cette ville est déja présente et active");
         }
         $json_city=$this->serializer->serialize($city,"json");
         return new Response($json_city);
     }
-
-
     /**
+     * @param int $id
+     * @return Response
      * @Rest\Put("/admin/city/activate/{id}")
      */
     public function activateAction(int $id)
@@ -102,6 +93,8 @@ class CityController extends Controller
         return new Response($id);
     }
     /**
+     * @param int $id
+     * @return Response
      * @Rest\Put("/admin/city/deactivate/{id}")
      */
     public function deactivateAction(int $id)
@@ -118,6 +111,8 @@ class CityController extends Controller
         return new Response($id);
     }
     /**
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/admin/city/delete/{id}")
      */
     public function deleteAction(int $id)
@@ -134,5 +129,4 @@ class CityController extends Controller
         }
         return new Response($id);
     }
-
 }

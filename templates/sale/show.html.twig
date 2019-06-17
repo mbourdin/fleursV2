@@ -1,0 +1,95 @@
+{% extends app.session.get("userRights")
+    ? 'base.html.twig'
+    : "admin/dashboard.html.twig" %}
+
+{% block body %}
+    <div class="bg-gray">
+        <h1>Gestion de la Commande</h1>
+        <table class="table table-responsive w-auto">
+            <tr>
+                <th>destinataire</th>
+                <th>adresse</th>
+            </tr>
+            <tr>
+                <td>{{ sale.recipient }}</td>
+                <td>{{ sale.address }}</td>
+            </tr>
+        </table>
+        <table class="table table-responsive  w-auto">
+            <tr>
+                <th>article</th>
+                <th>id_article</th>
+                <th>quantite</th>
+                <th>prix_unitaire</th>
+                <th>prix_total</th>
+                <th></th>
+            </tr>
+            {% if sale!=null %}
+                <tr>
+                    <th>PRODUITS</th>
+                </tr>
+                {% for productContent in sale.products %}
+                    <tr id="productLine{{ productContent.product.id }}">
+                        <td>{{ productContent.product.name }}</td>
+                        <td> {{ productContent.product.id }}</td>
+                        <td >
+                            {{ productContent.quantity }}
+                        </td>
+                        <td>{{ productContent.pricewhenbought/100.0 }}</td>
+                        <td >{{ productContent.pricewhenbought * productContent.quantity/100.0 }}</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <th>SERVICES</th>
+                </tr>
+                {% for serviceContent in sale.services %}
+
+                    <tr id="serviceLine{{ serviceContent.service.id }}">
+                        <td>{{ serviceContent.service.name }}</td>
+                        <td> {{ serviceContent.service.id }}</td>
+                        <td>{{ serviceContent.quantity }}"
+                        </td>
+                        <td>{{ serviceContent.pricewhenbought/100.0 }}</td>
+                        <td >{{ serviceContent.pricewhenbought * serviceContent.quantity/100.0 }}</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>OFFERS</th>
+                </tr>
+                {% for offerContent in sale.offers %}
+                    <tr >
+                        <td>{{ offerContent.offer.name }}</td>
+                        <td> {{ offerContent.offer.id }}</td>
+                        <td>{{ offerContent.quantity }}
+                        </td>
+                        <td >{{ offerContent.pricewhenbought/100.0 }}</td>
+                        <td >{{ offerContent.pricewhenbought * offerContent.quantity/100.0 }}</td>
+                        <td>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>TOTAL</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th >{% if sale!=null %}{{ sale.price()/100.0 }}{% endif %}</th>
+                    <th>
+                    </th>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>Pas de commande trouvée</td>
+                </tr>
+            {% endif %}
+        </table>
+    </div>
+{% endblock %}
+

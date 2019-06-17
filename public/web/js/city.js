@@ -12,7 +12,7 @@ $(document).ready(
                 error: onError
             });
     }
-)
+);
 function clearCityList()
 {   console.log("clearCityList()");
     $('#cityOptions').children('option:not(:first)').remove();
@@ -22,8 +22,8 @@ function onSuccessDepList(result)
 {   //TODO parse la liste pour la rajouter aux options
     for(dep of result)
     {
-        opt=new Option(dep.code+" "+dep.nom,dep.code)
-        $("#departement").append(opt)
+        opt=new Option(dep.code+" "+dep.nom,dep.code);
+        $("#departement").append(opt);
     }
     //console.log(result);
 }
@@ -75,7 +75,10 @@ function onSuccessAdd(result)
 }
 function addline(result)
 {   city=JSON.parse(result);
-    var active="inactive"
+    if(document.getElementById("ligne"+city.id)!=null)
+    {   return;
+    }
+    var active="inactive";
     if(city.active)
     {
         active="active";
@@ -154,5 +157,4 @@ function deleteCity(id) {
 }
 function onSuccessDelete(result)
 {   document.getElementById("ligne"+result).remove();
-
 }

@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 use App\Entity\Product;
+use App\Entity\ProductType;
 use App\Entity\Service;
 use App\Entity\Offer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -50,10 +51,20 @@ class SearchController extends Controller
     }
 
     /**
+     * @param Product $product
+     * @return bool|null
+     */
+    private function filter(Product $product)
+    {   return $product->getActive();
+    }
+    /**
      * @Route("/orchid")
      */
     public function orchideesAction()
-    {   $list=$this->searchProducts("orchid");
+    {   //$list=$this->searchProducts("orchid");
+        $list=$this->getDoctrine()->getRepository(ProductType::class)->findOneByNameLikeAndActiveTrue("orchid")->getProducts();
+        //filtrage
+        $list=array_filter($list->toArray(),[$this,"filter"]);
         return $this->render("product/listClientView.html.twig",["products"=>$list,"title"=>"Orchidées"]);
     }
     /**

@@ -178,12 +178,14 @@ class Address {
     }
 
     public function __toString()
-    {   $str=
+    {   $name=City::nameFromApi($this->cityId);
+        $str=
         $this->number." "
         .$this->numberaddition." "
         .$this->roadtype." "
         .$this->roadname." "
-        .$this->postalcode;
+        .$this->postalcode." "
+        .$name;
         return $str;
 
     }

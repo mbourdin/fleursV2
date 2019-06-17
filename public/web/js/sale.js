@@ -7,7 +7,6 @@ function updateProductQuantity(id)
         type: "PUT",
         success: onSuccessProduct
     });
-
 }
 function updateServiceQuantity(id)
 {   quantity=document.getElementById("serviceInput"+id).value;
@@ -29,13 +28,11 @@ function submitform()
 {
     document.forms["form"].submit();
 }
-
 function isEmpty(id)
 {   console.log(id);
     val=document.getElementById(id);
     return val.value===undefined || val.value==="" || val.value===-1;
 }
-
 function buttonEnabler()
 {   button=document.getElementById("submitbutton");
     if
@@ -48,7 +45,6 @@ function buttonEnabler()
                 !document.getElementById("radioNew").checked
                 &&
                 document.getElementById("addressId").value!==undefined
-
             )
             ||
             (   document.getElementById("radioNew").checked
@@ -58,7 +54,6 @@ function buttonEnabler()
                 !isEmpty("roadname")
                 &&
                 !isEmpty("cityOptions")
-
             )
         )
         &&
@@ -78,8 +73,6 @@ function buttonEnabler()
     }
     //console.log("cityOptions : " + isEmpty("cityOptions"))
 }
-
-
 function requestCities()
 {   postcode=document.getElementById("postalcode").value;
     clearCityList();
@@ -94,11 +87,8 @@ function requestCities()
         success: onSuccessCityList,
         error: onError
     });
-
 }
-
 function onSuccessCityList(result){
-
         //TODO parse la liste pour la rajouter aux options
         {   for(city of result)
         {   opt=new Option(city.nom,city.code);
@@ -110,7 +100,6 @@ function onSuccessCityList(result){
     }
     //console.log(result);
 }
-
 function onError(result)
 {
     alert(result);
@@ -121,7 +110,6 @@ function clearCityList()
     $('#cityOptions').children('option:not(:first)').remove();
 
 }
-
 function getOwnAddress()
 {   document.getElementById("addressId").value=undefined;
     $.ajax({
@@ -133,7 +121,6 @@ function getOwnAddress()
     success: onSuccessOwnAddress,
     error: onError
 });
-
 }
 function getUsedAddresses()
 {   disableform(true);
@@ -152,7 +139,6 @@ function getUsedAddresses()
     })
     }
 };
-
 function addressToString(address)
 {    if (address.numberaddition===null)
     {numberaddition="";}
@@ -164,7 +150,6 @@ function addressToString(address)
     address.roadname+" "+
     address.postalcode;
 }
-
 function onSuccessUsedAddresses(result)
 {   i=0;
     for(address of result)
@@ -176,14 +161,12 @@ function onSuccessUsedAddresses(result)
     addresses=result;
 
 }
-
 function onSuccessOwnAddress(result)
 {   setAddress(result);
     document.getElementById("addressId").value=result.id;
     disableform(true);
     document.getElementById("ownAddress").value=addressToString(result);
 }
-
 function setAddress(address)
 {
     document.getElementById("number").value=address.number;
@@ -192,9 +175,8 @@ function setAddress(address)
     document.getElementById("roadname").value=address.roadname;
     document.getElementById("additionaladdress").value=address.additionaladdress;
     document.getElementById("postalcode").value=address.postalcode;
-    //document.getElementById("cityOptions").value=address.cityId;
+    document.getElementById("cityOptions").value=address.cityId;
     document.getElementById("cityOptions").value=undefined;
-
 }
 function setSelectedAddress()
 {
@@ -223,7 +205,6 @@ function disableform(boolvalue) {
         document.getElementById("postalcode").removeAttribute("disabled");
         document.getElementById("cityOptions").removeAttribute("disabled");
     }
-
     buttonEnabler()
 }
 function addProduct(id)
@@ -232,8 +213,6 @@ function addProduct(id)
     type : "PUT",
     success : onSuccessProduct
 });
-
-
 }
 function rmProduct(id) {
     $.ajax({
@@ -251,12 +230,9 @@ function delProduct(id) {
 }
 function onSuccessProduct(result) {
     content = JSON.parse(result);
-
     if (content.quantity == 0) {
         document.getElementById("productLine" + content.product.id).remove();
-
     } else {
-
     //set quantity
     document.getElementById("productInput" + content.product.id).value = content.quantity;
     //set total product
@@ -271,8 +247,6 @@ function addService(id)
     type : "PUT",
     success : onSuccessService
 });
-
-
 }
 function rmService(id) {
     $.ajax({
@@ -288,7 +262,6 @@ function delService(id) {
         success: onSuccessService
     });
 }
-
 function onSuccessService(result) {
     content = JSON.parse(result);
 
@@ -305,15 +278,12 @@ function onSuccessService(result) {
     }
     updateTotal(content.sale.priceTmp);
 }
-
 function addOffer(id)
 {    $.ajax({
     url : baseurl+"user/sale/addOffer/"+id,
     type : "PUT",
     success : onSuccessOffer
 });
-
-
 }
 function rmOffer(id) {
     $.ajax({
@@ -329,7 +299,6 @@ function delOffer(id) {
         success: onSuccessOffer
     });
 }
-
 function onSuccessOffer(result) {
     content = JSON.parse(result);
 
@@ -342,7 +311,6 @@ function onSuccessOffer(result) {
         document.getElementById("offerInput" + content.offer.id).value = content.quantity;
         //set total product
         document.getElementById("offerTotal" + content.offer.id).textContent = (content.quantity * unitprice).toFixed(2);
-
     }
     updateTotal(content.sale.priceTmp);
 }
@@ -353,4 +321,3 @@ function updateTotal(total)
         window.location.reload();
     }
 }
-

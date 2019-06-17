@@ -9,7 +9,6 @@ class City {
      * @ORM\Column(type="boolean")
      */
     private $active;
-
     /**
      * @ORM\Column(type="string", length=50)
      */
@@ -72,7 +71,6 @@ class City {
     {
         $this->inseeid = $inseeid;
     }
-
     /**
      * @return mixed
      */
@@ -80,7 +78,6 @@ class City {
     {
         return $this->active;
     }
-
     /**
      * @param mixed $active
      */
@@ -89,10 +86,39 @@ class City {
         $this->active = $active;
     }
 
+    /**
+     * @return string
+     */
     public function activeString()
     {   if($this->active) return "active";
         return "inactive";
-
     }
 
+    /**
+     * @param string $inseeid
+     * @return |null
+     */
+    public static function nameFromApi(string $inseeid)
+    {
+        $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
+        $json=json_decode($response);
+
+        if ($json==null){
+            return null;
+        }
+        return $json->nom;
+
+    }
+    public static function getFromApi(string $inseeid)
+    {   $city=new City();
+        $response=file_get_contents("https://geo.api.gouv.fr/communes/".$inseeid."?fields=nom&format=json&geometry=centre");
+        $json=json_decode($response);
+
+        if ($json==null){
+            return null;
+        }
+        $city->setName($json->nom);
+        $city->setInseeid($inseeid);
+        return $city;
+    }
 }

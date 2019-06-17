@@ -15,14 +15,8 @@ class MainController extends Controller
      * @Route("/",name="index")
      */
     public function indexAction()
-    {  $products=$this->getDoctrine()->getRepository(Product::class)->findAll();
+    {  $products=$this->getDoctrine()->getRepository(Product::class)->findBy(["active"=>true]);
         return  $this->render("default/home.html.twig",["products"=>$products]);
-    }
-    /**
-     * @Route("/planning")
-     */
-    public function planningAction()
-    {   return $this->render("default/planning.html.twig");
     }
 
 

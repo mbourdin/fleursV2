@@ -198,26 +198,6 @@ class Product
     public function removeType(ProductType $pt)
     {   $this->productTypes->removeElement($pt);
     }
-//    /**
-//     * @ORM\Column(type="datetime")
-//     */
-//    private $uploadedAt;
-//
-//    /**
-//     * @return mixed
-//     */
-//    public function getUploadedAt()
-//    {
-//        return $this->uploadedAt;
-//    }
-//
-//    /**
-//     * @param mixed $uploadedAt
-//     */
-//    public function setUploadedAt($uploadedAt): void
-//    {
-//        $this->uploadedAt = $uploadedAt;
-//    }
 
 
 }

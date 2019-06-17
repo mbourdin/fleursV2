@@ -10,7 +10,12 @@ use Doctrine\ORM\EntityRepository;
 use DateTimeImmutable;
 class SaleRepository extends EntityRepository
 {
-
+    /**
+     * @param int $days
+     * @param int $interval
+     * @return array
+     * @throws \Exception
+     */
     public function findAllByDaysFromNow(int $days,int $interval=7)
     {   if ($interval<=0){throw new \InvalidArgumentException("intervalle de temps invalide");}
         $now=new DateTimeImmutable();

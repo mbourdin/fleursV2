@@ -6,7 +6,9 @@ use PHPUnit\Framework\TestCase;
 use DateTime;
 class SaleTest extends TestCase
 {
-
+    /**
+     * @throws \Exception
+     */
     public function testSetOffers()
     {   $offer=new Offer();
         $sale= new Sale();
@@ -16,6 +18,9 @@ class SaleTest extends TestCase
         $this->assertEquals($sale->getOffers(),$offers);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testRemove()
     {   $sale= new Sale();
         $product=new Product();
@@ -33,6 +38,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testUpdateQuantity()
     {   $sale= new Sale();
         $product=new Product();
@@ -50,6 +58,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function test__construct()
     {
         $sale= new Sale();
@@ -64,6 +75,9 @@ class SaleTest extends TestCase
         $this->assertFalse($sale->getValidated());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetDiscount()
     {   $sale= new Sale();
         $sale->setPaid(true);
@@ -74,6 +88,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetDate()
     {   $sale= new Sale();
     $currenttime=new DateTime();
@@ -81,6 +98,9 @@ class SaleTest extends TestCase
         $this->assertEquals($sale->getDate(),$currenttime);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetPaid()
     {   $sale= new Sale();
         $sale->setPaid(false);
@@ -90,6 +110,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetProducts()
     {   $product=new Product();
         $sale= new Sale();
@@ -100,6 +123,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetServices()
     {   $service=new Service();
         $sale= new Sale();
@@ -110,6 +136,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testAdd()
     {   $sale= new Sale();
         $product=new Product();
@@ -140,6 +169,9 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetPerson()
     {   $sale= new Sale();
         $person=new Person();
@@ -147,6 +179,9 @@ class SaleTest extends TestCase
         $this->assertEquals($sale->getPerson(),$person);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetOnlinepay()
     {   $sale= new Sale();
         $sale->setOnlinepay(false);
@@ -156,11 +191,18 @@ class SaleTest extends TestCase
 
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSetId()
     {   $sale= new Sale();
         $sale->setId(666);
         $this->assertEquals(666,$sale->getId());
     }
+
+    /**
+     * @throws \Exception
+     */
     public function testSetValidated()
     {   $sale= new Sale();
         $sale->setValidated(false);

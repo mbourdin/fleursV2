@@ -2,8 +2,6 @@
 {% block title %}
 Gestion du panier
 {% endblock %}
-
-
 {% block body %}
     <h1>Gestion du panier</h1>
     <table class="table">
@@ -18,9 +16,7 @@ Gestion du panier
         <tr>
             <th>PRODUITS</th>
         </tr>
-
         {% for productContent in sale.products %}
-
             <tr id="productLine{{ productContent.product.id }}">
                 <td >{{ productContent.product.name }}</td>
                 <td > {{ productContent.product.id }}</td>
@@ -30,16 +26,12 @@ Gestion du panier
                 <td id="productTotal{{ productContent.product.id }}">{{ productContent.pricewhenbought * productContent.quantity/100.0 }}</td>
                 <td >
                     <button class="btn btn-success " onclick="rmProduct({{ productContent.product.id }})">-</button>
-{#                    <a href="/panier/rmProduct/{{ productContent.product.id }}"><button  class="btn btn-success ">-</button></a>#}
-{#                    <a href="/panier/addProduct/{{ productContent.product.id }}"><button class="btn  btn-success">+</button></a>#}
                     <button class="btn btn-success " onclick="addProduct({{ productContent.product.id }})">+</button>
-{#                    <a href="/panier/delProduct/{{ productContent.product.id }}"><button class="btn  btn-danger">X</button></a>#}
                     <button class="btn btn-danger " onclick="delProduct({{ productContent.product.id }})">X</button>
 
                 </td>
             </tr>
         {% endfor %}
-
         <tr>
             <th>SERVICES</th>
         </tr>
@@ -54,13 +46,8 @@ Gestion du panier
                 <td id="serviceTotal{{ serviceContent.service.id }}">{{ serviceContent.pricewhenbought * serviceContent.quantity/100.0 }}</td>
                 <td >
                     <button class="btn btn-success " onclick="rmService({{ serviceContent.service.id }})">-</button>
-
-                    {#                    <a href="/panier/rmService/{{ serviceContent.service.id }}"><button class="btn btn-success">-</button></a>#}
                     <button class="btn btn-success " onclick="addService({{ serviceContent.service.id }})">+</button>
-{#                    <a href="/panier/addService/{{ serviceContent.service.id }}"><button class="btn btn-success">+</button></a>#}
                     <button class="btn btn-danger " onclick="delService({{ serviceContent.service.id }})">X</button>
-
-{#                    <a href="/panier/delService/{{ serviceContent.service.id }}"><button class="btn  btn-danger">X</button></a>#}
                 </td>
             </tr>
         {% endfor %}
@@ -78,12 +65,8 @@ Gestion du panier
                 <td id="offerTotal{{ offerContent.offer.id }}">{{ offerContent.pricewhenbought * offerContent.quantity/100.0 }}</td>
                 <td >
                     <button class="btn btn-success " onclick="rmOffer({{ offerContent.offer.id }})">-</button>
-
-                    {#                    <a href="/panier/rmOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">-</button></a>#}
                     <button class="btn btn-success " onclick="addOffer({{ offerContent.offer.id }})">+</button>
-                    {#                    <a href="/panier/addOffer/{{ offerContent.offer.id }}"><button class="btn btn-success">+</button></a>#}
                     <button class="btn btn-danger " onclick="delOffer({{ offerContent.offer.id }})">X</button>
-{#                    <a href="/panier/delOffer/{{ offerContent.offer.id }}"><button class="btn  btn-danger">X</button></a>#}
                 </td>
             </tr>
         {% endfor %}
@@ -94,18 +77,15 @@ Gestion du panier
             <th></th>
             <th id="totalprice">{% if sale!=null %}{{ sale.price()/100.0 }}{% endif %}</th>
             <th>
-                <a href="/user/panier/save"><button class="btn btn-success">COMMANDER</button></a>
+                <a href="/user/panier/save" class="btn btn-success btn-block">COMMANDER</a>
                 <br>
-                <a href="/panier/clear"><button class="btn  btn-danger">VIDER LE PANIER</button></a>
+                <a href="/panier/clear" class="btn  btn-danger btn-block">VIDER LE PANIER</a>
             </th>
         </tr>
     </table>
-
 {% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script type="application/javascript" src="{{ asset("web/js/panier.js") }}">
-
     </script>
 {% endblock %}

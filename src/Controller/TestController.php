@@ -56,5 +56,14 @@ class TestController extends Controller
         $cities =$dao->findAll();
         return $this->render('admin/city.html.twig',["cities"=>$cities]);
     }
-
+    /**
+     * @Route("testProductsByType/{type}")
+     */
+    public function productsByType(string $type)
+    {
+        $productTypeDao=$this->getDoctrine()->getRepository(
+            e::class);
+        $products=$productTypeDao->findOneByNameLikeAndActiveTrue($type)->getProducts();
+        return $this->render("product/listClientView.html.twig",["products"=>$products]);
+    }
 }

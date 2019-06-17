@@ -175,11 +175,20 @@ class AdminController extends Controller
      */
     public function getSales()
     {   $dao=$this->getDoctrine()->getRepository(Sale::class);
-        $now=new DateTimeImmutable();
+        //$now=new DateTimeImmutable();
         $sales=$dao->findAllByDaysFromNow(-1,5);
 
         //$sales=$dao->findAll();
         return $this->render("sale/list.html.twig",["sales"=>$sales]);
     }
 
+    /**
+     * @param int $id
+     * @return Response
+     * @Route("/sale/show/{id}")
+     */
+    public function showSaleAction(int $id)
+    {   $sale=$this->getDoctrine()->getRepository(Sale::class)->find($id);
+    return $this->render("sale/show.html.twig",["sale"=>$sale]);
+    }
 }

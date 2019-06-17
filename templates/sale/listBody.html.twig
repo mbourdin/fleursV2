@@ -1,27 +1,31 @@
-    <table class="table table-responsive w-auto table-bordered" id="salesTable">
+<table class="table w-auto table-bordered" id="salesTable">
+    <tr>
+        <th>id</th>
+        <th>onlinepay</th>
+        <th>payée</th>
+        <th>date</th>
+        <th>personne</th>
+        <th>validée</th>
+        <th>destinataire</th>
+        <th>contact</th>
+        <th>adresse</th>
+        <th>detail</th>
+    </tr>
+    {% for sale in sales %}
         <tr>
-            <th>id</th>
-            <th>onlinepay</th>
-            <th>payée</th>
-            <th>date</th>
-            <th>personne</th>
-            <th>validée</th>
-            <th>destinataire</th>
-            <th>contact</th>
-            <th>adresse</th>
+            <td>{{ sale.id }}</td>
+            <td>{{ sale.onlinepay? 'Oui' : 'Non' }}</td>
+            <td>{{ sale.paid? 'Oui' : 'Non' }}</td>
+            <td>{{ sale.date|date }}</td>
+            <td>{{ sale.person.id ~"/"~sale.person.firstname ~"/"~sale.person.name }}</td>
+            <td>{{ sale.validated? 'Oui' : 'Non' }}</td>
+            <td>{{ sale.recipient }}</td>
+            <td>{{ sale.contact }}</td>
+            <td>{{ sale.address }}</td>
+            <td>
+                    <a href="/admin/sale/show/{{ sale.id }}">Consulter</a>
+            </td>
         </tr>
-        {% for sale in sales %}
-            <tr>
-                <td>{{ sale.id }}</td>
-                <td>{{ sale.onlinepay }}</td>
-                <td>{{ sale.paid }}</td>
-                <td>{{ sale.date|date }}</td>
-                <td>{{ sale.person.id ~sale.person.firstname ~sale.person.name }}</td>
-                <td>{{ sale.validated }}</td>
-                <td>{{ sale.recipient }}</td>
-                <td>{{ sale.contact }}</td>
-                <td>{{ sale.address }}</td>
-            </tr>
-        {% endfor %}
+    {% endfor %}
 
-    </table>
+</table>

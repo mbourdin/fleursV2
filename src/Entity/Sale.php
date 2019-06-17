@@ -97,6 +97,7 @@ class Sale
     /**
      * @return mixed
      */
+
     public function getId()
     {
         return $this->id;
@@ -241,7 +242,11 @@ class Sale
     //ajoute des services, des produits ou des offres à la commande
     //cette fonction fait appel aux 3 sous-fonctions ci-dessous
     //renvoie l'objet ajouté
-
+    /**
+     * @param $object
+     * @param $quantity
+     * @return SaleOfferContent|SaleProductContent|SaleServiceContent|null|mixed l'objet contenu ajouté
+     */
     public function add($object, $quantity)
     {
         if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
@@ -252,12 +257,18 @@ class Sale
         } elseif ($object instanceof Offer) {
             $result = $this->addOffer($object, $quantity);
         } else {
-            $result = false;
+            $result = null;
         }
         return $result;
     }
 
-//ajoute $quantity de $product au panier, renvoie vrai en cas de succes
+//ajoute $quantity de $product au panier, renvoie l'objet contenu ajouté
+
+    /**
+     * @param Product $product
+     * @param int $quantity
+     * @return SaleProductContent|mixed l'objet contenu ajouté
+     */
     public function addProduct(Product $product, int $quantity)
     {
         if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
@@ -280,7 +291,13 @@ class Sale
         return $newProduct;
     }
 
-//ajoute $quantity de $service au panier
+//ajoute $quantity de $service au panier, renvoie l'objet contenu ajouté
+
+    /**
+     * @param Service $service
+     * @param int $quantity
+     * @return SaleServiceContent|mixed l'objet contenu ajouté
+     */
     public function addService(Service $service, int $quantity)
     {
 
@@ -304,12 +321,12 @@ class Sale
         return $newService;
     }
 
-    //ajoute $quantity de $offre au panier
+    //ajoute $quantity de $offre au panier , renvoie l'objet contenu ajouté
 
     /**
      * @param Offer $offer
      * @param int $quantity
-     * @return SaleOfferContent|mixed
+     * @return SaleOfferContent|mixed l'objet contenu ajouté
      */
     public function addOffer(Offer $offer, int $quantity)
     {
@@ -335,7 +352,11 @@ class Sale
     }
     //supprime un produit/service /une offre du panier
     //cette fonction appelle les 3 fonctions ci-dessous
-    // revoie l'objet effacé
+    // revoie l'objet contenu effacé
+    /**
+     * @param $object
+     * @return mixed|null l'objet contenu effacé
+     */
     public function remove($object)
     {
         if ($object instanceof Product) {
@@ -349,6 +370,11 @@ class Sale
     }
 
     //supprime un produit du panier
+
+    /**
+     * @param Product $product
+     * @return mixed|null  l'objet contenu effacé
+     */
     public function removeProduct(Product $product)
     {
         foreach ($this->products->getIterator() as $i => $productContent) {
@@ -361,6 +387,11 @@ class Sale
     }
 
     // supprime un service du panier
+
+    /**
+     * @param Service $service
+     * @return mixed|null l'objet contenu effacé
+     */
     public function removeService(Service $service)
     {
         foreach ($this->services->getIterator() as $i => $serviceContent) {
@@ -373,6 +404,11 @@ class Sale
     }
 
     // supprime une offre du panier
+
+    /**
+     * @param Offer $offer
+     * @return mixed|null l'objet contenu effacé
+     */
     public function removeOffer(Offer $offer)
     {
         foreach ($this->offers->getIterator() as $i => $offerContent) {
@@ -386,6 +422,11 @@ class Sale
     // met à jour la quantité de l'objet dans le panier
     //supprime l'objet si quantité négative ou nulle
     //renvoie l'objet mis a jour
+    /**
+     * @param $object
+     * @param int $quantity
+     * @return bool|mixed|null l'objet contenu mis à jour
+     */
     public function updateQuantity($object, int $quantity)
     {
         if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
@@ -401,6 +442,11 @@ class Sale
         }
     }
 
+    /**
+     * @param Product $product
+     * @param int $quantity
+     * @return mixed|null l'objet contenu mis à jour
+     */
     public function updateProductQuantity(Product $product,int $quantity)
     {   if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
@@ -412,6 +458,12 @@ class Sale
         }
         return null;
     }
+
+    /**
+     * @param Service $service
+     * @param int $quantity
+     * @return mixed|null l'objet contenu mis à jour
+     */
     public function updateServiceQuantity(Service $service,int $quantity)
     {   if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
@@ -423,6 +475,12 @@ class Sale
         }
         return null;
     }
+
+    /**
+     * @param Offer $offer
+     * @param int $quantity
+     * @return mixed|null l'objet contenu mis à jour
+     */
     public function updateOfferQuantity(Offer $offer,int $quantity)
     {   if ($quantity <= 0) throw new \UnexpectedValueException("quantité négative");
 
@@ -435,6 +493,10 @@ class Sale
         return null;
     }
     //renvie en texte le contenu du panier
+
+    /**
+     * @return string
+     */
     public function toString()
     {
         $str = "id:" . $this->id
@@ -453,8 +515,12 @@ class Sale
         }
         return $str;
     }
+    //calcule le prix total de la vente, le stocke dans l'attribut priceTMP et renvoie cette valeur
+    /**
+     * @return int prix total de la vente
+     */
     public function price():int
-    {   //todo remplacer par le vrai code une fois les prix des articles en vente définis
+    {
         $result= 0;
 
 
@@ -521,7 +587,7 @@ class Sale
     /**
      * @param mixed $address
      */
-    public function setAddress($address): void
+    public function setAddress($address)
     {
         $this->address = $address;
     }
@@ -541,7 +607,4 @@ class Sale
     {
         $this->contact = $contact;
     }
-
-
 }
-

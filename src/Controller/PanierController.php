@@ -20,7 +20,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 class PanierController extends Controller
 {
     private $serializer;
-
     /**
      * PanierController constructor.
      */
@@ -36,56 +35,31 @@ class PanierController extends Controller
         $this->serializer = new Serializer($normalizers, $encoders);
     }
 
+    /**
+     * @param Request $request
+     * @return Sale|mixed
+     */
     private function getSale(Request $request)
-    {   //version cooke mais fonctionne mal
-//
-//        $cookie = $request->cookies->get("bucket");
-//        if ($cookie == null) {
-//            $sale = new Sale();
-//        } else {
-//
-//
-//        $sale = $this->serializer->deserialize($cookie, Sale::class, "json");
-//        $sale->setProducts(new ArrayCollection($sale->getProducts()));
-//        $sale->setServices(new ArrayCollection($sale->getServices()));
-//        $sale->setOffers(new ArrayCollection($sale->getOffers()));
-//        }
-
-        //version session
+    {
         $sale = $request->getSession()->get("sale");
         if ($sale == null) {
             return new Sale();
         }
-        /*
-        $saleDao=$this->$this->getDoctrine()->getRepository(Sale::class);
-        $id=$sale->getId();
-        $sale=$saleDao->find($id);
-        //
-        */
         return $sale;
-
     }
 
+    /**
+     * @param Sale $sale
+     * @param Request $request
+     */
     private function savePanier(Sale $sale, Request $request)
     {
-        //    version cookie mais fonctionne mal
-//        $response=new Response();
-//        $sale->setProducts($sale->getProducts()->toArray());
-//        $sale->setServices($sale->getServices()->toArray());
-//        $sale->setOffers($sale->getOffers()->toArray());
-//        $serialSale=$this->serializer->serialize($sale,"json");
-//        $cookie=new Cookie("bucket",$serialSale);
-//        $response->headers->setCookie($cookie);
-//        $response->send();
-//        $sale->setProducts(new ArrayCollection($sale->getProducts()));
-//        $sale->setServices(new ArrayCollection($sale->getServices()));
-//        $sale->setOffers(new ArrayCollection($sale->getOffers()));
-
-        //version session
         $request->getSession()->set("sale", $sale);
     }
 
     /**
+     * @param Request $request
+     * @return Response
      * @Route("/panier/show",name="panier")
      */
     public function panierShowAction(Request $request)
@@ -97,8 +71,9 @@ class PanierController extends Controller
         }
         return $this->render("/panier/panier.html.twig", ["sale" => $sale]);
     }
-
     /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/user/panier/save",name="savePanier")
      */
     public function savePanierAction(Request $request)
@@ -127,8 +102,10 @@ class PanierController extends Controller
         $this->clearPanier($request);
         return $this->redirect("/user/sale/edit");
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/panier/addProduct/{id}")
      */
     public function addToProduct(Request $request, int $id)
@@ -136,7 +113,6 @@ class PanierController extends Controller
         $this->addProduct($request, $id);
         return $this->redirect('/panier/show');
     }
-
     /**
      * @param Request $request
      * @param int $id
@@ -148,8 +124,10 @@ class PanierController extends Controller
         $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/panier/addService/{id}"))
      */
     public function addToService(Request $request, int $id)
@@ -157,8 +135,10 @@ class PanierController extends Controller
         $this->addService($request, $id);
         return $this->redirect("/panier/show");
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/panier/rest/addService/{id}")
      */
     public function addToServiceRest(Request $request, int $id)
@@ -167,8 +147,10 @@ class PanierController extends Controller
         $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Route("/panier/addOffer/{id}"))
      */
     public function addToOffer(Request $request, int $id)
@@ -176,7 +158,6 @@ class PanierController extends Controller
         $this->addOffer($request, $id);
         return $this->redirect("/panier/show");
     }
-
     /**
      * @param Request $request
      * @param int $id
@@ -189,6 +170,11 @@ class PanierController extends Controller
         return new Response($jsonContent);
     }
 
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return \App\Entity\SaleProductContent|mixed
+     */
     private function addProduct(Request $request, int $id)
     {
         $sale = $this->getSale($request);
@@ -199,8 +185,11 @@ class PanierController extends Controller
         $this->savePanier($sale, $request);
         return $content;
     }
-
-
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return \App\Entity\SaleServiceContent|mixed
+     */
     private function addService(Request $request, int $id)
     {
         $sale = $this->getSale($request);
@@ -211,7 +200,11 @@ class PanierController extends Controller
         $this->savePanier($sale, $request);
         return $content;
     }
-
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return \App\Entity\SaleOfferContent|mixed
+     */
     private function addOffer(Request $request, int $id)
     {
         $sale = $this->getSale($request);
@@ -222,8 +215,10 @@ class PanierController extends Controller
         $this->savePanier($sale, $request);
         return $content;
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/panier/rest/rmProduct/{id}"))
      */
     public function rmProduct(Request $request, int $id)
@@ -242,8 +237,10 @@ class PanierController extends Controller
         }
         return new Response(null);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/panier/rest/rmService/{id}"))
      */
     public function rmService(Request $request, int $id)
@@ -262,8 +259,10 @@ class PanierController extends Controller
         }
         return new Response(null);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Put("/panier/rest/rmOffer/{id}"))
      */
     public function rmOffer(Request $request, int $id)
@@ -282,8 +281,12 @@ class PanierController extends Controller
         }
         return new Response(null);
     }
-
     /**
+     * @param string $class
+     * @param int $id
+     * @param int $quantity
+     * @param Request $request
+     * @return Response
      * @Rest\Put ("/panier/updateQuantity/{class}/{id}/{quantity}")
      */
     public function updateQuantity(string $class, int $id, int $quantity, Request $request)
@@ -310,8 +313,10 @@ class PanierController extends Controller
         $this->savePanier($sale, $request);
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/panier/rest/delProduct/{id}"))
      */
     public function delProduct(Request $request, int $id)
@@ -326,8 +331,10 @@ class PanierController extends Controller
         $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/panier/rest/delService/{id}"))
      */
     public function delService(Request $request, int $id)
@@ -343,8 +350,10 @@ class PanierController extends Controller
         $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
-
     /**
+     * @param Request $request
+     * @param int $id
+     * @return Response
      * @Rest\Delete("/panier/rest/delOffer/{id}"))
      */
     public function delOffer(Request $request, int $id)
@@ -359,11 +368,10 @@ class PanierController extends Controller
         $jsonContent = $this->serializer->serialize($content, "json");
         return new Response($jsonContent);
     }
-
-
     /**
-     * @Route("/panier/clear")+
-     *
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/panier/clear")
      */
     public function clearPanier(Request $request)
     {

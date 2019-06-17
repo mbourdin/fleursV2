@@ -14,37 +14,23 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProducttypeRepository extends ServiceEntityRepository
 {
+    /**
+     * ProducttypeRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, ProductType::class);
     }
 
-    // /**
-    //  * @return TypeProduct[] Returns an array of TypeProduct objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function findOneByNameLikeAndActiveTrue($name)
+    {   $em=$this->getEntityManager();
+        $query=$em->createQuery('SELECT p FROM App\Entity\ProductType p WHERE p.name LIKE :name AND p.active=true');
+        $query->setParameter('name', "%".$name."%");
+        return $query->getResult()[0];
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?TypeProduct
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

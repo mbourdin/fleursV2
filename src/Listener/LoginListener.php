@@ -9,9 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use App\Utility\OnEventActions;
-use Doctrine\ORM\EntityManager;
-use App\Repository\PersonRepository;
-use Symfony\Component\HttpFoundation\Response;
+
 class LoginListener
 {   protected $userManager;
     private $em;
@@ -43,25 +41,6 @@ class LoginListener
             return null;
         }
         OnEventActions::setPermissions($session,$user);
-        $saleDao=$this->em->getRepository(Sale::class);
-        $criteria = array('person' => $user,'validated'=>false);
-        $sale=$saleDao->findOneBy($criteria);
-        if($sale!=null && !$sale->empty())
-        {   /*$sale->setId(null);
-            foreach($sale->getProducts()->getIterator() as $i => $productContent)
-            {
-                $productContent->setId(null);
-            }
-            foreach($sale->getServices()->getIterator() as $i => $serviceContent)
-            {
-                $serviceContent->setId(null);
-            }
-            foreach($sale->getOffers()->getIterator() as $i => $offerContent)
-            {
-                $offerContent->setId(null);
-            }
-            */
-            $session->set("sale",$sale);
-        }
+
     }
 }
